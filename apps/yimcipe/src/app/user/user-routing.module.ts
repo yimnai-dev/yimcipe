@@ -1,3 +1,4 @@
+import { PasswordChangeVerificationComponent } from './password-change-verification/password-change-verification.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { LoginComponent } from './login/login.component';
@@ -13,6 +14,7 @@ const routes: Routes = [
     {path: 'login', component: LoginComponent},
     {path: 'forgot', component: ForgotPasswordComponent},
     {path: 'reset/:resetId', component: ResetPasswordComponent},
+    {path: 'forgot/sent/:id', component: PasswordChangeVerificationComponent},
   ]}
 ];
 

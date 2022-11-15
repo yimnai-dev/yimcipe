@@ -21,7 +21,7 @@
         <img src="assets/images/hide-visibility.svg" alt="Visibility Icon" (click)="passwordVisibilityState = !passwordVisibilityState" *ngIf="!passwordVisibilityState" class="absolute -translate-y-8 md:translate-x-80 translate-x-128">
       </div>
       <div class="w-screen md:w-96 mx-auto text-center">
-        <button class="bg-darkChocolate text-white px-4 py-2 rounded-md hover:bg-pinkChocolate hover:text-darkChocolate" [routerLink]="['user/dashboard/home']">LOGIN</button>
+        <button class="bg-darkChocolate text-white px-4 py-2 rounded-md hover:bg-pinkChocolate hover:text-darkChocolate" [routerLink]="['/dashboard/home']">LOGIN</button>
       </div>
       <div class="w-screen md:w-96 mx-auto flex flex-col items-center pt-3">
         <a href="#" class="border-solid border-2 border-pinkChocolate w-1/2 mb-2 text-center pb-2 rounded-xl hover:border-transparent hover:bg-darkChocolate hover:text-white">Login with google?</a>
