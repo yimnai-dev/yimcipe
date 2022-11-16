@@ -1,0 +1,12 @@
+<div [class]=parentContainerClassList class="w-[60vw]">
+  <a href="#" class="text-md md:text-xl block text-center py-3" *ngIf="dropdownLocationState === 'dropdown-menu'">
+    <img src="assets/images/cancel.svg" class="w-10 h-10 ml-[80%]">
+  </a>
+  <a href="#" [class]=menuItemsClassList *ngIf="dropdownLocationState === 'header' || dropdownLocationState === 'dropdown-menu' || dropdownLocationState === 'footer'">HOME</a>
+  <a href="#" [class]=menuItemsClassList *ngIf="dropdownLocationState === 'header' || dropdownLocationState === 'dropdown-menu' || dropdownLocationState === 'footer'">PERSONAL</a>
+  <a href="#" [class]=menuItemsClassList *ngIf="dropdownLocationState === 'header' || dropdownLocationState === 'dropdown-menu' || dropdownLocationState === 'footer'">FAVOURITES</a>
+  <a href="#" [class]=menuItemsClassList *ngIf="dropdownLocationState === 'header' || dropdownLocationState === 'dropdown-menu' || dropdownLocationState === 'footer'">NEW</a>
+  <a href="#" [class]=menuItemsClassList *ngIf="dropdownLocationState === 'footer' || dropdownLocationState === 'dropdown-menu'">PROFILE</a>
+  <a href="#" [class]=menuItemsClassList *ngIf="dropdownLocationState === 'footer' || dropdownLocationState === 'dropdown-menu'">LOGOUT</a>
+
+</div>

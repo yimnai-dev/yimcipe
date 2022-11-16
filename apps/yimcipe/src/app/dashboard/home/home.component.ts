@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'yimcipe-home',
@@ -6,8 +6,11 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent implements OnInit {
-  constructor() {}
+export class HomeComponent {
 
-  ngOnInit(): void {}
+  @ViewChild('dropdownMenu') dropdownMenu!: ElementRef
+
+  openCloseDropdownMenu(){
+    console.log('Classlist: ', this.dropdownMenu.nativeElement.classList)
+  }
 }
