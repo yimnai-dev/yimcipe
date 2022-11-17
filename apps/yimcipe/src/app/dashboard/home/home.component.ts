@@ -8,9 +8,9 @@ import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angu
 })
 export class HomeComponent {
 
-  @ViewChild('dropdownMenu') dropdownMenu!: ElementRef
+  @ViewChild('dropdownMenu') dropdownMenu!: ElementRef;
 
-  openCloseDropdownMenu(){
-    console.log('Classlist: ', this.dropdownMenu.nativeElement.classList)
+  closeDropdownMenu(){
+    this.dropdownMenu.nativeElement.classList.add('hidden')
   }
 }

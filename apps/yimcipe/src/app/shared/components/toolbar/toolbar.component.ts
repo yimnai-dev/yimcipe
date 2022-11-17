@@ -1,5 +1,3 @@
-/* eslint-disable @angular-eslint/no-empty-lifecycle-method */
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 
 @Component({
@@ -10,7 +8,18 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
 })
 export class ToolbarComponent implements OnInit {
   @Input() nameInitial = 'Y'
-  constructor() {}
+  @Input() dropdownMenu!: HTMLDivElement;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    document.addEventListener('click', (event: any) => {
+      if(event.target.id === 'controller'){
+        this.dropdownMenu.classList.toggle('hidden')
+      }
+      if((event.target.id !== 'controller' && event.target.id !== 'dropdown' && event.target.id !== 'content')){
+        this.dropdownMenu.classList.add('hidden')
+      }
+    })
+  }
 }
+
+

@@ -13,7 +13,8 @@ module.exports = {
         darkChocolate: '#373333',
         pinkChocolate: '#D8ABAB',
         lightChocolate: '#A49A9A',
-        darkGray: '#A49A9A'
+        darkGray: '#A49A9A',
+        lightPink: '#F0DDDD'
       },
       spacing: {
         128: '92vw'

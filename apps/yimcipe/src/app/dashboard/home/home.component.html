@@ -1,26 +1,26 @@
 <!-- Dropdown Menu -->
 
 <main class="w-screen relative">
-  <div class="hidden absolute top-[60vh] left-1/2 transform -translate-x-1/2 -translate-y-[50vh] w-screen md:w-[40vw] bg-darkChocolate opacity-[0.95] rounded-lg shadow-lg" #dropdownMenu>
-      <a href="#" class="text-md md:text-xl block text-center py-3">
-        <img src="assets/images/cancel.svg" class="w-10 h-10 ml-[80%]">
-      </a>
-      <a href="#" class="text-md md:text-xl block text-center text-white hover:text-pinkChocolate py-6">HOME</a>
-      <a href="#" class="text-md md:text-xl block text-center text-white hover:text-pinkChocolate py-4">PERSONAL</a>
-      <a href="#" class="text-md md:text-xl block text-center text-white hover:text-pinkChocolate py-4">FAVOURITES</a>
-      <a href="#" class="text-md md:text-xl block text-center text-white hover:text-pinkChocolate py-4">NEW</a>
-      <a href="#" class="text-md md:text-xl block text-center text-white hover:text-pinkChocolate py-4">PROFILE</a>
-      <a href="#" class="text-md md:text-xl block text-center text-white hover:text-pinkChocolate py-4">LOGOUT</a>
-
-  </div>
-  <div class="grid grid-rows-3">
-    <div class="col-span-3">
-      <yimcipe-toolbar></yimcipe-toolbar>
+  <div id="dropdown" class="hidden absolute top-[60vh] left-1/2 transform -translate-x-1/2 -translate-y-[50vh] w-screen md:w-[40vw] bg-darkChocolate opacity-[0.95] rounded-lg shadow-lg text-center" #dropdownMenu>
+    <img src="assets/images/cancel.svg" class="w-10 h-10 ml-[80%] object-contain" (click)="closeDropdownMenu()">
+    <div id="content" class="h-full flex flex-col items-center justify-center">
+      <a [routerLink]="['/user/dashboard/home/main']" class="md:hidden text-md md:text-xl text-center text-white hover:text-pinkChocolate py-6">HOME</a>
+      <a href="#" class="md:hidden text-md md:text-xl text-center text-white hover:text-pinkChocolate py-4">PERSONAL</a>
+      <a href="#" class="md:hidden text-md md:text-xl text-center text-white hover:text-pinkChocolate py-4">FAVOURITES</a>
+      <a href="#" class="md:hidden text-md md:text-xl text-center text-white hover:text-pinkChocolate py-4">NEW</a>
+      <a href="#" class="text-md md:text-xl text-center text-white hover:text-pinkChocolate py-4">PROFILE</a>
+      <a href="#" class="text-md md:text-xl text-center text-white hover:text-pinkChocolate py-4">LOGOUT</a>
     </div>
-    <div class="col-span-3 py-4 bg-blue-500">
+  </div>
+  <div class="flex flex-col items-center justify-center space-y-2">
+    <div class="w-screen">
+      <yimcipe-toolbar [dropdownMenu]="dropdownMenu"></yimcipe-toolbar>
+    </div>
+    <div class="w-screen mx-auto md:w-[95vw] py-3 bg-lightPink flex-flex-col items-center justify-center space-y-3">
+      <yimcipe-search-bar></yimcipe-search-bar>
       <router-outlet></router-outlet>
     </div>
-    <div class="row-span-3 col-span-3">
+    <div class="w-screen">
       <yimcipe-footer></yimcipe-footer>
     </div>
   </div>

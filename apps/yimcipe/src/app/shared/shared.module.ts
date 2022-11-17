@@ -1,3 +1,5 @@
+import { RouterModule } from '@angular/router';
+import { DropdownDirective } from './directives/dropdown.directive';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FooterComponent } from './components/footer/footer.component';
@@ -5,8 +7,8 @@ import { NavigationLinksComponent } from './components/navigation-links/navigati
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 
 @NgModule({
-  declarations: [ToolbarComponent, FooterComponent, NavigationLinksComponent],
-  imports: [CommonModule],
-  exports: [ToolbarComponent, FooterComponent, NavigationLinksComponent],
+  declarations: [ToolbarComponent, FooterComponent, NavigationLinksComponent, DropdownDirective],
+  imports: [CommonModule, RouterModule],
+  exports: [ToolbarComponent, FooterComponent, NavigationLinksComponent, DropdownDirective],
 })
 export class SharedModule {}
