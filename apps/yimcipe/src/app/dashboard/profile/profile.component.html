@@ -1,1 +1,46 @@
-<p>profile works!</p>
+<div class="bg-white md:rounded-lg w-screen md:w-auto md:mx-2 mx-auto py-3 px-3">
+    <div class="w-full text-center">
+        <h1 class="text-darkChocolate font-bold py-2 text-3xl">PROFILE</h1>
+    </div>
+    <div class="w-full flex flex-col items-center justify-between md:flex-row md:items-center md:justify-around min-h-[70vh]">
+        <!-- Uneditable  -->
+        <div class="flex flex-col items-start justify-center">
+            <div class="flex space-around px-2 py-3 text-2xl space-x-4">
+                <p class="text-darkChocolate">Name</p>
+                <p class="text-pinkChocolate">Yimnai Nerus Zaumu</p>
+            </div>
+            <div class="flex space-around px-2 py-3 text-2xl space-x-4">
+                <p class="text-darkChocolate">Occupation</p>
+                <p class="text-pinkChocolate">Software Engineer</p>
+            </div>
+            <div class="flex space-around px-2 py-3 text-2xl space-x-4">
+                <p class="text-darkChocolate">Status</p>
+                <p class="text-pinkChocolate">Verified</p>
+            </div>
+            <div class="flex space-around px-2 py-3 text-2xl space-x-4">
+                <img src="assets/images/profileImage.png" class="">
+            </div>
+            <div class="relative mb-6 w-96 md:px-2">
+              <input [type]="passwordVisibilityState ? 'text' : 'password'" id="password" class="block border-solid border-2 border-pinkChocolate rounded-md w-full h-12 focus:outline-none focus:border-darkGray text-md text-darkChocolate peer" placeholder=" " autocomplete="off">
+              <label for="password" class="absolute duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-darkChocolate peer-focus:dark:text-pinkChocolate peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">Password</label>
+            </div>
+        </div>
+        <!-- editable  -->
+      <form class="">
+        <div class="flex flex-col items-start justify-start space-y-3 text-pinkChocolate">
+          <div class="w-96 py-2">
+            <input type="text" placeholder="@update name" class="border-solid border-2 border-pinkChocolate rounded-lg w-full h-12 focus:outline-none focus:border-darkGray">
+          </div>
+          <div class="w-96 py-2">
+            <input type="text" placeholder="@update occupation" class="border-solid border-2 border-pinkChocolate rounded-lg w-full h-12 focus:outline-none focus:border-darkGray">
+          </div>
+          <div class="w-96 py-2">
+            <input type="file" placeholder="@update picture">
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="flex items-center justify-center py-3">
+      <button class="px-3 py-2 text-white hover:text-darkGray hover:bg-pinkChocolate bg-darkChocolate rounded-lg">UPDATE</button>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+<div class=" mx-auto bg-white" *ngIf="!viewComments">
+  <!-- New Comment here  -->
+  <form class="flex flex-col md:flex-row items-start md:items-center justify-between">
+    <input type="text" placeholder="type comment here..." class="w-full md:w-[80%] border-solid border-b-2 border-darkGray my-3 focus:outline-none">
+    <button class="bg-darkChocolate text-white hover:bg-pinkChocolate hover:text-darkChocolate px-3 py-2 rounded-lg shadow-lg mb-2 md:mb-0">Comment</button>
+  </form>
+  <!-- Single Comment -->
+<div *ngFor="let comment of $comments">
+  <div class="flex flex-col items-start justify-center text-pinkChocolate">
+    <span class="text-[12px] text-darkChocolate font-bold">Youtah Claudette</span>
+    <span class="text-[10px] text-darkGray">Home economics Teacher</span>
+    <span class="flex items-center justify-center text-darkGray">
+      <img src="assets/images/verified.svg" alt="" class="w-3 h-3">
+      <p class="text-[10px]">Verified</p>
+    </span>
+</div>
+  <p class="text-darkChocolate border-solid border-b-2 border-darkGray w-full mx-auto py-2">{{ comment }}</p>
+</div>
+</div>

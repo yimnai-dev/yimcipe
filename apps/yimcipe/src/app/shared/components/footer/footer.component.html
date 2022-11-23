@@ -11,14 +11,14 @@
     </div>
   </div>
   <div class="flex flex-col space-between items-center md:items-left justify-center my-3 text-white md:w-auto w-1/2">
-    <a href="#" class="text-md md:text-xl hover:text-pinkChocolate py-2">HOME</a>
-    <a href="#" class="text-md md:text-xl hover:text-pinkChocolate py-2">PERSONAL</a>
-    <a href="#" class="text-md md:text-xl hover:text-pinkChocolate py-2">FAVOURITES</a>
-    <a href="#" class="text-md md:text-xl hover:text-pinkChocolate py-2">NEW</a>
+    <a [routerLink]="['/dashboard/home/main']" [routerLinkActive]="'text-pinkChocolate'" class="text-md md:text-xl hover:text-pinkChocolate py-2">HOME</a>
+    <a [routerLink]="['/dashboard/home/personal']" [routerLinkActive]="'text-pinkChocolate'" class="text-md md:text-xl hover:text-pinkChocolate py-2">PERSONAL</a>
+    <a [routerLink]="['/dashboard/home/favourite']" [routerLinkActive]="'text-pinkChocolate'" class="text-md md:text-xl hover:text-pinkChocolate py-2">FAVOURITES</a>
+    <a [routerLink]="['/dashboard/home/new']" [routerLinkActive]="'text-pinkChocolate'" class="text-md md:text-xl hover:text-pinkChocolate py-2">NEW</a>
   </div>
   <div class="flex flex-col space-between items-center md:items-left justify-center my-3 text-white md:w-auto w-1/2">
-    <a href="#" class="text-md md:text-xl hover:text-pinkChocolate py-2">PROFILE</a>
-    <a href="#" class="text-md md:text-xl hover:text-pinkChocolate py-2">LOGOUT</a>
+    <a [routerLink]="['/dashboard/home/profile']" [routerLinkActive]="'text-pinkChocolate'" class="text-md md:text-xl hover:text-pinkChocolate py-2">PROFILE</a>
+    <a [routerLink]="['/user/login']" [routerLinkActive]="'text-pinkChocolate'" class="text-md md:text-xl hover:text-pinkChocolate py-2">LOGOUT</a>
   </div>
   <div class="flex flex-col items-center justify-center px-3">
     <span class="text-pinkChocolate text-xl md:text-2xl py-3 text-center">Search meal by name</span>

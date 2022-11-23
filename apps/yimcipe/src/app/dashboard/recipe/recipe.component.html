@@ -1,1 +1,37 @@
-<p>recipe works!</p>
+<section class="w-full h-full py-3">
+  <!-- New Recipe Form  -->
+  <div class="container mx-auto my-3 flex flex-col items-center justify-center">
+  <form>
+    <div class="container mx-auto flex flex-col items-start justify-between my-3">
+      <label for="text" class="text-darkChocolate font-bold">Recipe Name:</label>
+      <input type="text" id="text" name="recipeName" class="block border-solid border-2 border-pinkChocolate rounded-md w-full h-12 focus:outline-none focus:border-darkGray text-md text-darkChocolate peer" placeholder=" " autocomplete="off">
+    </div>
+    <div class="container mx-auto flex flex-col items-start justify-between my-3">
+      <label for="category" class="text-darkChocolate font-bold">Recipe Category:</label>
+      <select class="block border-solid border-2 border-pinkChocolate rounded-md w-full h-12 focus:outline-none focus:border-darkGray text-md text-darkChocolate peer bg-white" [(ngModel)]="selectedCategory" [ngModelOptions]="{standalone: true}">
+        <option>Select meal category</option>
+        <option *ngFor="let category of $categories">{{ category }}</option>
+        <option>Category not here? Add new category</option>
+      </select>
+    </div>
+    <div class="container mx-auto flex flex-col items-start justify-between my-3">
+      <label for="text" class="text-darkChocolate font-bold">Category</label>
+      <input type="text" id="text" class="block border-solid border-2 border-pinkChocolate rounded-md w-full h-12 focus:outline-none focus:border-darkGray text-md text-darkChocolate peer" placeholder=" " autocomplete="off" [value]=getCategory() #category>
+    </div>
+    <div class="NgxEditor__Wrapper container mx-auto my-3">
+      <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"> </ngx-editor-menu>
+      <ngx-editor
+        [editor]="editor"
+        ngModel="html"
+        disabled="false"
+        placeholder="Start entering recipe"
+        [ngModelOptions]="{standalone: true}"
+     ></ngx-editor>
+    </div>
+    <div class="text-center">
+      <button type="button" class="bg-darkChocolate text-white px-6 py-3 rounded-lg hover:bg-darkGray hover:text-darkChocolate">CREATE</button>
+    </div>
+  </form>
+  </div>
+</section>
+

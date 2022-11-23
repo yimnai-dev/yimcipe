@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'yimcipe-personal',
@@ -6,8 +6,5 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
   styleUrls: ['./personal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PersonalComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit(): void {}
+export class PersonalComponent {
 }

@@ -1,16 +1,22 @@
-<div class="w-screen md:w-[80vw] mx-auto h-auto bg-white mt-3 rounded-lg shadow-lg py-6 flex flex-col items-start justify-center">
-  <div class="flex justify-between items-center px-3">
+<div class="w-screen md:w-[80vw] mx-auto h-auto bg-white mt-3 rounded-lg shadow-lg py-6 flex flex-col items-start justify-center" *ngFor="let recipe of count">
+  <div class="flex justify-between items-center px-3 w-full">
     <!-- Profile Info  -->
     <div class="flex space-x-3">
       <div class="rounded-full w-20 h-20 bg-darkChocolate text-darkGray font-bold text-6xl flex items-center justify-center">Y</div>
-      <div class="flex flex-col items-start justify-center text-pinkChocolate">
-        <h1>Yimnai Nerus Zaumu</h1>
-        <h3>Software/Mobile developer</h3>
-        <span class="flex items-center justify-center">
-          <img src="assets/images/verified.svg" alt="">
-          <p>Verified</p>
-        </span>
+        <div class="flex flex-col items-start justify-center text-pinkChocolate">
+          <h1>Yimnai Nerus Zaumu</h1>
+          <h3>Software/Mobile developer</h3>
+          <span class="flex items-center justify-center">
+            <img src="assets/images/verified.svg" alt="">
+            <p>Verified</p>
+          </span>
       </div>
+    </div>
+    <div class="flex flex-col">
+      <button class="bg-darkChocolate text-white px-3 py-2 rounded-lg hover:bg-pinkChocolate hover:text-darkChocolate">Subscribe</button>
+      <a href="#" class="text-darkChocolate">View profile</a>
+      <span class="italic text-pinkChocolate">Followers - 234</span>
+
     </div>
   </div>
   <div class="px-3">
@@ -39,5 +45,7 @@
     </div>
   </div>
   <!-- Comments section -->
-  <div class="px-3">Comments Section</div>
+  <div class="px-3 w-full">
+    <yimcipe-comments-section></yimcipe-comments-section>
+  </div>
 </div>

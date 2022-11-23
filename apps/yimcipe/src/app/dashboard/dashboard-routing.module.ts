@@ -9,7 +9,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MainDashboardComponent } from './main-dashboard/main-dashboard.component';
 
 const routes: Routes = [
-  {path: '', redirectTo: '/home', pathMatch: 'full'},
+  {path: '', redirectTo: '/home/main', pathMatch: 'full'},
   {path: '', component: DashboardComponent, children: [
     {path: 'home', component: HomeComponent, children: [
       {path: 'main', component: MainDashboardComponent},
