@@ -13,25 +13,21 @@ export class Profile extends Model{
   profileId: string
 
   @Unique
-  @AllowNull(false)
   @Column({
     type: DataType.STRING
   })
   fullName: string
 
-  @AllowNull(false)
   @Column({
     type: DataType.STRING
   })
   occupation: string
 
-  @AllowNull(false)
   @Column({
     type: DataType.BLOB
   })
   photo: Blob
 
-  @AllowNull(false)
   @Column({
     type: DataType.STRING
   })

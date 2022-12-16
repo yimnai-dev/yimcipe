@@ -1,3 +1,4 @@
+import { Comments } from './comments.model';
 import { Subscriber } from './subscriber.model';
 import { Recipe } from './recipe.model';
 import { Profile } from './profile.model';
@@ -27,11 +28,21 @@ export class User extends Model {
   })
   email: string
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column({
     type: DataType.STRING
   })
   password: string
+
+
+  //Registration mechanism stores whether user was created via
+  //signup form or used a federated login mechanism. In the latter
+  //case, the password field will be left as null
+  @AllowNull(false)
+  @Column({
+    type: DataType.ENUM('LOCAL', 'FEDERATED'),
+  })
+  registrationMechanism: string;
 
   @HasOne(() => Profile)
   profile: Profile
@@ -41,5 +52,8 @@ export class User extends Model {
 
   @HasMany(() => Subscriber)
   subscribers: Subscriber[]
+
+  @HasMany(() => Comments)
+  comments: Comments[]
 
 }

@@ -1,3 +1,4 @@
+import { User } from './user.model';
 import { Column, Model, Table, Unique, AllowNull, PrimaryKey, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import { Recipe } from './recipe.model';
 
@@ -22,9 +23,18 @@ export class Comments extends Model {
   @Column({
     type: DataType.UUID,
   })
-  recipeId: string
+  recipeId: string;
 
   @BelongsTo(() => Recipe)
   recipe: Recipe;
+
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.UUID
+  })
+  userId: string;
+
+  @BelongsTo(() => User)
+  commenter: User;
 
 }

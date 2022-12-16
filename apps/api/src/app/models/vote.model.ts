@@ -14,15 +14,15 @@ export class Vote extends Model {
 
   @AllowNull(false)
   @Column({
-    type: DataType.STRING
+    type: DataType.INTEGER
   })
-  upvote: string
+  upvote: number
 
   @AllowNull(false)
   @Column({
-    type: DataType.STRING
+    type: DataType.INTEGER,
   })
-  downvote: string
+  downvote: number
 
   @ForeignKey(() => Recipe)
   @Column({
