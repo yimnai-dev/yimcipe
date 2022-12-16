@@ -1,8 +1,10 @@
+import { UpdateRecipeStatusDto } from './../../../../../../libs/api-interfaces/src/lib/update-recipe-status.dto';
+import { RecipeCurrentStatus } from './../../utils/types/user.type';
+import { UpdateRecipeDto } from './../../../../../../libs/api-interfaces/src/lib/update-recipe.dto';
 import { RecipeByIdDto } from './../../../../../../libs/api-interfaces/src/lib/recipe-by-id.dto';
 import { Category } from './../../models/category.model';
 import { generateUUID } from './../../utils/cid-generator.util';
-import { User } from './../../models/user.model';
-import { RecipeDto } from './../../../../../../libs/api-interfaces/src/lib/recipe.dto';
+import { RecipeDto } from '../../../../../../libs/api-interfaces/src/lib/create-recipe.dto';
 import { UserByIdDto } from './../../../../../../libs/api-interfaces/src/lib/user-by-id.dto';
 import { Recipe } from './../../models/recipe.model';
 import { Injectable, HttpStatus } from '@nestjs/common';
@@ -23,12 +25,14 @@ export class RecipeService {
             categoryId: generateUUID(),
             category: recipe.category
         }})
+        const currentStatus: RecipeCurrentStatus = 'GENERAL'
         const payload = {
             recipeId: generateUUID(),
             recipeTitle: recipe.title,
             recipeContent: recipe.content,
             userId: user.userId,
-            categoryId: categoryExists.get('categoryId')
+            categoryId: categoryExists.get('categoryId'),
+            recipeCurrentStatus: currentStatus
         }
         const newRecipe = await this.recipeModel.create(payload)
         if(!newRecipe){
@@ -88,7 +92,7 @@ export class RecipeService {
         }
     }
 
-    updateRecipe = async (user: UserByIdDto, recipe: RecipeDto, recipeWithId: RecipeByIdDto) => {
+    updateRecipe = async (user: UserByIdDto, recipe: UpdateRecipeDto, recipeWithId: RecipeByIdDto) => {
         const recipeToUpdate = await this.recipeModel.findOne({where: {recipeId: recipeWithId.recipeId}})
         if(!recipeToUpdate){
             return {
@@ -126,5 +130,64 @@ export class RecipeService {
                 status: HttpStatus.ACCEPTED
             }
         }
+    }
+
+    deleteRecipeById = async (user: UserByIdDto, recipeWithId: RecipeByIdDto) => {
+        const recipeToDelete = await this.recipeModel.findOne({where: {recipeId: recipeWithId.recipeId}})
+        if(!recipeToDelete){
+            return {
+                success: false,
+                message: 'Could not find particular recipe. Try again later!',
+                status: HttpStatus.NOT_FOUND
+            }
+        }
+        if(recipeToDelete.get('userId') !== user.userId){
+            return {
+                success: false,
+                message: 'Only User with the given ID can delete a recipe. Ensure that you have passed the correct user Id',
+                status: HttpStatus.NOT_MODIFIED
+            }
+        }
+        const culpritRecipe = await this.recipeModel.destroy({where: {recipeId: recipeWithId.recipeId}})
+        if(!culpritRecipe){
+            return {
+                success: false,
+                message: 'Could not delete recipe.',
+                status: HttpStatus.ACCEPTED
+            }
+        }
+        return {
+            success: true,
+            message: 'Recipe deleted successfully',
+            status: HttpStatus.CREATED
+        }
+    }
+
+    changeRecipeStatus = async (user: UserByIdDto, recipeWithId: RecipeByIdDto, activeRecipe: UpdateRecipeStatusDto) => {
+        const recipe = await this.recipeModel.findOne({where: {
+            recipeId: recipeWithId.recipeId
+        }})
+        if(!recipe){
+            return {
+                success: false,
+                message: 'Could not find recipe',
+                status: HttpStatus.NOT_FOUND
+            }
+        }
+        if(recipe.get('userId') !== user.userId){
+            return {
+                success: false,
+                message: 'You can only update recipes you created',
+                status: HttpStatus.PRECONDITION_FAILED
+            }
+        }
+
+        await this.recipeModel.update({recipeCurrentStatus: activeRecipe.status}, {where: {recipeId: recipeWithId.recipeId}})
+        return {
+            success: true,
+            message: 'Successfully changed status',
+            status: HttpStatus.CREATED
+        }
+
     }
 }

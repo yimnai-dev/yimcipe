@@ -1,6 +1,6 @@
 import { UpdateCredentialsDto } from './../../../../../../libs/api-interfaces/src/lib/update-credentials.dto';
 import { UserByIdDto } from './../../../../../../libs/api-interfaces/src/lib/user-by-id.dto';
-import { UserRegistrationMechanism } from './../../utils/enums/user.enums';
+import { UserRegistrationMechanism } from '../../utils/types/user.type';
 import { generateUUID } from './../../utils/cid-generator.util';
 import { RegisterUserDto } from '../../../../../../libs/api-interfaces/src/lib/register.dto';
 import { encryptPassword } from './../../utils/password.util';

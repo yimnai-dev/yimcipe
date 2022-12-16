@@ -1,3 +1,4 @@
+import { RecipeCurrentStatus } from './../utils/types/user.type';
 import { RecipeShares } from './recipe-shares.model';
 import { User } from './user.model';
 import { Vote } from './vote.model';
@@ -26,6 +27,12 @@ export class Recipe extends Model {
     type: DataType.STRING
   })
   recipeContent: string;
+
+  @AllowNull(false)
+  @Column({
+    type: DataType.STRING
+  })
+  recipeCurrentStatus: RecipeCurrentStatus;
 
   @HasMany(() => Comments)
   comments: Comments[];

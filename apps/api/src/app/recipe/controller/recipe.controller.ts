@@ -1,9 +1,11 @@
+import { UpdateRecipeStatusDto } from './../../../../../../libs/api-interfaces/src/lib/update-recipe-status.dto';
+import { UpdateRecipeDto } from './../../../../../../libs/api-interfaces/src/lib/update-recipe.dto';
 import { RecipeByIdDto } from './../../../../../../libs/api-interfaces/src/lib/recipe-by-id.dto';
 import { JwtAuthGuard } from './../../user/guards/jwt-auth.guard';
-import { RecipeDto } from './../../../../../../libs/api-interfaces/src/lib/recipe.dto';
+import { RecipeDto } from '../../../../../../libs/api-interfaces/src/lib/create-recipe.dto';
 import { UserByIdDto } from './../../../../../../libs/api-interfaces/src/lib/user-by-id.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { Body, Controller, Get, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { RecipeService } from '../service/recipe.service';
 
 @UseGuards(JwtAuthGuard)
@@ -34,9 +36,26 @@ export class RecipeController {
     @Put('update')
     updateRecipe(
         @Query() user: UserByIdDto,
-        @Body() recipe: RecipeDto,
+        @Body() recipe: UpdateRecipeDto,
         @Query() recipeWithId: RecipeByIdDto
     ){
         return this.recipeService.updateRecipe(user, recipe, recipeWithId)
+    }
+
+    @Delete('delete')
+    deleteRecipe(
+        @Query() user: UserByIdDto,
+        @Query() recipeWithId: RecipeByIdDto
+    ){
+        return this.recipeService.deleteRecipeById(user, recipeWithId)
+    }
+
+    @Put('update/status')
+    updateStatus(
+        @Query() user: UserByIdDto,
+        @Query() recipeWithId: RecipeByIdDto,
+        @Body() activeRecipe: UpdateRecipeStatusDto
+    ){
+        return this.recipeService.changeRecipeStatus(user, recipeWithId, activeRecipe)
     }
 }
