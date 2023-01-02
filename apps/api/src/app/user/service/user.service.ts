@@ -1,3 +1,4 @@
+import * as rn from 'random-number'
 import { UpdateCredentialsDto } from './../../../../../../libs/api-interfaces/src/lib/update-credentials.dto';
 import { UserByIdDto } from './../../../../../../libs/api-interfaces/src/lib/user-by-id.dto';
 import { UserRegistrationMechanism } from '../../utils/types/user.type';
@@ -7,15 +8,64 @@ import { encryptPassword } from './../../utils/password.util';
 import { User } from './../../models/user.model';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { MailerService } from '@nestjs-modules/mailer';
+import { Request } from 'express';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User)
-    private userModel: typeof User
+    private userModel: typeof User,
+    private mailerService: MailerService
   ){}
 
-  registerUser = async (user: RegisterUserDto) => {
+  verifyEmail = async (email: string, req: Request) => {
+    let payload: {success?: boolean, message?: string, status?: HttpStatus} = {}
+    const randomCode = rn.generator({
+      min:  10000,
+      max:  99999,
+      integer: true
+    })()
+    await this.mailerService.sendMail({
+      to: email,
+      from: 'yimnai.dev@outlook.com',
+      subject: 'Verify your email',
+      html: `
+        <p>Hey ${email.split('@')[0]},</p>
+        <p>Please copy the code below and enter in the form. It expires in 15 minutes after which you would have to verify your email again</p>
+        <h1><strong>${randomCode}</strong></h1>
+        <p>If you did not request this email you can safely ignore it.</p>
+
+      `,
+      context: {
+        email: email,
+        verificationCode: randomCode
+      }
+    })
+    .then((result) => {
+      payload = {
+        success: true,
+        message: result,
+        status: HttpStatus.OK
+      }
+      req.session.verificationCode = randomCode
+      req.session.verificationEmail = email
+      setTimeout(() => {
+       req.session.destroy((error: any) => {})
+      }, 900000)
+    })
+    .catch((error) => {
+      payload = {
+        success: false,
+        message: error,
+        status: HttpStatus.BAD_REQUEST
+      }
+    })
+    return payload
+  }
+
+
+  registerUser = async (user: RegisterUserDto, req: any) => {
     const userExists = await this.userModel.findOne({where: {email: user.email}})
     if(userExists){
       return {
@@ -40,6 +90,13 @@ export class UserService {
     }
     const hashedPassword = encryptPassword(user.password)
     const userId = generateUUID()
+    if(!user.verificationCode || (user.verificationCode !== req.session.verificationCode || user.email !== req.session.verificationEmail)){
+      return {
+        success: false,
+        message: 'Verification code does not match or email does not match that used to get verification code',
+        status: HttpStatus.BAD_REQUEST
+      }
+    }
     const payload = {userId: userId, username: user.username, email: user.email, password: hashedPassword, registrationMechanism: UserRegistrationMechanism.LOCAL_SIGNUP}
     const createUser = await this.userModel.create(payload)
     if(createUser){
@@ -59,7 +116,7 @@ export class UserService {
   async getAllUsers(){
     const users = await this.userModel.findAll({
       attributes: {
-        exclude: ['password']
+        exclude: ['password'],
       }
     })
     if(!users){
@@ -109,6 +166,7 @@ export class UserService {
       email: data.email ? data.email : userExists.get('email'),
       password: data.password ? encryptPassword(data.password) : userExists.get('password')
     }
+
     const updatedUser = await this.userModel.update(payload, {where: {userId: user.userId}})
     if(!updatedUser){
       return {

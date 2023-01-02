@@ -7,8 +7,9 @@ import { LocalAuthGuard } from '../guards/local-auth.guard';
 import { AuthService } from '../service/auth.service';
 import { RegisterUserDto } from '../../../../../../libs/api-interfaces/src/lib/register.dto';
 import { UserService } from './../service/user.service';
-import { Body, Controller, Get, Post, UseGuards, Request, Delete, Param, Query, Put } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards, Req, Delete, Param, Query, Put } from '@nestjs/common';
 import { ApiTags, ApiQuery } from '@nestjs/swagger';
+import { Request } from 'express';
 
 @ApiTags('User')
 @Controller('users/auth')
@@ -16,11 +17,21 @@ export class UserController {
 
   constructor(private userService: UserService, private authService: AuthService){}
 
+  @Post('verify-email')
+  verifyEmail(
+    @Body() user: {email: string},
+    @Req() req: Request,
+    ){
+    return this.userService.verifyEmail(user.email, req);
+  }
+
   @Post('register')
   registerUser(
-    @Body() user: RegisterUserDto
+    @Body() user: RegisterUserDto,
+    @Req() req: Request,
   ){
-    return this.userService.registerUser(user)
+    console.log('___Final_Check___');
+    return this.userService.registerUser(user, req)
   }
 
   @UseGuards(LocalAuthGuard)
@@ -33,11 +44,11 @@ export class UserController {
 
   @UseGuards(GoogleAuthGuard)
   @Get('google')
-  async googleAuth(@Request() req: any){}
+  async googleAuth(@Req() req: any){}
 
   @UseGuards(GoogleAuthGuard)
   @Get('google/redirect')
-  async googleAuthRedirect(@Request() req: any){
+  async googleAuthRedirect(@Req() req: any){
     this.authService.googleLogin(req)
   }
 

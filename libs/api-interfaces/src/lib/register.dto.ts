@@ -6,11 +6,20 @@ import { IsEmail, IsNotEmpty, MinLength } from 'class-validator'
 export class RegisterUserDto {
   @IsNotEmpty()
   @ApiProperty({
+    description: 'This field contains the user verification code',
+    example: '12345',
+    required: true
+  })
+  verificationCode: string;
+
+
+  @IsNotEmpty()
+  @ApiProperty({
     description: 'This field contains your username',
     example: 'johndoe',
     required: true
   })
-  username: string; 
+  username: string;
 
   @IsEmail()
   @IsNotEmpty()
