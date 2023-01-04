@@ -1,3 +1,4 @@
+import { VerifyUserDto } from './../../../../../../libs/api-interfaces/src/lib/verify-user.dto';
 import { UpdateCredentialsDto } from './../../../../../../libs/api-interfaces/src/lib/update-credentials.dto';
 import { UserByIdDto } from './../../../../../../libs/api-interfaces/src/lib/user-by-id.dto';
 import { LoginUserDto } from './../../../../../../libs/api-interfaces/src/lib/login.dto';
@@ -19,10 +20,10 @@ export class UserController {
 
   @Post('verify-email')
   verifyEmail(
-    @Body() user: {email: string},
+    @Body() user: VerifyUserDto,
     @Req() req: Request,
     ){
-    return this.userService.verifyEmail(user.email, req);
+    return this.userService.verifyEmail(user, req);
   }
 
   @Post('register')
@@ -30,7 +31,6 @@ export class UserController {
     @Body() user: RegisterUserDto,
     @Req() req: Request,
   ){
-    console.log('___Final_Check___');
     return this.userService.registerUser(user, req)
   }
 

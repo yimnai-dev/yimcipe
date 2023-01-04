@@ -70,6 +70,7 @@ specifiers:
   mailtrap: ^3.0.1
   mysql2: ^2.3.3
   ngx-editor: ^15.0.1
+  ngx-toastr: ^16.0.1
   nodemailer: ^6.8.0
   nx: 15.0.13
   passport: ^0.6.0
@@ -128,6 +129,7 @@ dependencies:
   mailtrap: 3.0.1
   mysql2: 2.3.3
   ngx-editor: 15.0.1_o2mrubfx2jyawtsuz2ciqqqmri
+  ngx-toastr: 16.0.1_obeaopdwcnf2smap5gvmushmxa
   nodemailer: 6.8.0
   passport: 0.6.0
   passport-jwt: 4.0.0
@@ -10875,6 +10877,19 @@ packages:
       prosemirror-state: 1.4.2
       prosemirror-view: 1.29.0
       rxjs: 7.5.7
+      tslib: 2.4.1
+    dev: false
+
+  /ngx-toastr/16.0.1_obeaopdwcnf2smap5gvmushmxa:
+    resolution: {integrity: sha512-GpGPQcNqB2m2i5yhH73CkGV6D6DlCJ0+aXZvUoR7OMxlJTlM+73FUePVYUnpWUHXR2IVMS+1ce8WwcTXJzGJxA==}
+    peerDependencies:
+      '@angular/common': '>=14.0.0-0'
+      '@angular/core': '>=14.0.0-0'
+      '@angular/platform-browser': '>=14.0.0-0'
+    dependencies:
+      '@angular/common': 14.2.10_fyli66qyvqiwbjy3d5zeqqz3au
+      '@angular/core': 14.2.10_rxjs@7.5.7+zone.js@0.11.8
+      '@angular/platform-browser': 14.2.10_2cx72nz3jmtgwwodpmk7x4j5na
       tslib: 2.4.1
     dev: false
 

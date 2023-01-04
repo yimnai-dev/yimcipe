@@ -14,6 +14,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors({origin: 'http://localhost:4200'})
   const globalPrefix = 'api/v1.0';
   const configService = app.get(ConfigService)
   const sessionSecret = configService.get<string>('EXPRESS_SESSION_TOKEN')

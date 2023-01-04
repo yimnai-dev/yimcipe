@@ -1,3 +1,4 @@
+import { VerifyUserDto } from './../../../../../../libs/api-interfaces/src/lib/verify-user.dto';
 import * as rn from 'random-number'
 import { UpdateCredentialsDto } from './../../../../../../libs/api-interfaces/src/lib/update-credentials.dto';
 import { UserByIdDto } from './../../../../../../libs/api-interfaces/src/lib/user-by-id.dto';
@@ -19,53 +20,51 @@ export class UserService {
     private mailerService: MailerService
   ){}
 
-  verifyEmail = async (email: string, req: Request) => {
-    let payload: {success?: boolean, message?: string, status?: HttpStatus} = {}
+  verifyEmail = async (user: VerifyUserDto, req: Request) => {
     const randomCode = rn.generator({
       min:  10000,
       max:  99999,
       integer: true
     })()
     await this.mailerService.sendMail({
-      to: email,
+      to: user.email,
       from: 'yimnai.dev@outlook.com',
       subject: 'Verify your email',
       html: `
-        <p>Hey ${email.split('@')[0]},</p>
+        <p>Hey ${user.email},</p>
         <p>Please copy the code below and enter in the form. It expires in 15 minutes after which you would have to verify your email again</p>
         <h1><strong>${randomCode}</strong></h1>
         <p>If you did not request this email you can safely ignore it.</p>
 
       `,
       context: {
-        email: email,
+        email: user.email,
         verificationCode: randomCode
       }
     })
     .then((result) => {
-      payload = {
+      req.session.verificationCode = randomCode
+      req.session.verificationEmail = user.email
+      setTimeout(() => {
+       req.session.destroy((error: any) => {})
+      }, 900000)
+      return {
         success: true,
         message: result,
         status: HttpStatus.OK
       }
-      req.session.verificationCode = randomCode
-      req.session.verificationEmail = email
-      setTimeout(() => {
-       req.session.destroy((error: any) => {})
-      }, 900000)
     })
     .catch((error) => {
-      payload = {
+      return {
         success: false,
         message: error,
         status: HttpStatus.BAD_REQUEST
       }
     })
-    return payload
   }
 
 
-  registerUser = async (user: RegisterUserDto, req: any) => {
+  registerUser = async (user: RegisterUserDto, req: Request) => {
     const userExists = await this.userModel.findOne({where: {email: user.email}})
     if(userExists){
       return {
@@ -90,7 +89,7 @@ export class UserService {
     }
     const hashedPassword = encryptPassword(user.password)
     const userId = generateUUID()
-    if(!user.verificationCode || (user.verificationCode !== req.session.verificationCode || user.email !== req.session.verificationEmail)){
+    if(!user.verificationCode || (+user.verificationCode !== req.session.verificationCode || user.email !== req.session.verificationEmail)){
       return {
         success: false,
         message: 'Verification code does not match or email does not match that used to get verification code',

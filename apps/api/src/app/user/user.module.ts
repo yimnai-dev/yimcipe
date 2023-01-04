@@ -11,8 +11,6 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { join } from 'path';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
 const configService: ConfigService = new ConfigService()
 
@@ -32,19 +30,12 @@ const configService: ConfigService = new ConfigService()
         secure: false,
         auth: {
           user: 'yimnai.dev@outlook.com',
-          pass: 'yimnaiDev237()',
+          pass: '.Kvrag7C2yFinOL',
         },
       },
       defaults: {
         from: '"No Reply" <yimnai.dev@outlook.com>',
-      },
-      template: {
-        dir: join(__dirname, 'user/mailer'),
-        adapter: new HandlebarsAdapter(),
-        options: {
-          strict: false,
-        },
-      },
+      }
     }),
   ],
   controllers: [UserController],

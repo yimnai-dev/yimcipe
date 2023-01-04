@@ -44,6 +44,7 @@
     "mailtrap": "^3.0.1",
     "mysql2": "^2.3.3",
     "ngx-editor": "^15.0.1",
+    "ngx-toastr": "^16.0.1",
     "nodemailer": "^6.8.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
