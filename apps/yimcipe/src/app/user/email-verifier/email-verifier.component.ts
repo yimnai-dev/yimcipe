@@ -39,7 +39,7 @@ export class EmailVerifierComponent {
         this.isLoading$.next(false);
         return throwError(() => {error})
       }),
-      tap(() => {
+      tap((response: any) => {
         this.isLoading$.next(false);
         this.toastService.showSuccess('A verification Code has been sent to your email!');
         this.router.navigate(['/user/signup']);

@@ -6,6 +6,7 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as session from 'express-session';
+import * as cors from 'cors'
 import { ConfigService } from '@nestjs/config';
 
 import { AppModule } from './app/app.module';
@@ -14,10 +15,9 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors({origin: 'http://localhost:4200'})
+  app.enableCors({origin: 'http://localhost:4200', credentials: true})
   const globalPrefix = 'api/v1.0';
-  const configService = app.get(ConfigService)
-  const sessionSecret = configService.get<string>('EXPRESS_SESSION_TOKEN')
+  // const configService = app.get(ConfigService)
   app.setGlobalPrefix(globalPrefix);
 
   app.useGlobalPipes(new ValidationPipe());

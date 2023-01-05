@@ -24,9 +24,6 @@ import { LoadingSpinnerComponent } from "../shared/components/loading-spinner/lo
         PasswordChangeVerificationComponent,
         EmailVerifierComponent,
     ],
-    providers: [
-        AuthService
-    ],
     imports: [
         CommonModule,
         UserRoutingModule,

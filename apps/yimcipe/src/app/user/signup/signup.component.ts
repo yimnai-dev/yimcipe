@@ -31,7 +31,7 @@ export class SignupComponent {
   }
 
   registerUser(){
-    const user: User = {
+    const user: Pick<User, 'verificationCode' | 'username' | 'email' | 'password'> = {
       verificationCode: this.registrationForm.get('verificationCode')?.value,
       username: this.registrationForm.get('username')?.value,
       email: this.registrationForm.get('email')?.value,
@@ -47,8 +47,13 @@ export class SignupComponent {
       }),
       tap((response: any) => {
         this.isLoading$.next(false)
-        this.toastService.showSuccess('Account Created Successfully');
-        this.router.navigate(['/user/login']);
+        if(response.status >= 400){
+          this.toastService.showError(response.message)
+        }
+        else{
+          this.toastService.showSuccess('Account Created Successfully');
+          this.router.navigate(['/user/login']);
+        }
       })
     )
     .subscribe((response: any) => {
