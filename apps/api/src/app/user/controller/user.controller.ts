@@ -16,7 +16,10 @@ import { Request } from 'express';
 @Controller('users/auth')
 export class UserController {
 
-  constructor(private userService: UserService, private authService: AuthService){}
+  constructor(
+    private userService: UserService,
+    private authService: AuthService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache){}
 
   @Post('verify-email')
   verifyEmail(
@@ -37,9 +40,9 @@ export class UserController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async loginUser(
-    @Body() user: LoginUserDto
+    @Req() req: any
   ){
-    return this.authService.login(user)
+    return this.authService.login(req)
   }
 
   @UseGuards(GoogleAuthGuard)
@@ -75,5 +78,30 @@ export class UserController {
     @Body() data: UpdateCredentialsDto
   ){
     return this.userService.updateUser(user, data)
+  }
+
+  @Post('forgot')
+  sendPasswordResetLink(
+    @Body() user: VerifyUserDto,
+    @Req() req: Request
+  ){
+    return this.userService.forgotPassword(user, req)
+  }
+
+  @Post('reset')
+  resetPasswordStatus(
+    @Body() link: {resetLink: string},
+    @Req() req: Request
+  ){
+    return this.userService.resetPassword(link.resetLink, req);
+  }
+
+  @Put('change-password')
+  changePassword(
+    @Body() user: {email: string, newPass: string, confirmPass: string},
+    @Body() newPass: string,
+    @Body() confirmPass: string
+  ){
+    return this.userService.changePassword(user.newPass, user.confirmPass, user.email)
   }
 }

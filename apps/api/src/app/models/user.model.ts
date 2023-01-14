@@ -2,7 +2,7 @@ import { Comments } from './comments.model';
 import { Subscriber } from './subscriber.model';
 import { Recipe } from './recipe.model';
 import { Profile } from './profile.model';
-import { Column, Model, Table, AllowNull, PrimaryKey, DataType, Unique, HasMany, HasOne } from 'sequelize-typescript';
+import { Column, Model, Table, AllowNull, PrimaryKey, DataType, Unique, HasMany, HasOne, Default } from 'sequelize-typescript';
 
 @Table({tableName: 'USERS', timestamps: false})
 export class User extends Model {
@@ -13,26 +13,46 @@ export class User extends Model {
   @Column({
     type: DataType.UUID
   })
-  userId: string
+  userId!: string;
 
   @Unique
   @AllowNull(false)
   @Column({
     type: DataType.STRING
   })
-  username: string
+  username!: string;
 
   @AllowNull(false)
   @Column({
     type: DataType.STRING
   })
-  email: string
+  email!: string;
 
   @AllowNull(true)
   @Column({
     type: DataType.STRING
   })
-  password: string
+  password!: string;
+
+  @AllowNull(true)
+  @Column({
+    type: DataType.UUID
+  })
+  passwordResetToken!: string;
+
+  @AllowNull(true)
+  @Column({
+    type: DataType.TIME
+  })
+  passwordResetExpires: unknown;
+
+  @AllowNull(false)
+  @Default(true)
+  @Column({
+    type: DataType.BOOLEAN
+  })
+  passwordResetPossible!: boolean
+
 
 
   //Registration mechanism stores whether user was created via
@@ -42,18 +62,18 @@ export class User extends Model {
   @Column({
     type: DataType.ENUM('LOCAL', 'FEDERATED'),
   })
-  registrationMechanism: string;
+  registrationMechanism!: string;
 
   @HasOne(() => Profile)
-  profile: Profile
+  profile!: Profile;
 
   @HasMany(() => Recipe)
-  recipes: Recipe[]
+  recipes!: Recipe[];
 
   @HasMany(() => Subscriber)
-  subscribers: Subscriber[]
+  subscribers!: Subscriber[];
 
   @HasMany(() => Comments)
-  comments: Comments[]
+  comments!: Comments[];
 
 }

@@ -1,11 +1,12 @@
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ChangeDetectionStrategy, Component, OnInit, SkipSelf } from '@angular/core';
+import { ChangeDetectionStrategy, Component, SkipSelf } from '@angular/core';
 import { User } from '../../shared/interfaces/interface';
 import { AuthService } from '../../shared/services/auth/auth.service';
 import { catchError, shareReplay, tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { ToastService } from '../../shared/services/toastr/toast.service';
 import { Router } from '@angular/router';
+import jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'yimcipe-login',
@@ -126,33 +127,42 @@ export class LoginComponent {
   passwordVisibilityState = false;
   constructor(@SkipSelf() private authService: AuthService, private toastService: ToastService, private router: Router) { }
 
-
   loginUser(){
     const user: Pick<User, 'email' | 'password'> = {
       email: this.loginForm.get('email')?.value as string,
       password: this.loginForm.get('password')?.value as string
     };
+    console.log('Hello')
     this.authService.loginUser(user)
     .pipe(
       catchError((error: Error) => {
         this.toastService.showError(error.message);
+        console.log(error)
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         return throwError(() => {})
       }),
       tap((response: any) => {
-        if(response.status >= 400){
-          this.toastService.showWarning(`${response.status}: ${response.message}`)
+        if(response.success === false){
+          this.toastService.showError(`${response.status}: ${response.message}`)
         }
         else{
+          const userInfo = this.getDecodedAccessToken(response.access_token)
+          localStorage.setItem('authUser', JSON.stringify(userInfo))
           this.authService.setUserSession(response)
           this.toastService.showSuccess('Successfully Logged in!')
           this.router.navigate(['/dashboard/home/main']);
         }
       }),
       shareReplay()
-    ).subscribe((response: any) => {
-      console.log('Response: ', response)
-    })
+    ).subscribe()
+  }
+
+  getDecodedAccessToken(token: string){
+    try{
+      return jwt_decode(token);
+    }catch(error){
+      return null
+    }
   }
 
 }

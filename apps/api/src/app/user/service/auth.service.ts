@@ -26,29 +26,22 @@ export class AuthService {
         status: HttpStatus.NOT_FOUND
       }
     }
-    if(user && !isMatches(password, user.getDataValue('password'))){
+    if(!isMatches(password, user.getDataValue('password'))){
       return {
         success: false,
         message: 'Passwords do not match'
       }
     }
-    if(user && isMatches(password, user.getDataValue('password'))){
       const result = {username: user.getDataValue('username'), userId: user.getDataValue('userId'), email: email}
-      console.log(result)
       return result
-    }
-    return null
   }
 
-  async login(user: any) {
-    if(!user.email || !user.password){
-      return {
-        success: false,
-        message: 'Could not find user!'
-      }
+  async login(req: any) {
+    if(req.user.success === false){
+      return req.user
     }
     return {
-      access_token: this.jwtService.sign(user),
+      access_token: this.jwtService.sign(req.user),
       expires_in: '10800'
     };
   }

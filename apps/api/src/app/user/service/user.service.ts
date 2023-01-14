@@ -7,17 +7,17 @@ import { generateUUID } from './../../utils/cid-generator.util';
 import { RegisterUserDto } from '../../../../../../libs/api-interfaces/src/lib/register.dto';
 import { encryptPassword } from './../../utils/password.util';
 import { User } from './../../models/user.model';
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { MailerService } from '@nestjs-modules/mailer';
 import { Request } from 'express';
+import { SendMailService } from '../../shared/services/mail/mail.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User)
     private userModel: typeof User,
-    private mailerService: MailerService
+    private sendMailService: SendMailService
   ){}
 
   verifyEmail = async (user: VerifyUserDto, req: Request) => {
@@ -26,41 +26,34 @@ export class UserService {
       max:  99999,
       integer: true
     })()
-    await this.mailerService.sendMail({
-      to: user.email,
-      from: 'yimnai.dev@outlook.com',
-      subject: 'Verify your email',
-      html: `
-        <p>Hey ${user.email},</p>
-        <p>Please copy the code below and enter in the form. It expires in 15 minutes after which you would have to verify your email again</p>
-        <h1><strong>${randomCode}</strong></h1>
-        <p>If you did not request this email you can safely ignore it.</p>
-
-      `,
-      context: {
-        email: user.email,
-        verificationCode: randomCode
-      }
-    })
+    let payload: {} = {};
+    const message = `
+    <p>Hey ${user.email},</p>
+    <p>Please copy the code below and enter in the form. It expires in 15 minutes after which you would have to verify your email again</p>
+    <h1><strong>${randomCode}</strong></h1>
+    <p>If you did not request this email you can safely ignore it.</p>`
+    const subject = 'Email Verification'
+    await this.sendMailService.sendEmail(user.email, subject, message)
     .then((result) => {
       req.session.verificationCode = randomCode
       req.session.verificationEmail = user.email
       setTimeout(() => {
-       req.session.destroy((error: any) => {})
+       req.session.destroy((error: Error) => {})
       }, 900000)
-      return {
+      payload = {
         success: true,
         message: result,
         status: HttpStatus.OK
       }
     })
     .catch((error) => {
-      return {
+      payload = {
         success: false,
         message: error,
         status: HttpStatus.BAD_REQUEST
       }
     })
+    return {...payload}
   }
 
 
@@ -176,4 +169,113 @@ export class UserService {
     }
   }
 
+  async forgotPassword(user: VerifyUserDto, req: Request){
+    const userExists = await this.userModel.findOne({where: {email: user.email}})
+    if(!userExists){
+      return new HttpException('User does not exist', HttpStatus.NOT_FOUND);
+    }
+    const resetToken = generateUUID()
+    await this.userModel.update({ passwordResetToken: resetToken, passwordResetExpires: new Date(Date.now() + 3600000)}, {where: {email: user.email}})
+    const passwordResetLink = `http://localhost:3333/api/v1.0/user/auth/reset/${resetToken}`
+    const message = `
+    <p>Hey ${user.email},</p>
+    <p>Please click the link below to reset your email. It expires in one hour after which you would have to verify your email again</p>
+    <h1><strong>${passwordResetLink}</strong></h1>
+    <p>If you did not request this email you can safely ignore it.</p>
+
+  `
+    const subject = 'Reset Password'
+    let payload = {};
+    await this.sendMailService.sendEmail(user.email, subject, message)
+    .then((result) => {
+      req.session.verificationEmail = user.email
+      req.session.passwordResetLink = passwordResetLink
+      payload = {
+        success: true,
+        message: result,
+        status: HttpStatus.OK
+      }
+    })
+    .catch((error) => {
+      const payload = {
+        success: false,
+        message: error,
+        status: HttpStatus.BAD_REQUEST
+      }
+    })
+    return payload;
+  }
+
+  resetPassword = async (resetLink: string, req: Request) => {
+    if(resetLink !== req.session.passwordResetLink){
+      return {
+        success: false,
+        message: 'Invalid Password Reset Link',
+        status: HttpStatus.PRECONDITION_FAILED
+      }
+    }
+    const userExists = req.session.verificationEmail && await this.userModel.findOne({where: {email: req.session.verificationEmail}})
+    if(!userExists){
+      return {
+        success: false,
+        message: 'Reset link has expired. Ask for another',
+        status: HttpStatus.GATEWAY_TIMEOUT
+      }
+    }
+    const resetToken = resetLink.split('/').slice(-1)[0];
+    if(resetToken !== userExists.getDataValue('passwordResetToken')){
+      return {
+        success: false,
+        message: 'Invalid reset Token',
+        status: HttpStatus.FORBIDDEN
+      }
+    }
+    const passwordResetEnabled = await this.userModel.update({passwordResetToken: null, passwordResetExpires: null, passwordResetPossible: true}, {where: {email: req.session.verificationEmail}});
+    if(!passwordResetEnabled){
+      return {
+        success: false,
+        message: 'Permission Denied. Try again later',
+        status: HttpStatus.PRECONDITION_FAILED
+      }
+    }
+
+    return {
+      success: true,
+      message: 'Password change enabled.',
+      status: HttpStatus.CREATED
+    }
+  }
+
+  changePassword = async (newPass: string, confirmPass: string, email: string) => {
+    if(newPass.length < 8 || confirmPass.length < 8){
+      return {
+        success: false,
+        message: 'Password is too short',
+        status: HttpStatus.NOT_ACCEPTABLE
+      }
+    }
+    if(newPass !== confirmPass){
+      return {
+        success: false,
+        message: 'Passwords do not match!',
+        status: HttpStatus.NOT_ACCEPTABLE
+      }
+    }
+    const encrpytedNewPass = encryptPassword(newPass)
+    const changePassword = await this.userModel.update({password: encrpytedNewPass}, {where: {email: email}})
+    if(!changePassword){
+      return {
+        success: false,
+        message: 'Could not update password. Try again later',
+        status: HttpStatus.EXPECTATION_FAILED
+      }
+    }
+    await this.userModel.update({passwordResetPossible: false}, {where: {email: email}})
+    return {
+      success: true,
+      message: 'Password changed successfully',
+      status: HttpStatus.CREATED
+    }
+  }
 }
+
