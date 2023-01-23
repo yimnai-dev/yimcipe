@@ -5,14 +5,17 @@ import { JwtAuthGuard } from './../../user/guards/jwt-auth.guard';
 import { RecipeDto } from '../../../../../../libs/api-interfaces/src/lib/create-recipe.dto';
 import { UserByIdDto } from './../../../../../../libs/api-interfaces/src/lib/user-by-id.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { Body, Controller, Delete, Get, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, CACHE_MANAGER, Controller, Delete, Get, Inject, Post, Put, Query, UseGuards, CacheTTL, UseInterceptors, CacheInterceptor } from '@nestjs/common';
 import { RecipeService } from '../service/recipe.service';
+import { Cache } from 'cache-manager';
 
 @UseGuards(JwtAuthGuard)
 @ApiTags('Recipes')
 @Controller('recipes')
 export class RecipeController {
-    constructor(private recipeService: RecipeService){}
+    constructor(
+      private recipeService: RecipeService,
+      ){}
     @Post('create')
     createRecipe(
         @Query() user: UserByIdDto,
@@ -22,16 +25,16 @@ export class RecipeController {
     }
 
     @Get('all')
-    getAllRecipes(){
+    async getAllRecipes(){
         return this.recipeService.getAllRecipes()
     }
 
     @Get('all/single')
-    getRecipesForSingleUser(
+    async getRecipesForSingleUser(
         @Query() user: UserByIdDto,
         @Query() recipe: RecipeByIdDto
     ){
-        return this.recipeService.getRecipesForSingleUser(user, recipe)
+      return this.recipeService.getRecipesForSingleUser(user, recipe)
     }
     @Put('update')
     updateRecipe(

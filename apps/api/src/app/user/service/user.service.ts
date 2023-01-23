@@ -7,17 +7,19 @@ import { generateUUID } from './../../utils/cid-generator.util';
 import { RegisterUserDto } from '../../../../../../libs/api-interfaces/src/lib/register.dto';
 import { encryptPassword } from './../../utils/password.util';
 import { User } from './../../models/user.model';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, CACHE_MANAGER } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Request } from 'express';
 import { SendMailService } from '../../shared/services/mail/mail.service';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User)
     private userModel: typeof User,
-    private sendMailService: SendMailService
+    private sendMailService: SendMailService,
+    @Inject(CACHE_MANAGER)  private readonly cacheManager: Cache
   ){}
 
   verifyEmail = async (user: VerifyUserDto, req: Request) => {
@@ -118,6 +120,7 @@ export class UserService {
         status: HttpStatus.NOT_FOUND
       }
     }
+    this.cacheManager.set('users', users)
     return {
       success: true,
       message: 'Users fetched successfully',

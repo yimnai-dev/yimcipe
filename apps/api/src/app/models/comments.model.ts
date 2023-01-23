@@ -11,30 +11,30 @@ export class Comments extends Model {
   @Column({
     type: DataType.UUID
   })
-  commentId: string
+  commentId!: string;
 
   @AllowNull(false)
   @Column({
     type: DataType.STRING
   })
-  comment: string
+  comment!: string;
 
   @ForeignKey(() => Recipe)
   @Column({
     type: DataType.UUID,
   })
-  recipeId: string;
+  recipeId!: string;
 
   @BelongsTo(() => Recipe)
-  recipe: Recipe;
+  recipe!: Recipe;
 
   @ForeignKey(() => User)
   @Column({
     type: DataType.UUID
   })
-  userId: string;
+  userId!: string;
 
   @BelongsTo(() => User)
-  commenter: User;
+  commenter!: User;
 
 }

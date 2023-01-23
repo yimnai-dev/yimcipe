@@ -1,25 +1,23 @@
 import { VerifyUserDto } from './../../../../../../libs/api-interfaces/src/lib/verify-user.dto';
 import { UpdateCredentialsDto } from './../../../../../../libs/api-interfaces/src/lib/update-credentials.dto';
 import { UserByIdDto } from './../../../../../../libs/api-interfaces/src/lib/user-by-id.dto';
-import { LoginUserDto } from './../../../../../../libs/api-interfaces/src/lib/login.dto';
 import { GoogleAuthGuard } from './../guards/google.guard';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { LocalAuthGuard } from '../guards/local-auth.guard';
 import { AuthService } from '../service/auth.service';
 import { RegisterUserDto } from '../../../../../../libs/api-interfaces/src/lib/register.dto';
 import { UserService } from './../service/user.service';
-import { Body, Controller, Get, Post, UseGuards, Req, Delete, Param, Query, Put } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards, Req, Delete, Query, Put } from '@nestjs/common';
 import { ApiTags, ApiQuery } from '@nestjs/swagger';
 import { Request } from 'express';
 
-@ApiTags('User')
+@ApiTags('User')  
 @Controller('users/auth')
 export class UserController {
 
   constructor(
     private userService: UserService,
-    private authService: AuthService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache){}
+    private authService: AuthService){}
 
   @Post('verify-email')
   verifyEmail(

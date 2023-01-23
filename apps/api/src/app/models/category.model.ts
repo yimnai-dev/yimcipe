@@ -10,15 +10,15 @@ export class Category extends Model {
   @Column({
     type: DataType.UUID
   })
-  categoryId: string
+  categoryId!: string;
 
   @AllowNull(false)
   @Column({
     type: DataType.STRING
   })
-  category: string
+  category!: string;
 
   @HasMany(() => Recipe)
-  recipe: Recipe[]
+  recipe!: Recipe[];
 
 }

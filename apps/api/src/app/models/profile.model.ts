@@ -10,34 +10,34 @@ export class Profile extends Model{
   @Column({
     type: DataType.UUID
   })
-  profileId: string
+  profileId!: string;
 
   @Unique
   @Column({
     type: DataType.STRING
   })
-  fullName: string
+  fullName!: string;
 
   @Column({
     type: DataType.STRING
   })
-  occupation: string
+  occupation!: string;
 
   @Column({
     type: DataType.BLOB
   })
-  photo: Blob
+  photo!: Blob;
 
   @Column({
     type: DataType.STRING
   })
-  status: string
+  status!: string;
 
   @ForeignKey(() => User)
   @Column({
     type: DataType.UUID,
     field: 'userId'
   })
-  userId: string
+  userId!: string;
 
 }

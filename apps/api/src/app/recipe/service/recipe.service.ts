@@ -1,3 +1,4 @@
+import { RecipeResponse } from './../../utils/response.util';
 import { UpdateRecipeStatusDto } from './../../../../../../libs/api-interfaces/src/lib/update-recipe-status.dto';
 import { RecipeCurrentStatus } from './../../utils/types/user.type';
 import { UpdateRecipeDto } from './../../../../../../libs/api-interfaces/src/lib/update-recipe.dto';
@@ -7,8 +8,10 @@ import { generateUUID } from './../../utils/cid-generator.util';
 import { RecipeDto } from '../../../../../../libs/api-interfaces/src/lib/create-recipe.dto';
 import { UserByIdDto } from './../../../../../../libs/api-interfaces/src/lib/user-by-id.dto';
 import { Recipe } from './../../models/recipe.model';
-import { Injectable, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpStatus, CACHE_MANAGER, Inject } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { Cache } from 'cache-manager';
+import { environment } from 'apps/api/src/environments/environment';
 
 @Injectable()
 export class RecipeService {
@@ -16,10 +19,13 @@ export class RecipeService {
         @InjectModel(Recipe)
         private recipeModel: typeof Recipe,
         @InjectModel(Category)
-        private categoryModel: typeof Category
+        private categoryModel: typeof Category,
+        @Inject(CACHE_MANAGER)
+        private cacheManager: Cache
     ){}
 
     createNewRecipe = async (user: UserByIdDto, recipe: RecipeDto) => {
+        const cachedRecipes = await this.cacheManager.get('recipes') as RecipeResponse
         const [categoryExists] = await this.categoryModel.findOrCreate({where: {category: recipe.category},
         defaults: {
             categoryId: generateUUID(),
@@ -42,6 +48,7 @@ export class RecipeService {
                 status: HttpStatus.EXPECTATION_FAILED
             }
         }
+        console.log('Cached: ', cachedRecipes)
 
         return {
             success: true,
@@ -51,21 +58,27 @@ export class RecipeService {
 
     }
 
-    getAllRecipes = async () =>{
-        const recipes = await this.recipeModel.findAll({include: Category})
-        if(!recipes){
-            return {
-                success: false,
-                message: 'Could not get Recipes due to server error. Ensure you are authenticated and try again',
-                status: HttpStatus.NOT_FOUND
-            }
-        }
-        return {
-            success: true,
-            message: 'Recipes Query successful',
-            payload: recipes
-        }
+    getAllRecipes = async () => {
+    const cachedRecipes = await this.cacheManager.get('recipes');
+    if (cachedRecipes) {
+      return cachedRecipes;
     }
+    const payload = await this.recipeModel.findAll({ include: Category });
+    if (!payload) {
+      return {
+        success: false,
+        message: 'Could not get Recipes due to server error. Ensure you are authenticated and try again',
+        status: HttpStatus.NOT_FOUND
+      };
+    }
+    const recipes = {
+      success: true,
+      message: 'Recipes Query successful',
+      recipes: payload
+    };
+    this.cacheManager.set('recipes', recipes as RecipeResponse, environment.cacheTTL);
+    return recipes;
+  };
 
     getRecipesForSingleUser = async (user: UserByIdDto, recipe: RecipeByIdDto) => {
         const targetRecipe = await this.recipeModel.findOne({where: {recipeId: recipe.recipeId}})

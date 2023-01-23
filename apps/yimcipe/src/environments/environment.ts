@@ -4,7 +4,6 @@
 
 export const environment = {
   production: false,
-  JWT_SECRET_KEY: '1789ffc06f2d201a944253ef0bf3c80fce643b1b926e15a7695b6abec6944c8ec6c91c5359dd2743d1971179d5f28ff709457f2552ba6de33681f87ca9d0aade'
 };
 
 /*

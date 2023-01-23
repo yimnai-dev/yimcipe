@@ -8,8 +8,8 @@ export class RecipeShares extends Model {
   @Column({
     type: DataType.UUID
   })
-  recipeId: string
+  recipeId!: string;
 
   @BelongsTo(() => Recipe)
-  recipe: Recipe
+  recipe!: Recipe;
 }

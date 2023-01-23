@@ -10,27 +10,27 @@ export class Vote extends Model {
   @Column({
     type: DataType.UUID,
   })
-  voterId: string
+  voterId!: string;
 
   @AllowNull(false)
   @Column({
     type: DataType.INTEGER
   })
-  upvote: number
+  upvote!: number;
 
   @AllowNull(false)
   @Column({
     type: DataType.INTEGER,
   })
-  downvote: number
+  downvote!: number;
 
   @ForeignKey(() => Recipe)
   @Column({
     type: DataType.UUID,
   })
-  recipeId: string
+  recipeId!: string;
 
   @BelongsTo(() => Recipe)
-  recipe: Recipe
+  recipe!: Recipe;
 
 }

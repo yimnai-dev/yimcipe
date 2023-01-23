@@ -11,16 +11,16 @@ export class Subscriber extends Model {
   @Column({
     type: DataType.UUID
   })
-  subscriberId: string
+  subscriberId!: string;
 
   @ForeignKey(() => User)
   @Column({
     type: DataType.UUID,
     field: 'userId'
   })
-  userId: string
+  userId!: string;
 
   @BelongsToMany(() => User, () => SubscriberManager)
-  users: User[]
+  users!: User[];
 
 }

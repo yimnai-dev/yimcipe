@@ -1,5 +1,6 @@
+import * as redisStore from 'cache-manager-redis-store';
 import { CommentsModule } from './comments/comments.module';
-import { Module, CacheModule } from '@nestjs/common';
+import { Module, CacheModule, CacheStore } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize'
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './user/user.module';
@@ -9,7 +10,8 @@ import { SubscriptionModule } from './subscription/subscription.module';
 import { SharesModule } from './shares/shares.module';
 import { RecipeModule } from './recipe/recipe.module';
 import { SharedModule } from './shared/shared.module';
-import * as redisStore from 'cache-manager-redis-store';
+import type { RedisClientOptions } from 'redis'
+import { environment } from '../environments/environment';
 
 const configService: ConfigService = new ConfigService()
 
@@ -37,9 +39,13 @@ const configService: ConfigService = new ConfigService()
     RecipeModule,
     CommentsModule,
     SharedModule,
-    CacheModule.register({store: redisStore, host: 'localhost', port: 6379})
+    CacheModule.register<RedisClientOptions>({
+      store: redisStore as unknown as CacheStore,
+      isGlobal: true,
+      url: 'redis://localhost:6379',
+      ttl: environment.cacheTTL
+    })
   ],
   controllers: [],
-  providers: [],
 })
 export class AppModule {}

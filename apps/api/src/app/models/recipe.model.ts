@@ -14,51 +14,51 @@ export class Recipe extends Model {
   @Column({
     type: DataType.UUID
   })
-  recipeId: string;
+  recipeId!: string;
 
   @AllowNull(false)
   @Column({
     type: DataType.STRING
   })
-  recipeTitle: string;
+  recipeTitle!: string;
 
   @AllowNull(false)
   @Column({
     type: DataType.STRING
   })
-  recipeContent: string;
+  recipeContent!: string;
 
   @AllowNull(false)
   @Column({
     type: DataType.STRING
   })
-  recipeCurrentStatus: RecipeCurrentStatus;
+  recipeCurrentStatus!: RecipeCurrentStatus;
 
   @HasMany(() => Comments)
-  comments: Comments[];
+  comments!: Comments[];
 
   @HasMany(() => Vote)
-  votes: Vote[];
+  votes!: Vote[];
 
   @HasMany(() => RecipeShares)
-  shares: RecipeShares[];
+  shares!: RecipeShares[];
 
   @ForeignKey(() => User)
   @Column({
     type: DataType.UUID,
     field: 'userId'
   })
-  userId: string;
+  userId!: string;
 
   @BelongsTo(() => User)
-  user: User;
+  user!: User;
 
   @ForeignKey(() => Category)
   @Column({
     type: DataType.UUID,
   })
-  categoryId: string
+  categoryId!: string;
 
   @BelongsTo(() => Category)
-  category: string;
+  category!: string;
 }
