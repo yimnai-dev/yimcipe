@@ -32,9 +32,8 @@ export class RecipeController {
     @Get('all/single')
     async getRecipesForSingleUser(
         @Query() user: UserByIdDto,
-        @Query() recipe: RecipeByIdDto
     ){
-      return this.recipeService.getRecipesForSingleUser(user, recipe)
+      return this.recipeService.getRecipesForSingleUser(user)
     }
     @Put('update')
     updateRecipe(

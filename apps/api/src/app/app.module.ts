@@ -12,6 +12,7 @@ import { RecipeModule } from './recipe/recipe.module';
 import { SharedModule } from './shared/shared.module';
 import type { RedisClientOptions } from 'redis'
 import { environment } from '../environments/environment';
+import { MulterModule } from '@nestjs/platform-express';
 
 const configService: ConfigService = new ConfigService()
 
@@ -42,8 +43,11 @@ const configService: ConfigService = new ConfigService()
     CacheModule.register<RedisClientOptions>({
       store: redisStore as unknown as CacheStore,
       isGlobal: true,
-      url: 'redis://localhost:6379',
-      ttl: environment.cacheTTL
+      url: '127.0.0.1:6379',
+      ttl: environment.cacheTTL,
+    }),
+    MulterModule.register({
+      dest: '/files',
     })
   ],
   controllers: [],

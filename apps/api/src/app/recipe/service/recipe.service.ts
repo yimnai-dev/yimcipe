@@ -25,7 +25,6 @@ export class RecipeService {
     ){}
 
     createNewRecipe = async (user: UserByIdDto, recipe: RecipeDto) => {
-        const cachedRecipes = await this.cacheManager.get('recipes') as RecipeResponse
         const [categoryExists] = await this.categoryModel.findOrCreate({where: {category: recipe.category},
         defaults: {
             categoryId: generateUUID(),
@@ -48,8 +47,6 @@ export class RecipeService {
                 status: HttpStatus.EXPECTATION_FAILED
             }
         }
-        console.log('Cached: ', cachedRecipes)
-
         return {
             success: true,
             message: `Successfully created new recipe for user with id: ${user.userId}`,
@@ -76,33 +73,32 @@ export class RecipeService {
       message: 'Recipes Query successful',
       recipes: payload
     };
+
     this.cacheManager.set('recipes', recipes as RecipeResponse, environment.cacheTTL);
+    console.log('Store from get: ', this.cacheManager.store.keys());
     return recipes;
   };
 
-    getRecipesForSingleUser = async (user: UserByIdDto, recipe: RecipeByIdDto) => {
-        const targetRecipe = await this.recipeModel.findOne({where: {recipeId: recipe.recipeId}})
-        if(targetRecipe && (targetRecipe.get('userId') === user.userId)){
-            const deleteRecipe = await this.recipeModel.destroy({where: {recipeId: recipe.recipeId}})
-            if(deleteRecipe){
-                return {
-                    success: true,
-                    message: 'Recipe deleted successfully',
-                    status: HttpStatus.CREATED
-                }
-
-            }
-            return {
-                success: false,
-                message: 'Could not delete recipes successfully',
-                status: HttpStatus.EXPECTATION_FAILED
-            }
-        }
+    getRecipesForSingleUser = async (user: UserByIdDto) => {
+      const cachedUserRecipes = await this.cacheManager.get('userRecipes')
+      if(cachedUserRecipes){
+        return cachedUserRecipes
+      }
+      const recipes = await this.recipeModel.findAll({where: {userId: user.userId}, include: Category})
+      if(!recipes){
         return {
-            success: false,
-            message: 'Recipe does not exist or has already been deleted!',
-            status: HttpStatus.NOT_FOUND
+          success: false,
+          message: 'Recipes not found for this user',
+          status: HttpStatus.NOT_FOUND
         }
+      }
+      const payload = {
+        success: true,
+        message: 'User recipes loaded successfully',
+        recipes: recipes
+    }
+      this.cacheManager.set('userRecipes', payload, environment.cacheTTL)
+        return payload
     }
 
     updateRecipe = async (user: UserByIdDto, recipe: UpdateRecipeDto, recipeWithId: RecipeByIdDto) => {

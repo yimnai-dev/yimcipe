@@ -44,7 +44,7 @@ export class User extends Model {
   @Column({
     type: DataType.TIME
   })
-  passwordResetExpires: unknown;
+  passwordResetExpires!: unknown;
 
   @AllowNull(false)
   @Default(true)

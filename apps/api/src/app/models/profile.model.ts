@@ -29,7 +29,8 @@ export class Profile extends Model{
   photo!: Blob;
 
   @Column({
-    type: DataType.STRING
+    type: DataType.STRING,
+    default: 'UNVERIFIED'
   })
   status!: string;
 

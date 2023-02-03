@@ -1,10 +1,12 @@
-import { VerifyUserDto } from './../../../../../../libs/api-interfaces/src/lib/verify-user.dto';
+import { 
+  VerifyUserDto,
+  UpdateCredentialsDto,
+  UserByIdDto,
+  RegisterUserDto
+ } from '../../../../../../libs/api-interfaces/src/lib/dto.holder';
 import * as rn from 'random-number'
-import { UpdateCredentialsDto } from './../../../../../../libs/api-interfaces/src/lib/update-credentials.dto';
-import { UserByIdDto } from './../../../../../../libs/api-interfaces/src/lib/user-by-id.dto';
 import { UserRegistrationMechanism } from '../../utils/types/user.type';
 import { generateUUID } from './../../utils/cid-generator.util';
-import { RegisterUserDto } from '../../../../../../libs/api-interfaces/src/lib/register.dto';
 import { encryptPassword } from './../../utils/password.util';
 import { User } from './../../models/user.model';
 import { HttpException, HttpStatus, Inject, Injectable, CACHE_MANAGER } from '@nestjs/common';
