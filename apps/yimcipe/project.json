@@ -7,7 +7,9 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/yimcipe",
         "index": "apps/yimcipe/src/index.html",
@@ -15,8 +17,13 @@
         "polyfills": "apps/yimcipe/src/polyfills.ts",
         "tsConfig": "apps/yimcipe/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/yimcipe/src/favicon.ico", "apps/yimcipe/src/assets"],
-        "styles": ["apps/yimcipe/src/styles.scss"],
+        "assets": [
+          "apps/yimcipe/src/favicon.ico",
+          "apps/yimcipe/src/assets"
+        ],
+        "styles": [
+          "apps/yimcipe/src/styles.scss"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -76,15 +83,29 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": ["apps/yimcipe/**/*.ts", "apps/yimcipe/**/*.html"]
+        "lintFilePatterns": [
+          "apps/yimcipe/**/*.ts",
+          "apps/yimcipe/**/*.html"
+        ]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
       "options": {
         "jestConfig": "apps/yimcipe/jest.config.ts",
         "passWithNoTests": true
+      }
+    },
+    "component-test": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/yimcipe/cypress.config.ts",
+        "testingType": "component",
+        "skipServe": true,
+        "devServerTarget": "yimcipe:build"
       }
     }
   },
