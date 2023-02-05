@@ -12,6 +12,7 @@ import { UserService } from './../service/user.service';
 import { Body, Controller, Get, Post, UseGuards, Req, Delete, Query, Put } from '@nestjs/common';
 import { ApiTags, ApiQuery } from '@nestjs/swagger';
 import { Request } from 'express';
+import { ConfigService } from '@nestjs/config';
 
 @ApiTags('User')  
 @Controller('users/auth')
@@ -19,7 +20,8 @@ export class UserController {
 
   constructor(
     private userService: UserService,
-    private authService: AuthService){}
+    private authService: AuthService,
+    private configService: ConfigService){}
 
   @Post('verify-email')
   verifyEmail(
@@ -34,6 +36,7 @@ export class UserController {
     @Body() user: RegisterUserDto,
     @Req() req: Request,
   ){
+    console.log('Req: ', req.session.verificationEmail, ':; ', req.session.verificationCode)
     return this.userService.registerUser(user, req)
   }
 

@@ -17,7 +17,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({origin: 'http://localhost:4200', credentials: true})
   const globalPrefix = 'api/v1.0';
-  // const configService = app.get(ConfigService)
+  const configService = app.get(ConfigService)
   app.setGlobalPrefix(globalPrefix);
 
   app.useGlobalPipes(new ValidationPipe());
@@ -25,7 +25,7 @@ async function bootstrap() {
   //Express Sessions
   app.use(
     session({
-      secret: '493dd42ea9f5369dfe933a61903466a3add05e8d5bd4954efe5ef9a25acdeb43',
+      secret: configService.get<string>('EXPRESS_SESSION_SECRET') as string,
       resave: false,
       saveUninitialized: false,
     }),

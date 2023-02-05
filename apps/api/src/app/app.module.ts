@@ -13,6 +13,7 @@ import { SharedModule } from './shared/shared.module';
 import type { RedisClientOptions } from 'redis'
 import { environment } from '../environments/environment';
 import { MulterModule } from '@nestjs/platform-express';
+import config from 'apps/api/config';
 
 const configService: ConfigService = new ConfigService()
 
@@ -20,7 +21,8 @@ const configService: ConfigService = new ConfigService()
   imports: [
     ConfigModule.forRoot({
       cache: true,
-      isGlobal: true
+      isGlobal: true,
+      load: [config]
     }),
     SequelizeModule.forRoot({
       dialect: 'mysql',
@@ -46,9 +48,7 @@ const configService: ConfigService = new ConfigService()
       url: '127.0.0.1:6379',
       ttl: environment.cacheTTL,
     }),
-    MulterModule.register({
-      dest: '/files',
-    })
+    MulterModule.register()
   ],
   controllers: [],
 })

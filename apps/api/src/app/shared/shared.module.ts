@@ -3,22 +3,22 @@ import { Module } from '@nestjs/common';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
 
-const configService: ConfigService = new ConfigService()
 
+const configService: ConfigService = new ConfigService()
 
 @Module({
   imports: [
     MailerModule.forRoot({
       transport: {
-        host: 'smtp.office365.com',
+        host: configService.get<string>('SMTP_HOST'),
         secure: false,
         auth: {
-          user: 'yimnai.dev@outlook.com',
-          pass: '.Kvrag7C2yFinOL()',
+          user: configService.get<string>('YIMCIPE_EMAIL') ,
+          pass: configService.get<string>('YIMCIPE_PASSWORD'),
         },
       },
       defaults: {
-        from: `"No Reply" <yimnai.dev@outlook.com`,
+        from: `"No Reply" <${configService.get<string>('YIMCIPE_EMAIL')}>`,
       },
     }),
   ],

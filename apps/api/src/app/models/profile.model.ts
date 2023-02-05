@@ -1,5 +1,5 @@
 import { User } from './user.model';
-import { Column, Model, Table, Unique, AllowNull, PrimaryKey, DataType, ForeignKey } from 'sequelize-typescript';
+import { Column, Model, Table, Unique, AllowNull, PrimaryKey, DataType, ForeignKey, Default } from 'sequelize-typescript';
 
 @Table({tableName: 'PROFILES', timestamps: true})
 export class Profile extends Model{
@@ -28,9 +28,10 @@ export class Profile extends Model{
   })
   photo!: Blob;
 
+  @Default('UNVERIFIED')
   @Column({
     type: DataType.STRING,
-    default: 'UNVERIFIED'
+    
   })
   status!: string;
 

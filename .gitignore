@@ -9,6 +9,9 @@ tmp
 node_modules
 environments
 
+#Environments Config
+configurations
+
 # IDEs and editors
 /.idea
 .project
