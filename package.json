@@ -113,6 +113,7 @@
     "eslint": "~8.15.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-cypress": "^2.10.3",
+    "fork-ts-checker-webpack-plugin": "^7.3.0",
     "html-webpack-plugin": "^5.5.0",
     "jest": "28.1.1",
     "jest-environment-jsdom": "28.1.1",

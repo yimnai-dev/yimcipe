@@ -9,6 +9,7 @@ import UpdateRecipeStatusDto from "./update-recipe-status.dto";
 import UpdateCredentialsDto from "./update-credentials.dto";
 import RecipeDto from "./create-recipe.dto";
 import SubscriptionDto from "./subscription.dto";
+import VoteDto from "./vote.dto";
 
 export {
     ProfileDto,
@@ -21,5 +22,6 @@ export {
     UpdateRecipeDto,
     UpdateRecipeStatusDto,
     RecipeDto,
-    SubscriptionDto
+    SubscriptionDto,
+    VoteDto
 }

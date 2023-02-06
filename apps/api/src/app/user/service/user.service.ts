@@ -14,6 +14,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Request } from 'express';
 import { SendMailService } from '../../shared/services/mail/mail.service';
 import { Cache } from 'cache-manager';
+import { Profile } from '../../models/profile.model';
 
 @Injectable()
 export class UserService {
@@ -56,7 +57,7 @@ export class UserService {
         message: error,
         status: HttpStatus.BAD_REQUEST
       }
-    })
+  })
     return {...payload}
   }
 
@@ -113,7 +114,8 @@ export class UserService {
     const users = await this.userModel.findAll({
       attributes: {
         exclude: ['password'],
-      }
+      },
+      include: [Profile]
     })
     if(!users){
       return {
