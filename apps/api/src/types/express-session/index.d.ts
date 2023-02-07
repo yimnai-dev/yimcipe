@@ -5,7 +5,7 @@ declare module 'express-session' {
  interface Session {
     verificationCode: number;
     verificationEmail: string;
-    passwordResetLink: string;
+    passwordResetToken: string;
   }
 
 }

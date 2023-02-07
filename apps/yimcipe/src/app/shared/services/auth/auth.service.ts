@@ -22,6 +22,18 @@ export class AuthService {
     return this.httpService.post(`${this.authBaseUrl}/login`, user)
   }
 
+  forgotPassword(user: Pick<User, 'email'>){
+    return this.httpService.post(`${this.authBaseUrl}/forgot`, user)
+  }
+
+  validateResetToken(payload: {token: string}){
+    return this.httpService.post(`${this.authBaseUrl}/reset`, payload)
+  }
+
+  resetPassword(payload: {email: string, newPass: string, confirmPass: string}){
+    return this.httpService.update(`${this.authBaseUrl}/change-password`, payload)
+  }
+
 
   //Perhaps not too clean Authentication Logic and methods here. Doesn't just return observable APIs. Let just say computation(Don't know why I said that :)
   setUserSession(authUser: Pick<User, "access_token" | "expires_in">){

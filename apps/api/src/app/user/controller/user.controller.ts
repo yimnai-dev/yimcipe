@@ -1,4 +1,4 @@
-import { 
+import {
   VerifyUserDto,
   UpdateCredentialsDto,
   UserByIdDto,
@@ -14,7 +14,7 @@ import { ApiTags, ApiQuery } from '@nestjs/swagger';
 import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 
-@ApiTags('User')  
+@ApiTags('User')
 @Controller('users/auth')
 export class UserController {
 
@@ -93,17 +93,15 @@ export class UserController {
 
   @Post('reset')
   resetPasswordStatus(
-    @Body() link: {resetLink: string},
+    @Body() payload: {token: string},
     @Req() req: Request
   ){
-    return this.userService.resetPassword(link.resetLink, req);
+    return this.userService.resetPassword(payload.token, req);
   }
 
   @Put('change-password')
   changePassword(
     @Body() user: {email: string, newPass: string, confirmPass: string},
-    @Body() newPass: string,
-    @Body() confirmPass: string
   ){
     return this.userService.changePassword(user.newPass, user.confirmPass, user.email)
   }

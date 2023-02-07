@@ -1,3 +1,4 @@
+import { ConfirmPasswordTokenComponent } from './confirm-password-token/confirm-password-token.component';
 import { EmailVerifierComponent } from './email-verifier/email-verifier.component';
 import { PasswordChangeVerificationComponent } from './password-change-verification/password-change-verification.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
@@ -15,8 +16,9 @@ const routes: Routes = [
     {path: 'signup', component: SignupComponent},
     {path: 'login', component: LoginComponent},
     {path: 'forgot', component: ForgotPasswordComponent},
-    {path: 'reset/:resetId', component: ResetPasswordComponent},
-    {path: 'forgot/sent/:id', component: PasswordChangeVerificationComponent},
+    {path: 'reset', component: ResetPasswordComponent},
+    {path: 'forgot/sent', component: PasswordChangeVerificationComponent},
+    {path: 'forgot/confirm-token', component: ConfirmPasswordTokenComponent},
   ]}
 ];
 

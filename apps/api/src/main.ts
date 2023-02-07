@@ -6,8 +6,9 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as session from 'express-session';
-import * as cors from 'cors'
 import { ConfigService } from '@nestjs/config';
+import * as cors from 'cors'
+import * as cookieParser from 'cookie-parser'
 
 import { AppModule } from './app/app.module';
 
@@ -28,6 +29,7 @@ async function bootstrap() {
       secret: configService.get<string>('EXPRESS_SESSION_SECRET') as string,
       resave: false,
       saveUninitialized: false,
+      cookie: {secure: false}
     }),
   );
 

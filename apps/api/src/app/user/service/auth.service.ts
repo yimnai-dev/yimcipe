@@ -29,7 +29,7 @@ export class AuthService {
     if(!isMatches(password, user.getDataValue('password'))){
       return {
         success: false,
-        message: 'Passwords do not match'
+        message: 'Wrong password entered!'
       }
     }
       const result = {username: user.getDataValue('username'), userId: user.getDataValue('userId'), email: email}

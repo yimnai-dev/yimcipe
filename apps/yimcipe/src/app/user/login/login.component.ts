@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, SkipSelf } from '@angular/core';
 import { User } from '../../shared/interfaces/interface';
 import { AuthService } from '../../shared/services/auth/auth.service';
 import { catchError, shareReplay, tap } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { throwError, Subject } from 'rxjs';
 import { ToastService } from '../../shared/services/toastr/toast.service';
 import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
@@ -11,7 +11,8 @@ import jwt_decode from 'jwt-decode';
 @Component({
   selector: 'yimcipe-login',
   template: `
-    <main class="w-screen min-h-screen bg-darkChocolate flex justify-center">
+  <yimcipe-loading-spinner *ngIf="isLoading$ | async"></yimcipe-loading-spinner>
+    <main class="w-screen min-h-screen bg-darkChocolate flex justify-center" *ngIf="!(isLoading$ | async)">
   <!-- Container -->
   <div
     class="container mx-auto flex flex-col md:flex-row items-center justify-between md:justify-around space-x-3 space-y-11 md:space-y-0"
@@ -120,10 +121,14 @@ import jwt_decode from 'jwt-decode';
 })
 export class LoginComponent {
 
+
   loginForm: FormGroup = new FormGroup({
     email: new FormControl<string>('', [Validators.required, Validators.email]),
     password: new FormControl<string>('', [Validators.required, Validators.minLength(8)])
   })
+
+  isLoading$: Subject<boolean> = new Subject<boolean>()
+
   passwordVisibilityState = false;
   constructor(@SkipSelf() private authService: AuthService, private toastService: ToastService, private router: Router) { }
 
@@ -132,17 +137,12 @@ export class LoginComponent {
       email: this.loginForm.get('email')?.value as string,
       password: this.loginForm.get('password')?.value as string
     };
-    console.log('Hello')
+    this.isLoading$.next(true)
     this.authService.loginUser(user)
     .pipe(
-      catchError((error: Error) => {
-        this.toastService.showError(error.message);
-        console.log(error)
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        return throwError(() => {})
-      }),
       tap((response: any) => {
-        if(response.success === false){
+        this.isLoading$.next(false)
+        if(!response.access_token){
           this.toastService.showError(`${response.status}: ${response.message}`)
         }
         else{
@@ -152,6 +152,11 @@ export class LoginComponent {
           this.toastService.showSuccess('Successfully Logged in!')
           this.router.navigate(['/dashboard/home/main']);
         }
+      }),
+      catchError(error => {
+        this.isLoading$.next(false)
+        this.toastService.showError(error.message);
+        return throwError(() => {})
       }),
       shareReplay()
     ).subscribe()

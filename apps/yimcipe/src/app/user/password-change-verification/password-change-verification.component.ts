@@ -4,13 +4,22 @@ import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core
 
 @Component({
   selector: 'yimcipe-password-change-verification',
-  templateUrl: './password-change-verification.component.html',
-  styleUrls: ['./password-change-verification.component.scss'],
+  template: `
+  <main class="w-screen h-screen bg-white flex flex-col items-center justify-center">
+  <img src="assets/images/email-confirmation.svg" class="w-[50vw] h-[50vh]">
+  <h1 class="text-green-500 font-bold text-4xl md:text-5xl py-3 px-2 text-center">Check your email. A message has been sent to </h1>
+  <h1 class="text-darkChocolate font-bold text-xl sm:text-2xl md:text-3xl py-3 px-2 text-center">{{ email }}</h1>
+  <button class="px-3 py-2 rounded-md bg-darkChocolate text-white font-light" [routerLink]="['/user/forgot/confirm-token']">Confirm Token</button>
+</main>
+
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PasswordChangeVerificationComponent implements OnInit {
-  @Input() email = 'neruszaumuy@gmail.com'
+  email!: string;
   constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.email = localStorage.getItem('confirmationEmail') as string
+  }
 }

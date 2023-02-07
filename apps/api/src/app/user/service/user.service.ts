@@ -1,4 +1,4 @@
-import { 
+import {
   VerifyUserDto,
   UpdateCredentialsDto,
   UserByIdDto,
@@ -183,11 +183,10 @@ export class UserService {
     }
     const resetToken = generateUUID()
     await this.userModel.update({ passwordResetToken: resetToken, passwordResetExpires: new Date(Date.now() + 3600000)}, {where: {email: user.email}})
-    const passwordResetLink = `http://localhost:3333/api/v1.0/user/auth/reset/${resetToken}`
     const message = `
     <p>Hey ${user.email},</p>
-    <p>Please click the link below to reset your email. It expires in one hour after which you would have to verify your email again</p>
-    <h1><strong>${passwordResetLink}</strong></h1>
+    <p>Please copy this token and paste in the field. Do not share it with anyone. It expires in one hour after which you would have to verify your email again</p>
+    <h1><strong>${resetToken}</strong></h1>
     <p>If you did not request this email you can safely ignore it.</p>
 
   `
@@ -196,7 +195,7 @@ export class UserService {
     await this.sendMailService.sendEmail(user.email, subject, message)
     .then((result) => {
       req.session.verificationEmail = user.email
-      req.session.passwordResetLink = passwordResetLink
+      req.session.passwordResetToken = resetToken
       payload = {
         success: true,
         message: result,
@@ -204,7 +203,7 @@ export class UserService {
       }
     })
     .catch((error) => {
-      const payload = {
+      payload = {
         success: false,
         message: error,
         status: HttpStatus.BAD_REQUEST
@@ -213,11 +212,11 @@ export class UserService {
     return payload;
   }
 
-  resetPassword = async (resetLink: string, req: Request) => {
-    if(resetLink !== req.session.passwordResetLink){
+  resetPassword = async (token: string, req: Request) => {
+    if(token !== req.session.passwordResetToken){
       return {
         success: false,
-        message: 'Invalid Password Reset Link',
+        message: 'Invalid Password Reset Token',
         status: HttpStatus.PRECONDITION_FAILED
       }
     }
@@ -225,12 +224,11 @@ export class UserService {
     if(!userExists){
       return {
         success: false,
-        message: 'Reset link has expired. Ask for another',
+        message: 'Reset token has expired. Ask for another',
         status: HttpStatus.GATEWAY_TIMEOUT
       }
     }
-    const resetToken = resetLink.split('/').slice(-1)[0];
-    if(resetToken !== userExists.getDataValue('passwordResetToken')){
+    if(token !== userExists.getDataValue('passwordResetToken')){
       return {
         success: false,
         message: 'Invalid reset Token',
