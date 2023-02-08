@@ -1,3 +1,4 @@
+import { DashboardService } from './../shared/services/dashboard/dashboard.service';
 import { ProfileComponent } from './profile/profile.component';
 import { RecipeComponent } from './recipe/recipe.component';
 import { FavouriteComponent } from './favourite/favourite.component';
@@ -29,7 +30,7 @@ const routes: Routes = [
   exports: [RouterModule],
   providers: [
     AuthGuard,
-    AuthService
+    AuthService,
   ]
 })
 export class DashboardRoutingModule { }

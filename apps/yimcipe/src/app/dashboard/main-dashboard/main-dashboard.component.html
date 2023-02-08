@@ -1,2 +1,3 @@
 <yimcipe-search-bar></yimcipe-search-bar>
-<yimcipe-recipe-card></yimcipe-recipe-card>
+<yimcipe-loading-spinner *ngIf="dashboardService.isLoading$ | async"></yimcipe-loading-spinner>
+<yimcipe-recipe-card *ngIf="!(dashboardService.isLoading$)"></yimcipe-recipe-card>

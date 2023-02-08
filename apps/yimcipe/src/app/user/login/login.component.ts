@@ -7,6 +7,8 @@ import { throwError, Subject } from 'rxjs';
 import { ToastService } from '../../shared/services/toastr/toast.service';
 import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
+import { Store } from '@ngxs/store';
+import { LoginUser } from '../../actions/user.actions';
 
 @Component({
   selector: 'yimcipe-login',
@@ -130,7 +132,7 @@ export class LoginComponent {
   isLoading$: Subject<boolean> = new Subject<boolean>()
 
   passwordVisibilityState = false;
-  constructor(@SkipSelf() private authService: AuthService, private toastService: ToastService, private router: Router) { }
+  constructor(@SkipSelf() private authService: AuthService, private toastService: ToastService, private router: Router, private store: Store) { }
 
   loginUser(){
     const user: Pick<User, 'email' | 'password'> = {
@@ -148,9 +150,14 @@ export class LoginComponent {
         else{
           const userInfo = this.getDecodedAccessToken(response.access_token)
           localStorage.setItem('authUser', JSON.stringify(userInfo))
-          this.authService.setUserSession(response)
-          this.toastService.showSuccess('Successfully Logged in!')
-          this.router.navigate(['/dashboard/home/main']);
+          this.store.dispatch(new LoginUser(user)).pipe(
+            tap(() => {
+              this.authService.setUserSession(response)
+              this.toastService.showSuccess('Successfully Logged in!')
+              this.router.navigate(['/dashboard/home/main']);
+            })
+          ).subscribe()
+
         }
       }),
       catchError(error => {

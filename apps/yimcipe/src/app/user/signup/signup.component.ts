@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AuthService } from '../../shared/services/auth/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -7,6 +6,8 @@ import { ToastService } from '../../shared/services/toastr/toast.service';
 import { catchError, throwError, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { CreateUser } from '../../actions/user.actions';
+import { Store } from '@ngxs/store';
 @Component({
   selector: 'yimcipe-signup',
   template: `
@@ -79,8 +80,7 @@ export class SignupComponent {
 
   isLoading$: Subject<boolean> = new Subject<boolean>()
 
-  constructor(private authService: AuthService, private toastService: ToastService, private router: Router) {
-    this.isLoading$.next(false);
+  constructor(private authService: AuthService, private toastService: ToastService, private router: Router, private store: Store) {
   }
 
   registerUser(){
@@ -104,8 +104,12 @@ export class SignupComponent {
           this.toastService.showError(response.message)
         }
         else{
-          this.toastService.showSuccess('Account Created Successfully');
-          this.router.navigate(['/user/login']);
+          this.store.dispatch(new CreateUser(user)).pipe(
+            tap(() => {
+              this.toastService.showSuccess('Account Created Successfully');
+              this.router.navigate(['/user/login']);
+            })
+          ).subscribe()
         }
       })
     )

@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import { DashboardService } from './../../shared/services/dashboard/dashboard.service';
+import { ChangeDetectionStrategy, Component, Input, OnInit, SkipSelf } from '@angular/core';
 
 @Component({
   selector: 'yimcipe-main-dashboard',
@@ -7,7 +9,10 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainDashboardComponent implements OnInit {
-  constructor() {}
+  constructor(@SkipSelf() public dashboardService: DashboardService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log('Isloading: ', this.dashboardService.isLoading$);
+
+  }
 }

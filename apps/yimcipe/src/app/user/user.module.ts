@@ -3,7 +3,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserComponent } from './user.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../shared/services/auth/auth.service';
 
 import { UserRoutingModule } from './user-routing.module';
 import { SignupComponent } from './signup/signup.component';
@@ -12,7 +11,6 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { PasswordChangeVerificationComponent } from './password-change-verification/password-change-verification.component';
 import { EmailVerifierComponent } from './email-verifier/email-verifier.component';
-import { LoadingSpinnerComponent } from '../shared/components/loading-spinner/loading-spinner.component';
 import { ConfirmPasswordTokenComponent } from './confirm-password-token/confirm-password-token.component';
 
 @NgModule({
@@ -31,7 +29,7 @@ import { ConfirmPasswordTokenComponent } from './confirm-password-token/confirm-
     UserRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    LoadingSpinnerComponent,
+    SharedModule
   ],
 })
 export class UserModule {}

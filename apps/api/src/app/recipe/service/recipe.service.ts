@@ -12,6 +12,7 @@ import { Injectable, HttpStatus, CACHE_MANAGER, Inject } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Cache } from 'cache-manager';
 import { environment } from 'apps/api/src/environments/environment';
+import { User } from '../../models/user.model';
 
 @Injectable()
 export class RecipeService {
@@ -60,7 +61,7 @@ export class RecipeService {
     if (cachedRecipes) {
       return cachedRecipes;
     }
-    const payload = await this.recipeModel.findAll({ include: Category });
+    const payload = await this.recipeModel.findAll({ include: [Category, User] });
     if (!payload) {
       return {
         success: false,
@@ -75,7 +76,6 @@ export class RecipeService {
     };
 
     this.cacheManager.set('recipes', recipes as RecipeResponse, environment.cacheTTL);
-    console.log('Store from get: ', this.cacheManager.store.keys());
     return recipes;
   };
 
