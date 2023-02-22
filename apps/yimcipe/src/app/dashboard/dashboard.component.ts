@@ -12,17 +12,18 @@ import { Store } from "@ngxs/store";
 })
 
 export class DashboardComponent implements OnInit{
-  constructor(private store: Store, private dashboardService: DashboardService, private toastService: ToastService){}
-
-
-  ngOnInit(): void {
+  constructor(private store: Store, private dashboardService: DashboardService, private toastService: ToastService){
     this.dashboardService.isLoading$.next(true)
     this.dashboardService.getAllRecipes()
     .pipe(
       tap((result: any) => {
         this.dashboardService.isLoading$.next(false)
         if(result.success){
-          this.dashboardService.recipes$ = result.recipes
+          this.dashboardService.recipes$ = result.recipes.map((recipe: any) => {
+            return {
+              ...recipe,
+            }
+          })
           console.log('Recipes: ', this.dashboardService.recipes$);
 
         }
@@ -36,5 +37,10 @@ export class DashboardComponent implements OnInit{
         return throwError(() => {error})
       })
     ).subscribe()
+  }
+
+
+  ngOnInit(): void {
+
   }
  }

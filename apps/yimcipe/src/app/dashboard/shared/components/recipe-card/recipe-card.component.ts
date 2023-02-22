@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { DashboardService } from './../../../../shared/services/dashboard/dashboard.service';
+import { AfterContentChecked, AfterContentInit, ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'yimcipe-recipe-card',
@@ -7,10 +8,14 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeCardComponent {
-  @Input() $recipes!: [];
-  count = [1, 2, 3, 4, 5]
-  // commentSectionController(sectionId?: number){
+  @Input() recipes$!: any[];
 
-  // }
+  constructor(private dashboardService: DashboardService) { }
 
+  toggleRecipeStatus(recipe: any) {
+    this.recipes$ = this.recipes$.map((singleRecipe: any) => {
+     return  singleRecipe.id === recipe.id && {...singleRecipe, status: !singleRecipe.status};
+    })
+    console.log('We are here..', this.recipes$);
+  }
 }
