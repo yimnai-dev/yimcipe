@@ -60,4 +60,9 @@ export class RecipeController {
     ){
         return this.recipeService.changeRecipeStatus(user, recipeWithId, activeRecipe)
     }
+
+    @Get('categories/all')
+    getCategories(){
+      return this.recipeService.getCategories()
+    }
 }

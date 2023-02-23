@@ -9,9 +9,7 @@
   </select>
   <select class="focus:outline-darkGray border-solid border-2 border-pinkChocolate rounded-lg text-darkChocolate">
     <option selected>Select categories</option>
-    <option value="category 1">category 1</option>
-    <option value="category 1">>category 2</option>
-    <option value="category 1">category 3</option>
+    <option [value]="categoryItem + catIndex" *ngFor="let categoryItem of categoryService.categories | async; let catIndex=index">{{ categoryItem.category | uppercase }}</option>
   </select>
 
 </main>

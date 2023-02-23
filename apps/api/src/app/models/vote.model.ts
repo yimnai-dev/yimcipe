@@ -4,9 +4,7 @@ import { Recipe } from './recipe.model';
 @Table({tableName: 'VOTES', timestamps: false})
 export class Vote extends Model {
 
-  @Unique
   @AllowNull(false)
-  @PrimaryKey
   @Column({
     type: DataType.UUID,
   })

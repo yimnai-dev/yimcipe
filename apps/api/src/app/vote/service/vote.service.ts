@@ -39,44 +39,77 @@ export class VoteService {
             status: HttpStatus.NOT_FOUND
         }
        }
-       const upvotedByThisVoter = await this.voteModel.findOne({where: {voterId: voterId}})
-       if(!upvotedByThisVoter){
+      const voteExists = await this.voteModel.findOne({where: {voterId: voterId, recipeId: recipeId}})
+
+      if(!voteExists || (voteExists?.getDataValue('recipeId') !== recipeId)){
         const createVote = await this.voteModel.create({
-            voterId: voterId, 
-            recipeId: recipeId,
-            upvote: voteType === 'upvote' ? 1 : 0,
-            downvote: voteType === 'downvote' ? 1 : 0
-        })
-        if(createVote){
-            return {
-                success: true,
-                message: voteType === 'upvote' ? 'Upvoted Successfully' : 'Downvoted Successfully'
-            }
+              recipeId: recipeId,
+              voterId: voterId,
+              upvote: voteType.toUpperCase() === 'UPVOTE' ? 1 : 0,
+              downvote: voteType.toUpperCase() === 'DOWNVOTE' ? 1 : 0
+            })
+        if(!createVote){
+          return {
+              success: false,
+              message: 'Could not successfully create new vote',
+              status: HttpStatus.EXPECTATION_FAILED
+          }
         }
-        return {
-            success: false,
-            message: 'Could not upvote'
-        }
-        }
-        
-       const updateVote = await this.voteModel.update({
-        upvote: voteType === 'upvote' ? 1 : 0,
-        downvote: voteType === 'downvote' ? 1 : 0
-       }, {
-        where: {recipeId: recipeId, voterId: voterId}
-       })
-       
-       if(updateVote){
         return {
             success: true,
-            message: 'Voted Successfully',
+            message: `Successfully created new vote for recipe with id: ${recipeId}`,
             status: HttpStatus.OK
         }
-       }
-        return {
-            success: false,
-            error: 'Could not update your vote',
+
+    }
+
+    if(voteExists && voteExists.getDataValue('recipeId') === recipeId){
+      let payload: {} = {}
+      if(voteType.toUpperCase() === 'UPVOTE'){
+        payload = {
+          upvote: 1,
+          downvote: 0,
         }
+      }
+      if(voteType.toUpperCase() === 'DOWNVOTE'){
+        payload = {
+          upvote: 0,
+          downvote: 1,
+        }
+      }
+      const updateVote = await this.voteModel.update(payload, {where: {recipeId: recipeId, voterId: voterId}})
+      if(updateVote){
+        const verifyVote = this.voteModel.findOne({where: {recipeId: recipeId, voterId: voterId}})
+        return {
+          success: true,
+          message: 'Vote updated successfully',
+          status: HttpStatus.ACCEPTED
+        }
+      }
+      return {
+        success: false,
+        message: 'Could not update vote',
+        status: HttpStatus.EXPECTATION_FAILED
+      }
     }
-       
+
+}
+
+getVotes = async () => {
+  const votes = await this.voteModel.findAll()
+  if(!votes){
+    return {
+      success: false,
+      message: 'Could not retrieve votes',
+      status: HttpStatus.EXPECTATION_FAILED
     }
+  }
+  return {
+    success: true,
+    message: 'Successfully retrieved votes',
+    status: HttpStatus.ACCEPTED,
+    votes: votes
+  }
+ }
+
+}

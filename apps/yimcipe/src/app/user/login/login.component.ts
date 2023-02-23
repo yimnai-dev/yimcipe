@@ -26,7 +26,11 @@ export class LoginComponent {
   isLoading$: Subject<boolean> = new Subject<boolean>()
 
   passwordVisibilityState = false;
-  constructor(@SkipSelf() private authService: AuthService, private toastService: ToastService, private router: Router, private store: Store) { }
+  constructor(
+    @SkipSelf() private authService: AuthService,
+    private toastService: ToastService,
+    private router: Router,
+    private store: Store,) { }
 
   loginUser(){
     const user: Pick<User, 'email' | 'password'> = {

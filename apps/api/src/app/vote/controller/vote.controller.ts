@@ -1,4 +1,4 @@
-import { Controller, Post, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../user/guards/jwt-auth.guard';
 import { VoteService } from '../service/vote.service';
@@ -19,4 +19,10 @@ export class VoteController {
     ){
         return this.voteService.makeOrChangeVote(recipeId, voterId, voteType)
     }
+
+    @Get('all')
+    getAllVotes(){
+        return this.voteService.getVotes()
+    }
+
 }

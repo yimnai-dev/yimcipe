@@ -1,15 +1,20 @@
+import { ToastService } from './../toastr/toast.service';
 import { Injectable } from '@angular/core';
+import { catchError, shareReplay, tap } from 'rxjs/operators';
+import { BehaviorSubject, throwError } from 'rxjs';
+import { HttpService } from '../http/http.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class RecipeService {
 
-  recipes = [
-    {title: 'Corn flour and Huckle berry(Kati kati)', excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quam elit, bibendum vel nunc ut, lobortis consectetur arcu. Sed commodo ante tristique velit scelerisqu..',},
-    {title: 'Corn flour and Huckle berry(Kati kati)', excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quam elit, bibendum vel nunc ut, lobortis consectetur arcu. Sed commodo ante tristique velit scelerisqu..',},
-    {title: 'Corn flour and Huckle berry(Kati kati)', excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quam elit, bibendum vel nunc ut, lobortis consectetur arcu. Sed commodo ante tristique velit scelerisqu..',},
-  ]
+  recipes: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
-  constructor() { }
+  constructor(private toastService: ToastService, private readonly http: HttpService) { }
+
+  recipesBaseUrl = "recipes"
+
+   getAllRecipes(){
+    return this.http.get(`${this.recipesBaseUrl}/all`)
+  }
+
 }

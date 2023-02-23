@@ -1,3 +1,6 @@
+import { Vote } from './../../models/vote.model';
+import { Subscriber } from './../../models/subscriber.model';
+import { Profile } from './../../models/profile.model';
 import { RecipeResponse } from './../../utils/response.util';
 import { UpdateRecipeStatusDto } from './../../../../../../libs/api-interfaces/src/lib/update-recipe-status.dto';
 import { RecipeCurrentStatus } from './../../utils/types/user.type';
@@ -13,6 +16,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Cache } from 'cache-manager';
 import { environment } from 'apps/api/src/environments/environment';
 import { User } from '../../models/user.model';
+import { Comments } from '../../models/comments.model';
 
 @Injectable()
 export class RecipeService {
@@ -61,7 +65,7 @@ export class RecipeService {
     if (cachedRecipes) {
       return cachedRecipes;
     }
-    const payload = await this.recipeModel.findAll({ include: [Category, User] });
+    const payload = await this.recipeModel.findAll({ include: [{model: Comments, attributes: ['commentId', 'comment', 'userId'], include: [{model: User, attributes: ['username']}]}, {model: Category, attributes: ['categoryId', 'category']} ,{model: User, attributes: ['userId', 'username', 'email'], include: [{model: Profile, attributes: ['profileId', 'fullName', 'occupation', 'photo', 'status']}, {model: Subscriber}]}]});
     if (!payload) {
       return {
         success: false,
@@ -198,5 +202,21 @@ export class RecipeService {
             status: HttpStatus.CREATED
         }
 
+    }
+
+    getCategories = async () => {
+      const categories = await this.categoryModel.findAll()
+      if(!categories){
+        return {
+          success: false,
+          error: 'Could not get categories',
+          status: HttpStatus.NOT_FOUND
+        }
+      }
+      return {
+        success: true,
+        message: 'Categories retrieved successfully',
+        categories: categories
+      }
     }
 }

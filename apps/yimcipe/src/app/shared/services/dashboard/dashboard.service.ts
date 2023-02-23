@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { HttpService } from './../http/http.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class DashboardService {
   constructor(private readonly http: HttpService){}
 

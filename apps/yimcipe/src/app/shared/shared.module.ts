@@ -22,7 +22,7 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
     FooterComponent,
     NavigationLinksComponent,
     DropdownDirective,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
   ],
 })
 export class SharedModule {}

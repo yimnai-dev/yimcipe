@@ -14,6 +14,13 @@ export class SubscriptionService {
       ){}
 
       subscribeOrUnsubscribe = async (userId: string, subId: string) => {
+          if(userId === subId){
+            return {
+              success: false,
+              message: 'You cannot subscribe to yourself',
+              status: HttpStatus.BAD_REQUEST
+            }
+          }
           const userExists = await this.userModel.findOne({where: {userId: userId}})
             if(!userExists){
                 return {
@@ -25,7 +32,7 @@ export class SubscriptionService {
         const subscriberExists = await this.userModel.findOne({where: {userId: subId}})
         if(!subscriberExists){
             return {
-                success: false, 
+                success: false,
                 message: 'subscriber does not exist',
                 status: HttpStatus.NOT_FOUND
             }
