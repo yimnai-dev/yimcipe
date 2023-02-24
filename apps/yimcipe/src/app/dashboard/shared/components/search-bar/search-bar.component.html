@@ -2,14 +2,16 @@
   <input type="text" placeholder="search meal" class="focus:outline-darkGray border-solid border-2 border-pinkChocolate rounded-lg">
   <button class="px-6 py-2 bg-darkChocolate rounded-lg text-white shadow-lg hover:bg-pinkChocolate">All</button>
   <button class="px-6 py-2 bg-darkChocolate rounded-lg text-white shadow-lg hover:bg-pinkChocolate">Subscribed To</button>
-  <select class="focus:outline-darkGray border-solid border-2 border-pinkChocolate rounded-lg text-darkChocolate">
-    <option selected>Poster status</option>hover
-    <option value="Verified">Verified</option>
-    <option value="Unverified">Unverified</option>
-  </select>
-  <select class="focus:outline-darkGray border-solid border-2 border-pinkChocolate rounded-lg text-darkChocolate">
-    <option selected>Select categories</option>
-    <option [value]="categoryItem + catIndex" *ngFor="let categoryItem of categoryService.categories | async; let catIndex=index">{{ categoryItem.category | uppercase }}</option>
-  </select>
+  <form>
+    <select class="focus:outline-darkGray border-solid border-2 border-pinkChocolate rounded-lg text-darkChocolate" [(ngModel)]="model.status" [name]="'status'">
+      <option selected>Poster status</option>hover
+      <option value="Verified">Verified</option>
+      <option value="Unverified">Unverified</option>
+    </select>
+    <select class="focus:outline-darkGray border-solid border-2 border-pinkChocolate rounded-lg text-darkChocolate" (change)="recipeService.filterRecipesByCategory($event)" [(ngModel)]="model.category" [name]="'category'">
+      <option selected>Select categories</option>
+      <option [value]="categoryItem + catIndex" *ngFor="let categoryItem of categoryService.categories | async; let catIndex=index">{{ categoryItem.category | uppercase }}</option>
+    </select>
+  </form>
 
 </main>

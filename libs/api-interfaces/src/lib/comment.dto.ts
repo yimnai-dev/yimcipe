@@ -9,7 +9,7 @@ export class CommentDto {
         required: true,
         example: '(UUID.V4)',
     })
-    commenterId: string;
+    commenterId!: string;
 
     @IsNotEmpty()
     @IsUUID()
@@ -17,7 +17,7 @@ export class CommentDto {
         required: true,
         example: '(UUID.v4)'
     })
-    recipeId: string;
+    recipeId!: string;
 
     @IsString()
     @IsNotEmpty()
@@ -25,7 +25,7 @@ export class CommentDto {
         required: true,
         example: 'Thanks for this wonderful recipe mehn'
     })
-    comment: string;
+    comment!: string;
 }
 
 export default CommentDto

@@ -4,7 +4,7 @@ import { IsNotEmpty } from 'class-validator'
 export class RecipeByIdDto {
   @IsNotEmpty()
   @ApiProperty()
-  recipeId: string
+  recipeId!: string
 }
 
 export default RecipeByIdDto

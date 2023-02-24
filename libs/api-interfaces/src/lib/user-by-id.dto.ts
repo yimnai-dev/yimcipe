@@ -4,7 +4,7 @@ import { IsNotEmpty } from 'class-validator'
 export class UserByIdDto {
   @IsNotEmpty()
   @ApiProperty()
-  userId: string
+  userId!: string
 }
 
 export default UserByIdDto

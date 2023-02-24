@@ -24,7 +24,7 @@ export class Recipe extends Model {
 
   @AllowNull(false)
   @Column({
-    type: DataType.STRING
+    type: DataType.TEXT
   })
   recipeContent!: string;
 

@@ -6,8 +6,8 @@ import { MailtrapClient } from 'mailtrap'
 const configService: ConfigService =  new ConfigService()
 
 export async function sendConfirmationEmail(recipientEmail: string, confirmationCode: number){
-  const TOKEN = configService.get<string>('MAILTRAP_API_TOKEN')
-  const senderEmail = configService.get<string>('SENDER_EMAIL')
+  const TOKEN = configService.get<string>('MAILTRAP_API_TOKEN') as string
+  const senderEmail = configService.get<string>('SENDER_EMAIL') as string
    const client = new MailtrapClient({token: TOKEN})
    const sender = {name: 'Yimcipe HR', email: senderEmail}
    await client.send({

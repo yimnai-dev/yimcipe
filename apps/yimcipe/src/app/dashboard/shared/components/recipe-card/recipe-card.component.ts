@@ -2,10 +2,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 // import { CommentService } from './../../../../../../../api/src/app/comments/service/comments.service';
 import { CategoryService } from './../../../../shared/services/category/category.service';
 import { ToastService } from './../../../../shared/services/toastr/toast.service';
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { RecipeService } from 'apps/yimcipe/src/app/shared/services/recipe/recipe.service';
-import { tap, catchError, throwError, shareReplay, map } from 'rxjs';
+import { tap, catchError, throwError, shareReplay, map, BehaviorSubject } from 'rxjs';
 import { Buffer } from 'buffer';
 import { SubscriptionService } from 'apps/yimcipe/src/app/shared/services/subscription/subscription.service';
 import { VoteService } from 'apps/yimcipe/src/app/shared/services/vote/vote.service';
@@ -16,12 +16,13 @@ import { CommentService } from 'apps/yimcipe/src/app/shared/services/comment/com
   templateUrl: './recipe-card.component.html',
   styleUrls: ['./recipe-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  // providers: [VotePipe, SubscriptionPipe]
 })
 export class RecipeCardComponent implements OnInit{
 
   recipes!: any[]
   votes!: any[]
+
+  @Input() desiredRecipes: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   commentForm: FormGroup = new FormGroup({
     comment: new FormControl('', [Validators.required])
@@ -39,8 +40,8 @@ export class RecipeCardComponent implements OnInit{
      ){}
 
   ngOnInit(): void {
+    this.voteService.getAllVotes()
     this.queryRecipes()
-    // this.getAllVotes()
     this.categoryService.queryCategories().subscribe((result: any) => {
       this.categoryService.categories.next(result.categories)
     })
@@ -49,10 +50,8 @@ export class RecipeCardComponent implements OnInit{
   makeVote({recipeId, voterId, voteType}: {recipeId: string, voterId: string, voteType: 'upvote' | 'downvote'}){
     this.voteService.vote({recipeId, voterId, voteType}).pipe(
       tap((result: any) => {
-        console.log('Vote Result: ', result);
+        this.voteService.getAllVotes()
         this.queryRecipes()
-        this.getAllVotes()
-
         if(result.success){
           this.toastService.showSuccess(result.message)
         }else{
@@ -71,7 +70,6 @@ export class RecipeCardComponent implements OnInit{
     this.subscriptionService.subscribeOrUnsubscribe({userId: userId, subId: subId}).pipe(
       tap((result: any) => {
         this.queryRecipes()
-        this.getAllVotes()
         if(result.success){
           this.toastService.showSuccess(result.message)
         }
@@ -98,10 +96,8 @@ export class RecipeCardComponent implements OnInit{
     this.recipeService.getAllRecipes()
     .pipe(
       tap((result: any) => {
-        console.log('Result: ', result.recipes);
-
         if(result.success){
-          this.recipeService.recipes.next(
+          this.recipeService.recipeTemplate.next(
             result.recipes.map((recipe: any) => {
               return {
                 ...recipe,
@@ -121,7 +117,9 @@ export class RecipeCardComponent implements OnInit{
         return throwError(() => {error})
       }),
       shareReplay(1)
-    ).subscribe()
+    ).subscribe(() => {
+      this.recipeService.recipes.next(this.recipeService.recipeTemplate.getValue())
+    })
   }
 
   convertBlobToImage(blobData: any){
@@ -140,7 +138,6 @@ export class RecipeCardComponent implements OnInit{
     this.commentService.makeComment(payload).pipe(
       tap((result: any) => {
         console.log('Comment Result: ', result);
-        this.getAllVotes()
         this.queryRecipes()
         if(result.success){
           this.commentForm.reset()
@@ -148,16 +145,6 @@ export class RecipeCardComponent implements OnInit{
         }else{
           this.toastService.showError(result.message)
         }
-      })
-    ).subscribe()
-  }
-
-  getAllVotes(){
-    this.voteService.getVotes()
-    .pipe(
-      tap((result: any) => {
-        this.voteService.votes.next(result.votes)
-        this.votes = result.votes
       })
     ).subscribe()
   }

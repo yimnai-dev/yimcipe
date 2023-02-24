@@ -10,7 +10,7 @@ export class RegisterUserDto {
     example: '12345',
     required: true
   })
-  verificationCode: string;
+  verificationCode!: string;
 
 
   @IsNotEmpty()
@@ -19,7 +19,7 @@ export class RegisterUserDto {
     example: 'johndoe',
     required: true
   })
-  username: string;
+  username!: string;
 
   @IsEmail()
   @IsNotEmpty()
@@ -28,7 +28,7 @@ export class RegisterUserDto {
     example: 'johndoe@gmail.com',
     required: true
   })
-  email: string;
+  email!: string;
 
   @IsNotEmpty()
   @MinLength(8)
@@ -37,7 +37,7 @@ export class RegisterUserDto {
     example: 'password',
     required: true,
   })
-  password: string;
+  password!: string;
 }
 
 

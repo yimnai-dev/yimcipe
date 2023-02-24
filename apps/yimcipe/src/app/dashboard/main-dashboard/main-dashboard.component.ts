@@ -1,3 +1,4 @@
+import { RecipeService } from 'apps/yimcipe/src/app/shared/services/recipe/recipe.service';
 import { Subject } from 'rxjs';
 import { DashboardService } from './../../shared/services/dashboard/dashboard.service';
 import { ChangeDetectionStrategy, Component, Input, OnInit, SkipSelf } from '@angular/core';
@@ -9,7 +10,7 @@ import { ChangeDetectionStrategy, Component, Input, OnInit, SkipSelf } from '@an
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainDashboardComponent implements OnInit {
-  constructor(@SkipSelf() public dashboardService: DashboardService) {}
+  constructor(@SkipSelf() public dashboardService: DashboardService, public recipeService: RecipeService) {}
 
   ngOnInit(): void {
     console.log('Isloading: ', this.dashboardService.isLoading$);

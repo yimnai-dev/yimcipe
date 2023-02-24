@@ -12,7 +12,13 @@ import { tap } from 'rxjs';
 export class SearchBarComponent implements OnInit {
 
   categories!: string[]
-  constructor(public categoryService: CategoryService) {}
+
+  model = {
+    status: '',
+    category: ''
+  }
+  
+  constructor(public categoryService: CategoryService, public recipeService: RecipeService) {}
 
   ngOnInit(): void {}
 }

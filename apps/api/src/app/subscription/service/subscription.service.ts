@@ -53,7 +53,7 @@ export class SubscriptionService {
                 status: HttpStatus.OK
             }
         }
-        const sub = await this.subscriberModel.create({userId, subscriberId: subId})
+        const sub = await this.subscriberModel.create({userId: userId, subscriberId: subId})
         if(!sub){
             return {
                 success: false,

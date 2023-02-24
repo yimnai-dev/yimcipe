@@ -15,9 +15,9 @@ export class VoteController {
     makeVote(
         @Query('recipeId') recipeId: string,
         @Query('voterId') voterId: string,
-        @Query('voteType') voteType: string
+        @Query('voteType') voteType: 'upvote' | 'downvote'
     ){
-        return this.voteService.makeOrChangeVote(recipeId, voterId, voteType)
+        return this.voteService.makeOrChangeVote(voterId, recipeId, voteType)
     }
 
     @Get('all')

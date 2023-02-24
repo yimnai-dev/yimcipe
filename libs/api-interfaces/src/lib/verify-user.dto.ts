@@ -9,7 +9,7 @@ export class VerifyUserDto {
     required: true,
     example: 'johndoe@example.com'
   })
-  email: string;
+  email!: string;
 }
 
 export default VerifyUserDto

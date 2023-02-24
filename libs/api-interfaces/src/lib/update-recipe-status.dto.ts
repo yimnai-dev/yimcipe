@@ -9,7 +9,7 @@ export class UpdateRecipeStatusDto {
     description: 'Contains the new status of the recipe',
     example: 'FAVOURITE',
   })
-  status: string
+  status!: string
 }
 
 export default UpdateRecipeStatusDto

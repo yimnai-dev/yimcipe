@@ -9,7 +9,7 @@ export class LoginUserDto {
     required: true,
     example: 'johndoe'
   })
-  email: string;
+  email!: string;
 
   @IsNotEmpty()
   @MinLength(8)
@@ -18,7 +18,7 @@ export class LoginUserDto {
     required: true,
     example: 'password'
   })
-  password: string;
+  password!: string;
 }
 
 export default LoginUserDto

@@ -4,6 +4,7 @@ import { tap, Subject, catchError, throwError } from 'rxjs';
 import { DashboardService } from './../shared/services/dashboard/dashboard.service';
 import { ChangeDetectionStrategy, Component, OnInit, SkipSelf } from "@angular/core";
 import { Store } from "@ngxs/store";
+import { VoteService } from '../shared/services/vote/vote.service';
 
 @Component
 ({
@@ -13,7 +14,11 @@ import { Store } from "@ngxs/store";
 })
 
 export class DashboardComponent implements OnInit{
-  ngOnInit(): void {
 
+  constructor(private voteService: VoteService){}
+  ngOnInit(): void {
+    this.voteService.getAllVotes()
   }
+
+
  }

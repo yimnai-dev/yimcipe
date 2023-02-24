@@ -10,7 +10,7 @@ export class UpdateRecipeDto {
       description: 'Title of a given recipe',
       required: true,
     })
-    title: string;
+    title!: string;
 
     @Optional()
     @ApiProperty({
@@ -18,7 +18,7 @@ export class UpdateRecipeDto {
       description: 'Description of the given recipe',
       required: true,
     })
-    content: string;
+    content!: string;
 
     @IsNotEmpty()
     @ApiProperty({
@@ -26,7 +26,7 @@ export class UpdateRecipeDto {
       description: 'Description of the given recipe',
       required: true,
     })
-    category: string;
+    category!: string;
 
 
 }

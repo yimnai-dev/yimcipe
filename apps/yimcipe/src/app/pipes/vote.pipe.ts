@@ -6,16 +6,15 @@ import { Pipe, PipeTransform } from "@angular/core";
   pure: false
 })
 export class VotePipe implements PipeTransform {
-  transform(votes: any[], type: string, recipeId: string) {
-  let result: any[] = [];
+  transform(votes: any[] = [], type: string, recipeId: string) {
   if(type === 'upvote'){
-    result = votes.filter((vote: any) => vote.upvote === 1)
+    const result = votes.filter((vote: any) => vote.upvote === 1 && vote.recipeId === recipeId)
+    return result.length
   }
   if(type === 'downvote'){
-    result = votes.filter((vote: any) => vote.downvote === 1)
+    const result = votes.filter((vote: any) => vote.downvote === 1 && vote.recipeId === recipeId)
+    return result.length
   }
-  return result.length
+  return 0
   }
 }
-
-// type any = {downvote: number; upvote: number; voterId: string; recipeId: string;}

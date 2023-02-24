@@ -7,21 +7,21 @@ export class ProfileDto {
         required: true,
         example: 'Yimnai Nerus Zaumu',
     })
-    fullName: string
+    fullName!: string
 
     @IsNotEmpty()
     @ApiProperty({
         required: true,
         example: 'Student'
     })
-    occupation: string
+    occupation!: string
 
     @IsNotEmpty()
     @ApiProperty({
         required: true,
         example: 'uuid V4'
     })
-    userId: string
+    userId!: string
 
 }
 

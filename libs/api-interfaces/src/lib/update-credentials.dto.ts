@@ -10,7 +10,7 @@ export class UpdateCredentialsDto {
     example: 'johndoe',
     required: false
   })
-  username: string;
+  username!: string;
 
   @IsEmail()
   @IsOptional()
@@ -19,7 +19,7 @@ export class UpdateCredentialsDto {
     example: 'johndoe@gmail.com',
     required: false
   })
-  email: string;
+  email!: string;
 
   @MinLength(8)
   @IsOptional()
@@ -28,7 +28,7 @@ export class UpdateCredentialsDto {
     example: 'password',
     required: false,
   })
-  password: string;
+  password!: string;
 }
 
 
