@@ -29,7 +29,7 @@ export class ProfileService {
                 status: HttpStatus.BAD_REQUEST
             }
         }
-        
+
         const userProfile: UProfile = {
             ...profile,
             profileId: profileId,
@@ -59,11 +59,11 @@ export class ProfileService {
         }
     }
 
-    updateProfile = async (profile: Partial<Pick<UProfile, 'fullName' | 'occupation'>>, userId: string, profileId: string, photo: Express.Multer.File) => {
-        const profileDeterminant = {...profile, photo} as const
+    updateProfile = async (profile: Partial<Pick<UProfile, 'fullName' | 'occupation' | 'photo'>>, userId: string, profileId: string) => {
+        const profileDeterminant = {...profile} as const
         type streamlinedProfile = Pick<UProfile, 'fullName' | 'occupation' | 'photo'>
         type IUProfile = Partial<Pick<streamlinedProfile, keyof typeof profileDeterminant>>
-        const profileToupdate: IUProfile = {...profile, photo: photo}
+        const profileToupdate: IUProfile = {...profile}
         if(!userId || !profileId){
             return {
                 success: false,
@@ -78,7 +78,6 @@ export class ProfileService {
                 status: HttpStatus.PARTIAL_CONTENT
             }
         }
-        console.log('Profile to update: ', profileToupdate)
         const update = await this.profileModel.update(profileToupdate, {where: {userId: userId, profileId: profileId}})
         if(!update){
             return {
@@ -110,11 +109,11 @@ export class ProfileService {
         }
     }
 
-    getUserProfile = async (profileId: string) => {
-        const profile = await this.profileModel.findOne({where: {profileId: profileId}});
+    getUserProfile = async (userId: string) => {
+        const profile = await this.profileModel.findOne({where: {userId: userId}});
         if(!profile){
             return{
-                success: false, 
+                success: false,
                 message: 'Could not find user profile',
                 status: HttpStatus.NOT_FOUND
             }

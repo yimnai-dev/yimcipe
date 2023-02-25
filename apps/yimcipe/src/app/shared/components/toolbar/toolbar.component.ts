@@ -10,6 +10,8 @@ export class ToolbarComponent implements OnInit {
   @Input() nameInitial = 'Y'
   @Input() dropdownMenu!: HTMLDivElement;
 
+  constructor() { }
+
   ngOnInit(): void {
     document.addEventListener('click', (event: any) => {
       if(event.target.id === 'controller'){

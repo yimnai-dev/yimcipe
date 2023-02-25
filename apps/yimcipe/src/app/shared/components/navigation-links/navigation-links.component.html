@@ -7,6 +7,6 @@
   <a [routerLink]="['/dashboard/home/favourite']" [routerLinkActive]="'text-pinkChocolate'" [class]=menuItemsClassList *ngIf="dropdownLocationState === 'header' || dropdownLocationState === 'dropdown-menu' || dropdownLocationState === 'footer'">FAVOURITES</a>
   <a [routerLink]="['/dashboard/home/new']" [routerLinkActive]="'text-pinkChocolate'" [class]=menuItemsClassList *ngIf="dropdownLocationState === 'header' || dropdownLocationState === 'dropdown-menu' || dropdownLocationState === 'footer'">NEW</a>
   <a [routerLink]="['/dashboard/home/profile']" [routerLinkActive]="'text-pinkChocolate'" [class]=menuItemsClassList *ngIf="dropdownLocationState === 'footer' || dropdownLocationState === 'dropdown-menu'">PROFILE</a>
-  <a [routerLink]="['/user/login']" [routerLinkActive]="'text-pinkChocolate'" [class]=menuItemsClassList *ngIf="dropdownLocationState === 'footer' || dropdownLocationState === 'dropdown-menu'">LOGOUT</a>
+  <a [routerLinkActive]="'text-pinkChocolate'" [class]=menuItemsClassList *ngIf="dropdownLocationState === 'footer' || dropdownLocationState === 'dropdown-menu'" (click)="authService.logout()">LOGOUT</a>
 
 </div>

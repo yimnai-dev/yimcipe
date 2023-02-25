@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
+import { AuthService } from '../../shared/services/auth/auth.service';
 
 @Component({
   selector: 'yimcipe-home',
@@ -9,6 +10,14 @@ import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angu
 export class HomeComponent {
 
   @ViewChild('dropdownMenu') dropdownMenu!: ElementRef;
+
+  nameInitial!: string;
+  profile!: any;
+
+  constructor(public authService: AuthService) {
+    const authUser = JSON.parse(localStorage.getItem('authUser') || '{}');
+    this.nameInitial = authUser.username.split('')[0].toUpperCase();
+   }
 
   closeDropdownMenu(){
     this.dropdownMenu.nativeElement.classList.add('hidden')

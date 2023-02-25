@@ -25,11 +25,23 @@ export class RecipeService {
   }
 
   filterRecipesByCategory(event: any){
-    console.info('Event target: ', event.target);
     this.recipeTemplate.subscribe(recipes => {
       const filteredRecipes = recipes.filter(recipe => recipe.category.category === event.target.value)
-      console.log('filteredRecipes', filteredRecipes);
-      this.recipes.next(filteredRecipes)
+      if(event.target.value === 'Select category'){
+        this.recipes.next(this.recipeTemplate.getValue());
+      }
+      else{
+        this.recipes.next(filteredRecipes)
+      }
+    })
+  }
+
+  filterByTitle(event: any){
+    this.recipeTemplate.subscribe(recipes => {
+      setTimeout(() => {
+        const filteredRecipes = recipes.filter(recipe => recipe.recipeTitle.toLowerCase().includes(event.target.value.toLowerCase()))
+        this.recipes.next(filteredRecipes)
+      }, 1000)
     })
   }
 

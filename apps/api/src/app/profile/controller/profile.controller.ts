@@ -27,14 +27,13 @@ export class ProfileController {
     @Put('update')
     @UseInterceptors(FileInterceptor('photo'))
     updateUserProfile(
-        @Body() profile: Partial<ProfileDto>,
+        @Body('fullName') fullName: string,
+        @Body('occupation') occupation: string,
+        @Body('photo') @UploadedFile() photo: Express.Multer.File,
         @Query('userId') userId: string,
         @Query('profileId') profileId: string,
-        @UploadedFile() photo: Express.Multer.File
     ){
-        console.log('Profile: ', profile)
-        console.log('typeof profile: ', typeof profile)
-        return this.profileService.updateProfile(profile, userId, profileId, photo)
+        return this.profileService.updateProfile({fullName: fullName, occupation: occupation, photo: photo}, userId, profileId)
     }
 
     @Delete('delete')
@@ -46,9 +45,9 @@ export class ProfileController {
 
     @Get('get-profile')
     getUserProfile(
-        @Query('profileId') profileId: string
+        @Query('userId') userId: string
     ){
-        return this.profileService.getUserProfile(profileId)
+        return this.profileService.getUserProfile(userId)
     }
-    
+
 }

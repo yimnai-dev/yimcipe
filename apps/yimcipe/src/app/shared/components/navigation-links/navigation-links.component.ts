@@ -1,3 +1,4 @@
+import { AuthService } from './../../services/auth/auth.service';
 import { Component, Input } from '@angular/core';
 
 @Component({
@@ -10,5 +11,7 @@ export class NavigationLinksComponent {
   @Input() dropdownLocationState!: string;
   @Input() menuItemsClassList!: string;
   @Input() parentContainerClassList!: string;
+
+  constructor(public authService: AuthService) { }
 
 }

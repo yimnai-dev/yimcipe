@@ -23,6 +23,7 @@ import { VotePipe } from "../pipes/vote.pipe";
 import { SubscriptionPipe } from "../pipes/subscription.pipe";
 import { VoteService } from '../shared/services/vote/vote.service';
 import { CommentService } from '../shared/services/comment/comment.service';
+import { ProfileService } from '../shared/services/profile/profile.service';
 
 @NgModule({
     declarations: [
@@ -42,7 +43,8 @@ import { CommentService } from '../shared/services/comment/comment.service';
         CategoryService,
         SubscriptionService,
         VoteService,
-        CommentService
+        CommentService,
+        ProfileService
     ],
     imports: [
         CommonModule,

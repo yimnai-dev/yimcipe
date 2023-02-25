@@ -1,3 +1,5 @@
+import { AuthService } from './../../services/auth/auth.service';
+import { RecipeService } from 'apps/yimcipe/src/app/shared/services/recipe/recipe.service';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,7 +9,13 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FooterComponent implements OnInit {
-  constructor() {}
+
+  model = {
+    title: '',
+  }
+
+  constructor(public recipeService: RecipeService, public readonly authService: AuthService) {}
 
   ngOnInit(): void {}
+
 }

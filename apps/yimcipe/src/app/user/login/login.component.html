@@ -16,7 +16,7 @@ class="container mx-auto flex flex-col md:flex-row items-center justify-between 
   <p class="text-md md:text-xl text-white py-4 font-light">
     Do not have an account yet? You can create one
     <a
-      [routerLink]="['/user/signup']"
+      [routerLink]="['/user/verify']"
       class="text-2xl underline text-pinkChocolate font-semibold hover:text-darkGray"
       >Here</a
     >
@@ -36,7 +36,7 @@ class="container mx-auto flex flex-col md:flex-row items-center justify-between 
       />
       <label
         for="email"
-        class="absolute duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-darkChocolate peer-focus:dark:text-pinkChocolate peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+        class="absolute duration-300 transform -translate-y-4 translate-x-2 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-darkChocolate peer-focus:dark:text-pinkChocolate peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
         >Email</label
       >
     <p class="text-red-500 font-bold" *ngIf="loginForm.get('email')?.dirty && loginForm.get('email')?.hasError('required')">*Email is required</p>
@@ -53,7 +53,7 @@ class="container mx-auto flex flex-col md:flex-row items-center justify-between 
       />
       <label
         for="password"
-        class="absolute duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-whitepx-2 peer-focus:px-2 peer-focus:text-darkChocolate peer-focus:dark:text-pinkChocolate peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
+        class="bg-white absolute duration-300 transform -translate-y-4 translate-x-2 scale-75 top-2 z-10 origin-[0] bg-whitepx-2 peer-focus:px-2 peer-focus:text-darkChocolate peer-focus:dark:text-pinkChocolate peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
         >Password</label
       >
       <p class="text-red-500 font-bold" *ngIf="loginForm.get('password')?.dirty && loginForm.get('password')?.hasError('required')">Password field is required!</p>

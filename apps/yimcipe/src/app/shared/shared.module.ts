@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { DropdownDirective } from './directives/dropdown.directive';
 import { CommonModule } from '@angular/common';
@@ -16,7 +17,7 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
     DropdownDirective,
     LoadingSpinnerComponent,
   ],
-  imports: [CommonModule, RouterModule, ToastrModule.forRoot()],
+  imports: [CommonModule, RouterModule, ToastrModule.forRoot(), FormsModule],
   exports: [
     ToolbarComponent,
     FooterComponent,

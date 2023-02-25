@@ -14,10 +14,11 @@ export class SearchBarComponent implements OnInit {
   categories!: string[]
 
   model = {
-    status: '',
+    // status: '',
+    title: '',
     category: ''
   }
-  
+
   constructor(public categoryService: CategoryService, public recipeService: RecipeService) {}
 
   ngOnInit(): void {}

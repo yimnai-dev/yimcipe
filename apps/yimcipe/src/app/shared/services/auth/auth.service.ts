@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { User } from './../../interfaces/interface';
 import { HttpService } from '../http/http.service';
 import { Injectable } from '@angular/core';
@@ -6,7 +7,7 @@ import * as moment from 'moment';
 @Injectable()
 export class AuthService {
 
-  constructor(private httpService: HttpService){}
+  constructor(private httpService: HttpService, private router: Router){}
 
   authBaseUrl = 'users/auth'
 
@@ -45,6 +46,8 @@ export class AuthService {
   logout(){
     localStorage.removeItem('access_token');
     localStorage.removeItem('expires_at');
+    localStorage.removeItem('profile');
+    this.router.navigate(['user/login']);
   }
 
   isLoggedIn(){

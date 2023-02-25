@@ -18,11 +18,12 @@
   </div>
   <div class="flex flex-col space-between items-center md:items-left justify-center my-3 text-white md:w-auto w-1/2">
     <a [routerLink]="['/dashboard/home/profile']" [routerLinkActive]="'text-pinkChocolate'" class="text-md md:text-xl hover:text-pinkChocolate py-2">PROFILE</a>
-    <a [routerLink]="['/user/login']" [routerLinkActive]="'text-pinkChocolate'" class="text-md md:text-xl hover:text-pinkChocolate py-2">LOGOUT</a>
+    <a [routerLinkActive]="'text-pinkChocolate'" class="text-md md:text-xl hover:text-pinkChocolate py-2" (click)="authService.logout()">LOGOUT</a>
   </div>
   <div class="flex flex-col items-center justify-center px-3">
     <span class="text-pinkChocolate text-xl md:text-2xl py-3 text-center">Search meal by name</span>
-    <input type="text" class="bg-darkChocolate border-solid border-2 border-pinkChocolate rounded-lg h-12 w-full py-3 focus:outline-darkGray text-white">
-    <button class="py-3 px-6 border-none rounded-lg bg-pinkChocolate text-white my-3 hover:bg-darkGray hover:text-darkChocolate">Search</button>
+    <form>
+      <input type="text" class="bg-darkChocolate border-solid border-2 border-pinkChocolate rounded-lg h-12 w-full py-3 focus:outline-darkGray text-white" [name]="'name'" [(ngModel)]="model.title" (input)="recipeService.filterByTitle($event)">
+    </form>
   </div>
 </footer>
