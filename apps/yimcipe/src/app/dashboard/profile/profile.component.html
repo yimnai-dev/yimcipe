@@ -1,47 +1,43 @@
-<div class="bg-white md:rounded-lg w-screen md:w-auto md:mx-2 mx-auto py-3 px-3">
+<yimcipe-loading-spinner *ngIf="isLoading$ | async"></yimcipe-loading-spinner>
+<div class="bg-white md:rounded-lg w-screen md:w-auto md:mx-2 mx-auto py-3 px-3" *ngIf="!(isLoading$ | async)">
     <div class="w-full text-center">
         <h1 class="text-darkChocolate font-bold py-2 text-3xl">PROFILE</h1>
     </div>
-    photo here
     <div class="w-full flex flex-col items-center justify-between md:flex-row md:items-center md:justify-around min-h-[70vh]">
         <!-- Uneditable  -->
         <div class="flex flex-col items-start justify-center">
             <div class="flex space-around px-2 py-3 text-2xl space-x-4">
                 <p class="text-darkChocolate">Name</p>
-                <p class="text-pinkChocolate">{{ profile.fullName || authUser.username }}</p>
+                <p class="text-pinkChocolate">{{ profile?.fullName || authUser.username }}</p>
             </div>
             <div class="flex space-around px-2 py-3 text-2xl space-x-4">
                 <p class="text-darkChocolate">Occupation</p>
-                <p class="text-pinkChocolate">{{ profile.occupation || 'No occupation' }}</p>
+                <p class="text-pinkChocolate">{{ profile?.occupation || 'No occupation' }}</p>
             </div>
             <div class="flex space-around px-2 py-3 text-2xl space-x-4">
                 <p class="text-darkChocolate">Status</p>
-                <p class="text-pinkChocolate">{{ profile.status }}</p>
+                <p class="text-pinkChocolate">{{ profile?.status }}</p>
             </div>
             <div class="flex space-around px-2 py-3 text-2xl space-x-4">
-                <img src="assets/images/profileImage.png" class="">
+                <img [src]="'data:image/jpeg;base64, ' + profile.photo" class="w-[250px] h-[250px] object-contain object-center">
             </div>
-            <!-- <div class="relative mb-6 w-96 md:px-2">
-              <input [type]="passwordVisibilityState ? 'text' : 'password'" id="password" class="block border-solid border-2 border-pinkChocolate rounded-md w-full h-12 focus:outline-none focus:border-darkGray text-md text-darkChocolate peer" placeholder=" " autocomplete="off">
-              <label for="password" class="absolute duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-darkChocolate peer-focus:dark:text-pinkChocolate peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1">Password</label>
-            </div> -->
         </div>
         <!-- editable  -->
-      <form class="">
+      <form class="" [formGroup]="profileForm">
         <div class="flex flex-col items-start justify-start space-y-3 text-pinkChocolate">
           <div class="w-96 py-2">
-            <input type="text" placeholder="@update name" class="border-solid border-2 border-pinkChocolate rounded-lg w-full h-12 focus:outline-none focus:border-darkGray" [name]="'fullName'" [(ngModel)]="model.fullName">
+            <input type="text" placeholder="@update name" class="border-solid border-2 border-pinkChocolate rounded-lg w-full h-12 focus:outline-none focus:border-darkGray" formControlName="fullName">
           </div>
           <div class="w-96 py-2">
-            <input type="text" placeholder="@update occupation" class="border-solid border-2 border-pinkChocolate rounded-lg w-full h-12 focus:outline-none focus:border-darkGray" [name]="'occupation'" [(ngModel)]="model.occupation">
+            <input type="text" placeholder="@update occupation" class="border-solid border-2 border-pinkChocolate rounded-lg w-full h-12 focus:outline-none focus:border-darkGray" formControlName="occupation">
           </div>
           <div class="w-96 py-2">
-            <input type="file" placeholder="@update picture" [name]="'photo'" [(ngModel)]="model.photo">
+            <input type="file" placeholder="@update picture" formControlName="photo" (change)="onFileChange($event)">
           </div>
         </div>
       </form>
     </div>
     <div class="flex items-center justify-center py-3">
-      <button class="px-3 py-2 text-white hover:text-darkGray hover:bg-pinkChocolate bg-darkChocolate rounded-lg" [disabled]="model.fullName.length < 5 && model.occupation.length < 5 && !model.photo" (click)="updateProfile()">UPDATE</button>
+      <button class="px-3 py-2 text-white hover:text-darkGray hover:bg-pinkChocolate bg-darkChocolate rounded-lg" [disabled]="formIsValid" (click)="updateProfile()">UPDATE</button>
     </div>
 </div>

@@ -11,12 +11,14 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { SharedModule } from '../shared/shared.module';
+import { ProfileService } from '../profile/service/profile.service';
+import { Profile } from '../models/profile.model';
 
 const configService: ConfigService = new ConfigService()
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([User]),
+    SequelizeModule.forFeature([User, Profile]),
     PassportModule,
     JwtModule.register({
       secret: configService.get<string>('JWT_SECRET_KEY'),
@@ -24,9 +26,9 @@ const configService: ConfigService = new ConfigService()
         expiresIn: '10800s'
       }
     }),
-    SharedModule
+    SharedModule,
   ],
   controllers: [UserController],
-  providers: [UserService, AuthService, LocalStrategy, JwtStrategy, GoogleStrategy, ConfigService]
+  providers: [UserService, AuthService, LocalStrategy, JwtStrategy, GoogleStrategy, ConfigService, ProfileService]
 })
 export class UserModule {}

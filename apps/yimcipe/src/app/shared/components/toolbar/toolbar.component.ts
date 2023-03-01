@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'yimcipe-toolbar',
@@ -10,9 +10,13 @@ export class ToolbarComponent implements OnInit {
   @Input() nameInitial = 'Y'
   @Input() dropdownMenu!: HTMLDivElement;
 
-  constructor() { }
+  profileImageClass!: string;
+  profile!: any;
+  constructor() {
+  }
 
   ngOnInit(): void {
+    this.profile = JSON.parse(localStorage.getItem('profile') || '{}')
     document.addEventListener('click', (event: any) => {
       if(event.target.id === 'controller'){
         this.dropdownMenu.classList.toggle('hidden')
@@ -22,6 +26,7 @@ export class ToolbarComponent implements OnInit {
       }
     })
   }
+
 }
 
 

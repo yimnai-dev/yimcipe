@@ -12,12 +12,10 @@ export class PersonalComponent {
 
   authUser = JSON.parse(localStorage.getItem('authUser') || '{}')
 
-  personalRecipes: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([])
-
   constructor(public recipeService: RecipeService){
     this.recipeService.recipes.subscribe((result: any) => {
       const outcome = result.filter((recipe: any) => recipe.userId === this.authUser.userId )
-      this.personalRecipes.next(outcome)
+      this.recipeService.personalRecipes.next(outcome)
     })
 
   }

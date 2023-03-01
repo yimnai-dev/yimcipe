@@ -1,7 +1,7 @@
 export interface UProfile {
     profileId: string;
     userId: string
-    photo: Express.Multer.File;
+    photo: any;
     fullName: string;
     occupation: string;
     status: 'VERIFIED' | 'UNVERIFIED',

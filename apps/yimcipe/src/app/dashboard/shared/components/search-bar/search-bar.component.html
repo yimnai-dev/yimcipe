@@ -1,5 +1,5 @@
 <main class="w-screen md:w-[80vw] mx-auto h-auto bg-white mt-3 rounded-lg shadow-lg py-6 flex flex-col items-center justify-center md:flex-row md:justify-around space-y-6 md:space-y-0">
-  <form class="container mx-auto flex items-center justify-around">
+  <form class="container mx-auto flex md:flex-row flex-col justify-center md:space-y-0 space-y-3 items-center md:justify-around">
   <input type="text" placeholder="search meal" class="focus:outline-darkGray border-solid border-2 border-pinkChocolate rounded-lg" (input)="recipeService.filterByTitle($event)" [name]="'title'" [(ngModel)]="model.title">
   <!-- <button class="px-6 py-2 bg-darkChocolate rounded-lg text-white shadow-lg hover:bg-pinkChocolate">All</button>
   <button class="px-6 py-2 bg-darkChocolate rounded-lg text-white shadow-lg hover:bg-pinkChocolate">Subscribed To</button> -->
@@ -9,7 +9,7 @@
       <option value="Unverified">Unverified</option>
     </select> -->
     <select class="focus:outline-darkGray border-solid border-2 border-pinkChocolate rounded-lg text-darkChocolate" (change)="recipeService.filterRecipesByCategory($event)" [(ngModel)]="model.category" [name]="'category'">
-      <option #default [value]="'Select category'">Select category</option>
+      <option>Select category</option>
       <option [value]="categoryItem.category" *ngFor="let categoryItem of categoryService.categories | async; let catIndex=index">{{ categoryItem.category | uppercase }}</option>
     </select>
   </form>

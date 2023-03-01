@@ -35,7 +35,7 @@
         <img src="assets/images/visibility.svg" alt="Visibility Icon" (click)="passwordVisibilityState = !passwordVisibilityState" *ngIf="passwordVisibilityState" class="absolute -translate-y-8 md:translate-x-80 translate-x-128">
         <img src="assets/images/hide-visibility.svg" alt="Visibility Icon" (click)="passwordVisibilityState = !passwordVisibilityState" *ngIf="!passwordVisibilityState" class="absolute -translate-y-8 md:translate-x-80 translate-x-128">
         <p class="text-red-500 font-bold" *ngIf="registrationForm.get('password')?.dirty && registrationForm.get('password')?.hasError('required')">Password field is required!</p>
-        <p class="text-red-500 font-bold" *ngIf="registrationForm.get('password')?.dirty">Password length must be contain at least 8 characters!</p>
+        <p class="text-red-500 font-bold" *ngIf="registrationForm.get('password')?.dirty && registrationForm.get('password')?.hasError('minLength')">Password length must be contain at least 8 characters!</p>
 
       </div>
       <div class="w-screen md:w-96 mx-auto text-center">

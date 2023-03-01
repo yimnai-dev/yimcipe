@@ -2,35 +2,35 @@
   <div class="flex justify-between items-center px-3 w-full">
     <!-- Profile Info  -->
     <div class="flex space-x-3">
-      <div class="rounded-full w-20 h-20 bg-darkChocolate text-darkGray font-bold text-6xl flex items-center justify-center"><img [src]="recipe?.avatar ? recipe.avatar : 'assets/images/default_person_avatar.jpg'"></div>
-        <div class="flex flex-col items-start justify-center text-pinkChocolate">
-          <h1>{{ recipe.user.profile.fullName }}</h1>
-          <h3 *ngIf="recipe?.user.profile.occupation">{{ recipe.user.profile.occupation }}</h3>
+      <div class="rounded-full w-20 h-20 text-darkGray font-bold text-6xl flex items-center justify-center"><img [src]="'data:image/jpeg;base64, ' + recipe.user.profile.photo" class="rounded-full object-center object-cover w-full h-full"></div>
+        <div class="flex flex-col items-start justify-center text-darkChocolate font-light">
+          <h1>{{ recipe.user.profile.fullName || recipe.user.username }}</h1>
+          <h3>{{ recipe.user.profile.occupation || 'No occupation' }}</h3>
           <span class="flex items-center justify-center">
-            <img src="assets/images/verified.svg" alt="Verified" *ngIf="recipe.user.profile.status === 'VERIFIED'">
-            <p class="italic capitalize">{{ recipe?.user.profile.status }}</p>
+            <img src="assets/images/verified.svg" alt="Verified" *ngIf="recipe.user.profile?.status === 'VERIFIED'">
+            <p class="italic capitalize">{{ recipe.user.profile.status }}</p>
           </span>
       </div>
     </div>
     <div class="flex flex-col">
       <button class="bg-darkChocolate text-white px-3 py-2 rounded-lg hover:bg-pinkChocolate hover:text-darkChocolate" (click)="subOrUnSub(recipe.userId, authUser.userId)">{{ recipe?.user.subscribers | subscription:authUser.userId }}</button>
       <a href="#" class="text-darkChocolate">View profile</a>
-      <span class="italic text-pinkChocolate">Followers - {{ recipe?.user.subscribers.length }}</span>
+      <span class="italic text-darkChocolate">Followers - {{ recipe?.user.subscribers.length }}</span>
 
     </div>
   </div>
   <div class="px-3">
     <!-- Excerpt  -->
     <h1 class="text-darkChocolate font-bold text-2xl md:text-3xl">{{ recipe.recipeTitle }}</h1>
-    <p class="text-pinkChocolate" [innerHTML]="recipe.status ? recipe.recipeContent : '... ' + recipe.recipeContent | slice:0-200"></p>
+    <p class="" [innerHTML]="recipe.status ? recipe.recipeContent : recipe.recipeContent | excerpt"></p>
     <span class="text-darkGray cursor-pointer hover:text-darkChocolate hover:font-bold" (click)="toggleRecipeStatus(recipe)">&nbsp; Read{{ !recipe.status ? ' more' : ' less' }}</span>
   </div>
   <div class="px-3 flex items-center justify-end text-darkChocolate w-full">
     <!-- Single comment  -->
-    <div class="flex flex-col items-center justify-center px-3 cursor-pointer">
+    <!-- <div class="flex flex-col items-center justify-center px-3 cursor-pointer">
       <img src="assets/images/share.svg">
       <span>4</span>
-    </div>
+    </div> -->
     <div class="flex flex-col items-center justify-center px-3 cursor-pointer" (click)="toggleComments(recipe)">
       <img src="assets/images/comments.svg">
       <span>{{ recipe.comments.length }}</span>

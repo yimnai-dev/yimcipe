@@ -24,7 +24,7 @@ export class SubscriptionService {
           const userExists = await this.userModel.findOne({where: {userId: userId}})
             if(!userExists){
                 return {
-                    success: true,
+                    success: false,
                     message: 'USER TO WHOM YOU WANT TO SUBSCRIBE DOES NOT EXIST!',
                     status: HttpStatus.NOT_FOUND
                 }

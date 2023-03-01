@@ -1,10 +1,8 @@
 import { CACHE_MANAGER, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Profile } from '../../models/profile.model';
-import { ProfileDto } from '../../../../../../libs/api-interfaces/src/lib/dto.holder';
-import { generateUUID } from '../../utils/cid-generator.util';
-import { User } from '../../models/user.model';
 import { UProfile } from '../../utils/profile.util';
+import { Buffer } from 'buffer';
 import { profileImageIsValid } from '../../utils/profile-image-validator';
 
 @Injectable()
@@ -13,57 +11,21 @@ export class ProfileService {
     constructor(
         @InjectModel(Profile)
         private readonly profileModel: typeof Profile,
-        @InjectModel(User)
-        private readonly userModel: typeof User,
-        @Inject(CACHE_MANAGER)  private readonly cacheManager: Cache
-
     ){}
 
-    createProfile = async (profile: ProfileDto, photo: Express.Multer.File) => {
-        const profileId = generateUUID()
-        const isImageValid = profileImageIsValid(photo)
-        if(!isImageValid.valid){
-            return {
-                success: isImageValid.valid,
-                message: isImageValid.reason,
-                status: HttpStatus.BAD_REQUEST
-            }
-        }
-
-        const userProfile: UProfile = {
-            ...profile,
-            profileId: profileId,
-            photo: photo,
-            status: 'UNVERIFIED'
-        }
-        const verifyUserExistence = await this.userModel.findOne({where: {userId: profile.userId}})
-        if(!verifyUserExistence){
-            return {
-                success: false,
-                message: 'User for whom this profile is created does not exist. Make sure the userId is correct',
-                status: HttpStatus.AMBIGUOUS
-            }
-        }
-        const createUserProfile = await this.profileModel.findOrCreate({where: {...userProfile}})
-        if(!createUserProfile){
-            return {
-                success: false,
-                message: 'Could not create user profile',
-                status: HttpStatus.BAD_REQUEST
-            }
-        }
-        return {
-            success: true,
-            message: 'User profile created successfully',
-            status: HttpStatus.CREATED
-        }
-    }
-
     updateProfile = async (profile: Partial<Pick<UProfile, 'fullName' | 'occupation' | 'photo'>>, userId: string, profileId: string) => {
+        const imageIsValid = profile.photo && profileImageIsValid(profile.photo);
+        if(imageIsValid.valid === false){
+          return {
+            success: false,
+            message: imageIsValid.reason
+          }
+        }
         const profileDeterminant = {...profile} as const
         type streamlinedProfile = Pick<UProfile, 'fullName' | 'occupation' | 'photo'>
         type IUProfile = Partial<Pick<streamlinedProfile, keyof typeof profileDeterminant>>
-        const profileToupdate: IUProfile = {...profile}
+        const buffer = Buffer.alloc(profile.photo.buffer.length, profile.photo.buffer, 'base64');
+        const profileToupdate: IUProfile = {...profile, photo: profile.photo && buffer.toString('base64')}
         if(!userId || !profileId){
             return {
                 success: false,
@@ -71,6 +33,7 @@ export class ProfileService {
                 status: HttpStatus.PRECONDITION_FAILED
             }
         }
+
         if(Object.entries(profile).length === 0){
             return {
                 success: false,
@@ -86,6 +49,7 @@ export class ProfileService {
                 status: HttpStatus.FAILED_DEPENDENCY
             }
         }
+
         return {
             success: true,
             message: 'Profile updated successfully',
@@ -119,11 +83,17 @@ export class ProfileService {
             }
         }
         return {
-            success: true,
-            message: 'Profile found',
-            status: HttpStatus.OK,
-            profile: profile
-        }
+          success: true,
+          message: 'Profile retrieved successfully',
+          profile: {
+            fullName: profile.getDataValue('fullName'),
+            occupation: profile.getDataValue('occupation'),
+            photo: profile.getDataValue('photo'),
+            status: profile.getDataValue('status'),
+            userId: profile.getDataValue('userId'),
+            profileId: profile.getDataValue('profileId'),
+          }
+        };
     }
 
 

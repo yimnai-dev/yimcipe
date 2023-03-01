@@ -1,3 +1,4 @@
+import { ExcerptPipe } from './../pipes/excerpt.pipe';
 import { SubscriptionService } from './../shared/services/subscription/subscription.service';
 import { DashboardComponent } from './dashboard.component';
 import { RouterModule } from '@angular/router';
@@ -89,7 +90,8 @@ import { ProfileService } from '../shared/services/profile/profile.service';
         }),
         FormsModule,
         VotePipe,
-        SubscriptionPipe
+        SubscriptionPipe,
+        ExcerptPipe
     ]
 })
 export class DashboardModule {}

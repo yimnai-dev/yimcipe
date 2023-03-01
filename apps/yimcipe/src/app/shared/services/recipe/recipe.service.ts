@@ -1,6 +1,4 @@
-import { ToastService } from './../toastr/toast.service';
 import { Injectable } from '@angular/core';
-import { catchError, shareReplay, tap } from 'rxjs/operators';
 import { BehaviorSubject, throwError } from 'rxjs';
 import { HttpService } from '../http/http.service';
 
@@ -12,7 +10,7 @@ export class RecipeService {
   personalRecipes: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   favouriteRecipes: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
-  constructor(private toastService: ToastService, private readonly http: HttpService) { }
+  constructor(private readonly http: HttpService) { }
 
   recipesBaseUrl = "recipes"
 

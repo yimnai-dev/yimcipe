@@ -13,7 +13,5 @@ export class MainDashboardComponent implements OnInit {
   constructor(@SkipSelf() public dashboardService: DashboardService, public recipeService: RecipeService) {}
 
   ngOnInit(): void {
-    console.log('Isloading: ', this.dashboardService.isLoading$);
-
   }
 }

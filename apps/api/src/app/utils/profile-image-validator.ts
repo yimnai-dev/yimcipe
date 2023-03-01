@@ -1,6 +1,6 @@
-export const profileImageIsValid = (file: Express.Multer.File): ImageValidResponse => {
+export function profileImageIsValid (file: Express.Multer.File): ImageValidResponse {
     const validPaths = ['image/jpg', 'image/jpeg', 'image/png'] as const
-    const maxFileSize = 200000;//Max file size is in bytes
+    const maxFileSize = 204800;//Max file size is in bytes
     const isValid = validPaths.some((path: string) => path === file.mimetype)
     if(!isValid){
         return {

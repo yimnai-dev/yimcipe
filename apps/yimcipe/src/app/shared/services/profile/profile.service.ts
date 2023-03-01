@@ -1,4 +1,3 @@
-import { BehaviorSubject } from 'rxjs';
 import { HttpService } from './../http/http.service';
 import { Injectable } from '@angular/core';
 
@@ -11,10 +10,15 @@ export class ProfileService {
   // profileBaseUrl = 'https://api.yimcipe.com/api/v1/users/';
 
   getProfile(userId: string) {
-    return this.http.get(`${this.profileBaseUrl}/get-profile?userId=${userId}`);
+     this.http.get(`${this.profileBaseUrl}/get-profile?userId=${userId}`)
+     .subscribe((response: any) => {
+      localStorage.setItem('profile', JSON.stringify(response.profile))
+     })
   }
 
-  updateProfile(profile: {fullName?: string, occupation?: string, photo: any}, userId: string, profileId: string){
+  updateProfile(profile: {fullName?: string, occupation?: string, photo: File}, userId: string, profileId: string){
     return this.http.update(`${this.profileBaseUrl}/update?userId=${userId}&profileId=${profileId}`, profile);
   }
+
+
 }

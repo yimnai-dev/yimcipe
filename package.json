@@ -42,6 +42,7 @@
     "@types/uuid": "^8.3.4",
     "autoprefixer": "^10.4.13",
     "axios": "^1.2.0",
+    "base64-img": "^1.0.4",
     "bcrypt": "^5.1.0",
     "buffer": "^6.0.3",
     "cache-manager": "^5.1.4",

@@ -1,8 +1,8 @@
+import { FormGroup, FormControl } from '@angular/forms';
 import { ToastService } from './../../shared/services/toastr/toast.service';
 import { tap, shareReplay, catchError, throwError, Subject } from 'rxjs';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ProfileService } from '../../shared/services/profile/profile.service';
-import { Buffer } from 'buffer';
 
 @Component({
   selector: 'yimcipe-profile',
@@ -19,47 +19,49 @@ export class ProfileComponent implements OnInit {
 
   profile!: any;
   photo!: any;
+  file!: File | null;
+
+  profileForm: FormGroup = new FormGroup({
+    fullName: new FormControl(''),
+    occupation: new FormControl(''),
+    photo: new FormControl(''),
+  });
 
   constructor(public profileService: ProfileService, private toastService: ToastService) {
-    this.getUserProfile()
+    this.profileService.getProfile(this.authUser.userId)
     this.profile = JSON.parse(localStorage.getItem('profile') || '{}')
-    const base64 = Buffer.from(this.profile.photo.data).toString('base64');
-    const dataUrl = `data:image/jpeg;base64,${base64}`;
-    this.photo = dataUrl
-    console.log('dataUrl', dataUrl);
-
-   }
-
-   model = {
-    occupation: '',
-    fullName: '',
-    photo: '',
    }
 
    ngOnInit(): void {
-    console.log('Profile now: ', this.profile);
-
    }
 
-   getUserProfile() {
-     this.profileService.getProfile(this.authUser.userId).pipe(
-      shareReplay(1)
-     ).subscribe((response: any) => {
-      localStorage.setItem('profile', JSON.stringify(response.profile))
-     });
+   get formIsValid() {
+     return this.profileForm.get('fullName')?.value.length === 0 && this.profileForm.get('occupation')?.value.length === 0 && this.profileForm.get('photo')?.value.length === 0;
    }
+
+   onFileChange(event: any){
+    if(event.target.files.length > 0){
+      const file = event.target.files[0];
+      this.file = file
+    }
+   }
+
 
    updateProfile(){
-    const profile = {...this.model};
+    const formData = {
+      fullName: this.profileForm.get('fullName')?.value,
+      occupation: this.profileForm.get('occupation')?.value,
+      photo: this.file
+    }
+    const payload = this.trimPayload(formData)
+    console.log('Payload: ', payload)
     this.isLoading$.next(true);
-     this.profileService.updateProfile(profile, this.authUser.userId, this.profile.profileId).pipe(
+     this.profileService.updateProfile({...payload} as any, this.authUser.userId, this.profile.profileId).pipe(
       tap((response: any) => {
-        console.log('Response: ', response);
-
         this.isLoading$.next(false);
         if(response?.success){
           this.toastService.showSuccess(response.message)
-          localStorage.setItem('profile', JSON.stringify(profile))
+          localStorage.setItem('profile', JSON.stringify(payload))
           this.profile = JSON.parse(localStorage.getItem('profile') || '{}')
         }
         else{
@@ -74,7 +76,18 @@ export class ProfileComponent implements OnInit {
       }),
       shareReplay(1)
      ).subscribe(() => {
+      console.log('Hello')
+      this.profileService.getProfile(this.authUser.userId)
       this.isLoading$.next(false);
      })
    }
+
+   trimPayload(profilePayload: any){
+    const trimmedPayload = Object.entries(profilePayload).filter(ob => ob[1] !== undefined && ob[1] !== null && ob[1] !== '')
+    const newPayload = Object.fromEntries(trimmedPayload)
+    return newPayload
+  }
+
 }
+
+type Payload = {fullName: string, occupation: string, photo: unknown}

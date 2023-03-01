@@ -15,6 +15,7 @@ import { Request } from 'express';
 import { SendMailService } from '../../shared/services/mail/mail.service';
 import { Cache } from 'cache-manager';
 import { Profile } from '../../models/profile.model';
+import { baseUserAvatar } from '../../utils/data.util';
 
 @Injectable()
 export class UserService {
@@ -22,7 +23,9 @@ export class UserService {
     @InjectModel(User)
     private userModel: typeof User,
     private sendMailService: SendMailService,
-    @Inject(CACHE_MANAGER)  private readonly cacheManager: Cache
+    @Inject(CACHE_MANAGER)  private readonly cacheManager: Cache,
+    @InjectModel(Profile)
+    private profileModel: typeof Profile,
   ){}
 
   verifyEmail = async (user: VerifyUserDto, req: Request) => {
@@ -96,10 +99,11 @@ export class UserService {
     }
     const payload = {userId: userId, username: user.username, email: user.email, password: hashedPassword, registrationMechanism: UserRegistrationMechanism.LOCAL_SIGNUP}
     const createUser = await this.userModel.create(payload)
-    if(createUser){
+    const initProfile = await this.profileModel.create({profileId: generateUUID(), userId: userId, photo: baseUserAvatar})
+    if(createUser && initProfile){
       return {
         success: true,
-        message: 'Successfully created new user',
+        message: 'Successfully created new user and initialized profile',
         status: HttpStatus.CREATED
       }
     }

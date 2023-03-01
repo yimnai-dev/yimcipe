@@ -14,9 +14,8 @@ export class SearchBarComponent implements OnInit {
   categories!: string[]
 
   model = {
-    // status: '',
     title: '',
-    category: ''
+    category: 'Select category'
   }
 
   constructor(public categoryService: CategoryService, public recipeService: RecipeService) {}

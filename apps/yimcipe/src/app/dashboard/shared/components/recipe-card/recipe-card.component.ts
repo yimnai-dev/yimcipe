@@ -1,5 +1,5 @@
+import { ProfileService } from './../../../../shared/services/profile/profile.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-// import { CommentService } from './../../../../../../../api/src/app/comments/service/comments.service';
 import { CategoryService } from './../../../../shared/services/category/category.service';
 import { ToastService } from './../../../../shared/services/toastr/toast.service';
 import { ChangeDetectionStrategy, Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
@@ -19,9 +19,6 @@ import { CommentService } from 'apps/yimcipe/src/app/shared/services/comment/com
 })
 export class RecipeCardComponent implements OnInit{
 
-  recipes!: any[]
-  votes!: any[]
-
   @Input() desiredRecipes: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   commentForm: FormGroup = new FormGroup({
@@ -36,8 +33,11 @@ export class RecipeCardComponent implements OnInit{
      public categoryService: CategoryService,
      public subscriptionService: SubscriptionService,
      public voteService: VoteService,
-     private commentService: CommentService
-     ){}
+     private commentService: CommentService,
+     private profileService: ProfileService,
+     ){
+      this.getUserProfile()
+     }
 
   ngOnInit(): void {
     this.voteService.getAllVotes()
@@ -103,7 +103,6 @@ export class RecipeCardComponent implements OnInit{
                 ...recipe,
                 status: false,
                 showComments: false,
-                avatar: this.convertBlobToImage(recipe.user?.profile?.photo)
               }
             })
           )
@@ -122,13 +121,6 @@ export class RecipeCardComponent implements OnInit{
     })
   }
 
-  convertBlobToImage(blobData: any){
-    const buff = Buffer.from(blobData.data).toString('base64')
-    const imageUrl = "data:image/jpeg;base64," + buff;
-    console.log(imageUrl);
-    return imageUrl
-  }
-
   makeComment(commenterId: string, recipeId: string){
     const payload = {
       commenterId: commenterId,
@@ -137,7 +129,6 @@ export class RecipeCardComponent implements OnInit{
     }
     this.commentService.makeComment(payload).pipe(
       tap((result: any) => {
-        console.log('Comment Result: ', result);
         this.queryRecipes()
         if(result.success){
           this.commentForm.reset()
@@ -147,6 +138,10 @@ export class RecipeCardComponent implements OnInit{
         }
       })
     ).subscribe()
+  }
+
+  getUserProfile(){
+    this.profileService.getProfile(this.authUser.userId)
   }
 
 }

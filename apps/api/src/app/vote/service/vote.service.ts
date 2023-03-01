@@ -63,8 +63,8 @@ getVotes = async () => {
     const createVote = await this.voteModel.create({
       recipeId: recipeId,
       voterId: voterId,
-      upvote: type.toUpperCase() === 'UPVOTE' ? 1 : 0,
-      downvote: type.toUpperCase() === 'DOWNVOTE' ? 1 : 0
+      upvote: type.toLowerCase() === voteOpts[0] ? 1 : 0,
+      downvote: type.toLowerCase() === voteOpts[1] ? 1 : 0
     })
     if(!createVote){
       return {
@@ -79,7 +79,11 @@ getVotes = async () => {
       status: HttpStatus.OK
     }
   }
-  const payload = type === 'upvote' ? {upvote: 1, downvote: 0} : {upvote: 0, downvote: 1}
+  // const payload = type === 'upvote' ? {upvote: 1 ? 0 : 1, downvote: 0 ? 1 : 0} : {upvote: 0 ? 1 : 0, downvote: 1 ? 0 : 1}
+  const upvote = voteExists.getDataValue('upvote') as number
+  const downvote = voteExists.getDataValue('downvote') as number
+  const payload = type === 'upvote' ? {upvote: !upvote, downvote: downvote === 0 ? 0 : !downvote} : {downvote: !downvote, upvote: upvote === 0 ? 0 : !upvote}
+  // const payload = {upvote: upvote, downvote: downvote}
   const updateVote = await this.voteModel.update(payload, {where: {recipeId: recipeId, voterId: voterId}})
   if(updateVote){
     return {

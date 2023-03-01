@@ -24,8 +24,8 @@ export class HttpService {
     return this.httpClient.post(`${this.baseUrl}/${url}`, payload, this.httpOptions);
   }
 
-  update(url: string, payload: any){
-    return this.httpClient.put(`${this.baseUrl}/${url}`, payload);
+  update(url: string, payload: any, options?: any){
+    return this.httpClient.put(`${this.baseUrl}/${url}`, payload, options);
   }
 
   delete(url: string, payload: any){
