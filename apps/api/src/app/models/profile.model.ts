@@ -24,14 +24,14 @@ export class Profile extends Model{
   occupation!: string;
 
   @Column({
-    type: DataType.BLOB
+    type: DataType.TEXT('long')
   })
-  photo!: Blob;
+  photo!: string;
 
   @Default('UNVERIFIED')
   @Column({
     type: DataType.STRING,
-    
+
   })
   status!: string;
 

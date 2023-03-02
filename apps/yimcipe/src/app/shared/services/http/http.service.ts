@@ -13,7 +13,7 @@ export class HttpService {
 
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'}),
-    withCredentials: true
+    withCredentials: true,
   }
 
   get(url: string, payload?: any) {
@@ -21,7 +21,7 @@ export class HttpService {
   }
 
   post(url: string, payload?: any){
-    return this.httpClient.post(`${this.baseUrl}/${url}`, payload, this.httpOptions);
+    return this.httpClient.post(`${this.baseUrl}/${url}`, payload, {...this.httpOptions});
   }
 
   update(url: string, payload: any, options?: any){

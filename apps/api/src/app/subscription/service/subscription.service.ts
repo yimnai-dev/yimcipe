@@ -37,7 +37,7 @@ export class SubscriptionService {
                 status: HttpStatus.NOT_FOUND
             }
         }
-        const subscriptionExists = await this.subscriberModel.findOne({where: {userId: userId, subscriberId: subId}})
+        const subscriptionExists = await this.subscriberModel.findOne({where: {subscriberId: subId, userId: userId}})
         if(subscriptionExists){
             const unsub = await this.subscriberModel.destroy({where: {subscriberId: subId}})
             if(unsub !== 1){

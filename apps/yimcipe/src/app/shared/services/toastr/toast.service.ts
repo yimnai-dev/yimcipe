@@ -15,18 +15,18 @@ export class ToastService {
 
 
   showSuccess(message: string){
-    return this.toastrService.success(message, 'Toastr fun', this.config);
+    return this.toastrService.success(message, 'Success', this.config);
   }
 
   showError(message: string){
-    return this.toastrService.error(message, 'Major Error', this.config)
+    return this.toastrService.error(message, 'Error', this.config)
   }
 
   showWarning(message: string){
-    return this.toastrService.warning(message, 'Major Error', this.config)
+    return this.toastrService.warning(message, 'Warning', this.config)
   }
 
   showInfo(message: string){
-    return this.toastrService.info(message, 'Toastr fun', this.config)
+    return this.toastrService.info(message, 'Info', this.config)
   }
 }

@@ -16,7 +16,7 @@ export class ProfileService {
      })
   }
 
-  updateProfile(profile: {fullName?: string, occupation?: string, photo: File}, userId: string, profileId: string){
+  updateProfile(profile: FormData, userId: string, profileId: string){
     return this.http.update(`${this.profileBaseUrl}/update?userId=${userId}&profileId=${profileId}`, profile);
   }
 

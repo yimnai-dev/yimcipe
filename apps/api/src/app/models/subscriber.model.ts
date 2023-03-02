@@ -5,9 +5,7 @@ import { User } from './user.model';
 @Table({tableName: 'SUBSCRIBERS', timestamps: false})
 export class Subscriber extends Model {
 
-  @Unique
   @AllowNull(false)
-  @PrimaryKey
   @Column({
     type: DataType.UUID
   })

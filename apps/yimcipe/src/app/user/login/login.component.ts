@@ -43,6 +43,8 @@ export class LoginComponent {
       tap((response: any) => {
         this.isLoading$.next(false)
         if(!response.access_token){
+        console.log('Error: ', response);
+
           this.toastService.showError(`${response.status}: ${response.message}`)
         }
         else{

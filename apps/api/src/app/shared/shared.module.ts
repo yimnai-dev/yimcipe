@@ -18,8 +18,8 @@ const configService: ConfigService = new ConfigService()
         },
       },
       defaults: {
-        from: `"No Reply" <${configService.get<string>('YIMCIPE_EMAIL')}>`,
-      },
+        from: `"No Reply" <admin@yimcipe.com>`,
+      }
     }),
   ],
   exports: [SendMailService],

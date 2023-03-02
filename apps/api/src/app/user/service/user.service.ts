@@ -185,12 +185,16 @@ export class UserService {
     if(!userExists){
       return new HttpException('User does not exist', HttpStatus.NOT_FOUND);
     }
-    const resetToken = generateUUID()
-    await this.userModel.update({ passwordResetToken: resetToken, passwordResetExpires: new Date(Date.now() + 3600000)}, {where: {email: user.email}})
+    const resetCode = rn.generator({
+      min:  10000,
+      max:  99999,
+      integer: true
+    })()
+    await this.userModel.update({ passwordResetToken: resetCode, passwordResetExpires: new Date(Date.now() + 3600000)}, {where: {email: user.email}})
     const message = `
     <p>Hey ${user.email},</p>
     <p>Please copy this token and paste in the field. Do not share it with anyone. It expires in one hour after which you would have to verify your email again</p>
-    <h1><strong>${resetToken}</strong></h1>
+    <h1><strong>${resetCode}</strong></h1>
     <p>If you did not request this email you can safely ignore it.</p>
 
   `
@@ -199,7 +203,7 @@ export class UserService {
     await this.sendMailService.sendEmail(user.email, subject, message)
     .then((result) => {
       req.session.verificationEmail = user.email
-      req.session.passwordResetToken = resetToken
+      req.session.passwordResetToken = resetCode.toString()
       payload = {
         success: true,
         message: result,

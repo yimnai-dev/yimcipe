@@ -21,6 +21,7 @@ const configService: ConfigService = new ConfigService()
     ConfigModule.forRoot({
       cache: true,
       isGlobal: true,
+      envFilePath: '.env',
     }),
     SequelizeModule.forRoot({
       dialect: 'mysql',

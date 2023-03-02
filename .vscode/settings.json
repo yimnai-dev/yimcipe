@@ -14,5 +14,5 @@
             "username": "root"
         }
     ],
-    "dotenv.enableAutocloaking": true
+    "dotenv.enableAutocloaking": false
 }

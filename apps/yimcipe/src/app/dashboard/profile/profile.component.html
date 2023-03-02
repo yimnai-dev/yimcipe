@@ -8,18 +8,18 @@
         <div class="flex flex-col items-start justify-center">
             <div class="flex space-around px-2 py-3 text-2xl space-x-4">
                 <p class="text-darkChocolate">Name</p>
-                <p class="text-pinkChocolate">{{ profile?.fullName || authUser.username }}</p>
+                <p class="text-pinkChocolate">{{ userProfile$.getValue()?.fullName || authUser.username }}</p>
             </div>
             <div class="flex space-around px-2 py-3 text-2xl space-x-4">
                 <p class="text-darkChocolate">Occupation</p>
-                <p class="text-pinkChocolate">{{ profile?.occupation || 'No occupation' }}</p>
+                <p class="text-pinkChocolate">{{ userProfile$.getValue()?.occupation || 'No occupation' }}</p>
             </div>
             <div class="flex space-around px-2 py-3 text-2xl space-x-4">
                 <p class="text-darkChocolate">Status</p>
-                <p class="text-pinkChocolate">{{ profile?.status }}</p>
+                <p class="text-pinkChocolate">{{ userProfile$.getValue()?.status }}</p>
             </div>
             <div class="flex space-around px-2 py-3 text-2xl space-x-4">
-                <img [src]="'data:image/jpeg;base64, ' + profile.photo" class="w-[250px] h-[250px] object-contain object-center">
+                <img [src]="'data:image/jpeg;base64, ' + userProfile$.getValue().photo" class="w-[250px] h-[250px] object-contain object-center">
             </div>
         </div>
         <!-- editable  -->
@@ -38,6 +38,6 @@
       </form>
     </div>
     <div class="flex items-center justify-center py-3">
-      <button class="px-3 py-2 text-white hover:text-darkGray hover:bg-pinkChocolate bg-darkChocolate rounded-lg" [disabled]="formIsValid" (click)="updateProfile()">UPDATE</button>
+      <button class="px-3 py-2 text-white hover:text-darkGray hover:bg-pinkChocolate bg-darkChocolate rounded-lg" [disabled]="formIsValid()" (click)="updateProfile()">UPDATE</button>
     </div>
 </div>
