@@ -89,7 +89,7 @@ export class ProfileComponent implements OnInit {
    }
 
    trimPayload(profilePayload: any){
-    const trimmedPayload = Object.entries(profilePayload).filter(ob => ob[1] !== undefined && ob[1] !== null && ob[1] !== '')
+    const trimmedPayload = Object.entries(profilePayload).filter(ob => Boolean(ob[1]))
     const newPayload = Object.fromEntries(trimmedPayload)
     return newPayload
   }
