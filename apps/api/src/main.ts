@@ -40,8 +40,8 @@ async function bootstrap() {
   .addTag('YIMCIPE')
   .build();
 const document = SwaggerModule.createDocument(app, config);
-SwaggerModule.setup('yimcipe-api-docs', app, document);
-
+SwaggerModule.setup('api', app, document);
+  console.log(configService.get<string>('DATABASE_PASSWORD'));
   const port = process.env.PORT || 3333;
   await app.listen(port);
   Logger.log(

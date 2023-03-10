@@ -9,7 +9,7 @@ export class ToastService {
   constructor(private toastrService: ToastrService){}
 
   config = {
-    timeOut: 5000,
+    timeOut: 2000,
     autoDismiss: true
   }
 

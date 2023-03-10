@@ -1,0 +1,7 @@
+{
+  "name": "yimcipe-mobile",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

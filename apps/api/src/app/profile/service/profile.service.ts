@@ -15,7 +15,7 @@ export class ProfileService {
 
     updateProfile = async (profile: Partial<Pick<UProfile, 'fullName' | 'occupation' | 'photo'>>, userId: string, profileId: string) => {
         const imageIsValid = profile.photo && profileImageIsValid(profile.photo);
-        if(imageIsValid.valid === false){
+        if(imageIsValid && imageIsValid.valid === false){
           return {
             success: false,
             message: imageIsValid.reason
@@ -24,8 +24,8 @@ export class ProfileService {
         const profileDeterminant = {...profile} as const
         type streamlinedProfile = Pick<UProfile, 'fullName' | 'occupation' | 'photo'>
         type IUProfile = Partial<Pick<streamlinedProfile, keyof typeof profileDeterminant>>
-        const buffer = Buffer.alloc(profile.photo.buffer.length, profile.photo.buffer, 'base64');
-        const profileToupdate: IUProfile = {...profile, photo: profile.photo && buffer.toString('base64')}
+        const buffer = Boolean(profile.photo) && Buffer.alloc(profile.photo.buffer.length, profile.photo.buffer, 'base64');
+        const profileToupdate: IUProfile = Boolean(profile.photo) ? {...profile, photo: profile.photo && buffer.toString('base64')} : {...profile}
         if(!userId || !profileId){
             return {
                 success: false,

@@ -37,34 +37,33 @@ export class SubscriptionService {
                 status: HttpStatus.NOT_FOUND
             }
         }
-        const subscriptionExists = await this.subscriberModel.findOne({where: {subscriberId: subId, userId: userId}})
-        if(subscriptionExists){
-            const unsub = await this.subscriberModel.destroy({where: {subscriberId: subId}})
-            if(unsub !== 1){
-                return {
-                    success: false,
-                    message: 'Could not unsubscribe for this user!',
-                    payload: unsub
-                }
-            }
+        const unsubIfSubbed = await this.subscriberModel.findOne({where: {userId: userId, subscriberId: subId}})
+        if(unsubIfSubbed){
+          const unsubbed = await this.subscriberModel.destroy({where: {userId: userId, subscriberId: subId}})
+          if(!unsubbed){
             return {
-                success: true,
-                message: 'Unsubscribed successfully',
-                status: HttpStatus.OK
+              success: false,
+              message: 'Unsubscription failed',
+              status: HttpStatus.INTERNAL_SERVER_ERROR
             }
+          }
+          return {
+            success: true,
+            message: 'Unsubscription successful',
+            status: HttpStatus.OK
+          }
         }
-        const sub = await this.subscriberModel.create({userId: userId, subscriberId: subId})
-        if(!sub){
+        const subIfNoSub = await this.subscriberModel.create({userId: userId, subscriberId: subId})
+        if(!subIfNoSub){
             return {
                 success: false,
-                message: 'Could not subscribe to particular user',
-                status: HttpStatus.FAILED_DEPENDENCY
+                message: 'Something went wrong',
+                status: HttpStatus.INTERNAL_SERVER_ERROR
             }
         }
-
         return {
             success: true,
-            message: 'Subscribed Successfully!',
+            message: 'You have successfully subscribed to this User',
             status: HttpStatus.OK
         }
       }

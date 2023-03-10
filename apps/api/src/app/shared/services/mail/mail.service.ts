@@ -8,7 +8,7 @@ export class SendMailService {
   async sendEmail(toEmail: string, subject: string, message: string){
     return await this.mailerService.sendMail({
       to: toEmail,
-      from: 'yimnai.dev@outlook.com',
+      from: 'jamespeterson5250@gmail.com',
       subject: subject,
       html: `
         ${message}

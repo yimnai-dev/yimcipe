@@ -1,3 +1,6 @@
+import { CommentFormService } from './../shared/services/forms/comments.service';
+import { LoadingSpinnerComponent } from './../shared/components/loading-spinner/loading-spinner.component';
+import { SingleRecipeComponent } from './recipe/single-recipe/single-recipe.component';
 import { ExcerptPipe } from './../pipes/excerpt.pipe';
 import { SubscriptionService } from './../shared/services/subscription/subscription.service';
 import { DashboardComponent } from './dashboard.component';
@@ -38,6 +41,7 @@ import { ProfileService } from '../shared/services/profile/profile.service';
         SearchBarComponent,
         RecipeCardComponent,
         CommentsSectionComponent,
+        SingleRecipeComponent
     ],
     providers: [
         RecipeService,
@@ -45,7 +49,8 @@ import { ProfileService } from '../shared/services/profile/profile.service';
         SubscriptionService,
         VoteService,
         CommentService,
-        ProfileService
+        ProfileService,
+        CommentFormService
     ],
     imports: [
         CommonModule,
@@ -92,6 +97,6 @@ import { ProfileService } from '../shared/services/profile/profile.service';
         VotePipe,
         SubscriptionPipe,
         ExcerptPipe
-    ]
+    ],
 })
 export class DashboardModule {}

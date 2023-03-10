@@ -1,3 +1,4 @@
+import { SingleRecipeComponent } from './recipe/single-recipe/single-recipe.component';
 import { DashboardService } from './../shared/services/dashboard/dashboard.service';
 import { ProfileComponent } from './profile/profile.component';
 import { RecipeComponent } from './recipe/recipe.component';
@@ -20,7 +21,8 @@ const routes: Routes = [
       {path: 'personal', component: PersonalComponent},
       {path: 'favourite', component: FavouriteComponent},
       {path: 'new', component: RecipeComponent},
-      {path: 'profile', component: ProfileComponent}
+      {path: 'profile', component: ProfileComponent},
+      {path: 'main/recipe/:recipeId', component: SingleRecipeComponent}
     ]},
   ]}
 ];
