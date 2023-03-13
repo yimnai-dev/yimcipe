@@ -29,14 +29,16 @@ export class RecipeCardComponent implements OnInit {
     public commentService: CommentService,
     private profileService: ProfileService,
     public commentFormService: CommentFormService,
-    private router: Router
+    private router: Router,
   ) {
     this.getUserProfile()
   }
 
   ngOnInit(): void {
     this.voteService.getAllVotes()
-    this.recipeService.queryRecipes()
+    this.recipeService.queryRecipes().subscribe(() => {
+      this.recipeService.recipes.next(this.recipeService.recipeTemplate.getValue())
+    })
     this.categoryService.queryCategories().subscribe((result: any) => {
       this.categoryService.categories.next(result.categories)
     })

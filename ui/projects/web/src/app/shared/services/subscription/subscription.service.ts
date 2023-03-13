@@ -14,7 +14,9 @@ export class SubscriptionService {
   subscribeOrUnsubscribe(userId: string, subId: string) {
     this.http.post(`${this.subscriptionBaseUrl}/sub-status?userId=${userId}&subId=${subId}`).pipe(
       tap((result: any) => {
-        this.recipeService.queryRecipes()
+        this.recipeService.queryRecipes().subscribe(() => {
+          this.recipeService.recipes.next(this.recipeService.recipeTemplate.getValue())
+        })
         if (result.success) {
           this.toastService.showSuccess(result.message)
         }

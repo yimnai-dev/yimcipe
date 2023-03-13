@@ -1,7 +1,7 @@
 import { DashboardService } from '../dashboard/dashboard.service';
 import { ToastService } from '../toastr/toast.service';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, shareReplay, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, shareReplay, Subject, tap, throwError } from 'rxjs';
 import { HttpService } from '../http/http.service';
 
 @Injectable()
@@ -47,11 +47,9 @@ export class RecipeService {
   }
 
   queryRecipes() {
-    this.dashboardService.isLoading$.next(true)
-    this.getAllRecipes()
+    return this.getAllRecipes()
       .pipe(
         tap((result: any) => {
-          this.dashboardService.isLoading$.next(false)
           if (result.success) {
             this.recipeTemplate.next(
               result.recipes.map((recipe: any) => {
@@ -68,14 +66,11 @@ export class RecipeService {
           }
         }),
         catchError((error: Error) => {
-          this.dashboardService.isLoading$.next(false)
           this.toastService.showError(error.message)
           return throwError(() => { error })
         }),
         shareReplay(1)
-      ).subscribe(() => {
-        this.recipes.next(this.recipeTemplate.getValue())
-      })
+        )
   }
 
   toggleRecipeStatus(recipe: any) {

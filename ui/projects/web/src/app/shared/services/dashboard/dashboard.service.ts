@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 import { HttpService } from '../http/http.service';
 
 @Injectable({
@@ -15,7 +15,7 @@ export class DashboardService {
   profile$!: any;
   categories$!: any[];
   recipes$!: any[]
-  isLoading$: Subject<boolean> = new Subject<boolean>()
+  isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
 
   getAllRecipes() {
     return this.http.get(`${this.recipesBaseUrl}/all`)

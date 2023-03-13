@@ -29,7 +29,9 @@ export class VoteService {
     return this.vote({ recipeId, voterId, voteType }).pipe(
       tap((result: any) => {
         this.getAllVotes()
-        this.recipeService.queryRecipes()
+        this.recipeService.queryRecipes().subscribe(() => {
+            this.recipeService.recipes.next(this.recipeService.recipeTemplate.getValue())
+        })
         if (result.success) {
           this.toastService.showSuccess(result.message)
         } else {

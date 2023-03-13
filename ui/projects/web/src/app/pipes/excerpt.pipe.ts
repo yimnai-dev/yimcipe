@@ -1,3 +1,4 @@
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
@@ -6,6 +7,9 @@ import { Pipe, PipeTransform } from "@angular/core";
   pure: false
 })
 export class ExcerptPipe implements PipeTransform {
+  constructor() {
+   }
+
   transform(recipeContent: string) {
     const regex = /<img\b[^>]*>/gi;
     const newContent = recipeContent.replace(regex, '');
