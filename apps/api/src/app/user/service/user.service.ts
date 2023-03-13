@@ -3,7 +3,7 @@ import {
   UpdateCredentialsDto,
   UserByIdDto,
   RegisterUserDto
- } from '../../../../../../libs/api-interfaces/src/lib/dto.holder';
+} from '../../../dtos/dto.holder';
 import * as rn from 'random-number'
 import { UserRegistrationMechanism } from '../../utils/types/user.type';
 import { generateUUID } from './../../utils/cid-generator.util';
@@ -23,15 +23,15 @@ export class UserService {
     @InjectModel(User)
     private userModel: typeof User,
     private sendMailService: SendMailService,
-    @Inject(CACHE_MANAGER)  private readonly cacheManager: Cache,
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
     @InjectModel(Profile)
     private profileModel: typeof Profile,
-  ){}
+  ) { }
 
   verifyEmail = async (user: VerifyUserDto, req: Request) => {
     const randomCode = rn.generator({
-      min:  10000,
-      max:  99999,
+      min: 10000,
+      max: 99999,
       integer: true
     })()
     let payload: {} = {};
@@ -42,46 +42,46 @@ export class UserService {
     <p>If you did not request this email you can safely ignore it.</p>`
     const subject = 'Email Verification'
     await this.sendMailService.sendEmail(user.email, subject, message)
-    .then((result) => {
-      req.session.verificationCode = randomCode
-      req.session.verificationEmail = user.email
-      setTimeout(() => {
-       req.session.destroy((error: Error) => {})
-      }, 900000)
-      payload = {
-        success: true,
-        message: result,
-        status: HttpStatus.OK
-      }
-    })
-    .catch((error) => {
-      payload = {
-        success: false,
-        message: error,
-        status: HttpStatus.BAD_REQUEST
-      }
-  })
-    return {...payload}
+      .then((result) => {
+        req.session.verificationCode = randomCode
+        req.session.verificationEmail = user.email
+        setTimeout(() => {
+          req.session.destroy((error: Error) => { })
+        }, 900000)
+        payload = {
+          success: true,
+          message: result,
+          status: HttpStatus.OK
+        }
+      })
+      .catch((error) => {
+        payload = {
+          success: false,
+          message: error,
+          status: HttpStatus.BAD_REQUEST
+        }
+      })
+    return { ...payload }
   }
 
 
   registerUser = async (user: RegisterUserDto, req: Request) => {
-    const userExists = await this.userModel.findOne({where: {email: user.email}})
-    if(userExists){
+    const userExists = await this.userModel.findOne({ where: { email: user.email } })
+    if (userExists) {
       return {
         success: false,
         message: 'A user with this email already exists',
         status: HttpStatus.EXPECTATION_FAILED
       }
     }
-    if(user.password.length < 8){
+    if (user.password.length < 8) {
       return {
         success: false,
         message: 'Password must contain at least 8 characters',
         status: HttpStatus.EXPECTATION_FAILED
       }
     }
-    if(!user.username || !user.email || !user.password){
+    if (!user.username || !user.email || !user.password) {
       return {
         success: false,
         message: 'All fields (email, password, username) are required',
@@ -90,17 +90,17 @@ export class UserService {
     }
     const hashedPassword = encryptPassword(user.password)
     const userId = generateUUID()
-    if(!user.verificationCode || (+user.verificationCode !== req.session.verificationCode || user.email !== req.session.verificationEmail)){
+    if (!user.verificationCode || (+user.verificationCode !== req.session.verificationCode || user.email !== req.session.verificationEmail)) {
       return {
         success: false,
         message: 'Verification code does not match or email does not match that used to get verification code',
         status: HttpStatus.BAD_REQUEST
       }
     }
-    const payload = {userId: userId, username: user.username, email: user.email, password: hashedPassword, registrationMechanism: UserRegistrationMechanism.LOCAL_SIGNUP}
+    const payload = { userId: userId, username: user.username, email: user.email, password: hashedPassword, registrationMechanism: UserRegistrationMechanism.LOCAL_SIGNUP }
     const createUser = await this.userModel.create(payload)
-    const initProfile = await this.profileModel.create({profileId: generateUUID(), userId: userId, photo: baseUserAvatar})
-    if(createUser && initProfile){
+    const initProfile = await this.profileModel.create({ profileId: generateUUID(), userId: userId, photo: baseUserAvatar })
+    if (createUser && initProfile) {
       return {
         success: true,
         message: 'Successfully created new user and initialized profile',
@@ -114,14 +114,14 @@ export class UserService {
     }
   }
 
-  async getAllUsers(){
+  async getAllUsers() {
     const users = await this.userModel.findAll({
       attributes: {
         exclude: ['password'],
       },
       include: [Profile]
     })
-    if(!users){
+    if (!users) {
       return {
         success: false,
         message: 'Not users exist yet!',
@@ -136,11 +136,11 @@ export class UserService {
     }
   }
 
-  async deleteUser(user: UserByIdDto){
+  async deleteUser(user: UserByIdDto) {
     const account = await this.userModel.destroy({
-      where: {userId: user.userId},
+      where: { userId: user.userId },
     })
-    if(!account){
+    if (!account) {
       return {
         success: false,
         message: 'Could not get User with given ID!',
@@ -154,9 +154,9 @@ export class UserService {
     }
   }
 
-  async updateUser(user: UserByIdDto, data: UpdateCredentialsDto){
-    const userExists = await this.userModel.findOne({where: {userId: user.userId}})
-    if(!userExists){
+  async updateUser(user: UserByIdDto, data: UpdateCredentialsDto) {
+    const userExists = await this.userModel.findOne({ where: { userId: user.userId } })
+    if (!userExists) {
       return {
         success: false,
         message: 'User could not be found.',
@@ -170,8 +170,8 @@ export class UserService {
       password: data.password ? encryptPassword(data.password) : userExists.get('password')
     }
 
-    const updatedUser = await this.userModel.update(payload, {where: {userId: user.userId}})
-    if(!updatedUser){
+    const updatedUser = await this.userModel.update(payload, { where: { userId: user.userId } })
+    if (!updatedUser) {
       return {
         success: false,
         message: 'User could not be updated',
@@ -180,17 +180,17 @@ export class UserService {
     }
   }
 
-  async forgotPassword(user: VerifyUserDto, req: Request){
-    const userExists = await this.userModel.findOne({where: {email: user.email}})
-    if(!userExists){
+  async forgotPassword(user: VerifyUserDto, req: Request) {
+    const userExists = await this.userModel.findOne({ where: { email: user.email } })
+    if (!userExists) {
       return new HttpException('User does not exist', HttpStatus.NOT_FOUND);
     }
     const resetCode = rn.generator({
-      min:  10000,
-      max:  99999,
+      min: 10000,
+      max: 99999,
       integer: true
     })()
-    await this.userModel.update({ passwordResetToken: resetCode, passwordResetExpires: new Date(Date.now() + 3600000)}, {where: {email: user.email}})
+    await this.userModel.update({ passwordResetToken: resetCode, passwordResetExpires: new Date(Date.now() + 3600000) }, { where: { email: user.email } })
     const message = `
     <p>Hey ${user.email},</p>
     <p>Please copy this token and paste in the field. Do not share it with anyone. It expires in one hour after which you would have to verify your email again</p>
@@ -201,50 +201,50 @@ export class UserService {
     const subject = 'Reset Password'
     let payload = {};
     await this.sendMailService.sendEmail(user.email, subject, message)
-    .then((result) => {
-      req.session.verificationEmail = user.email
-      req.session.passwordResetToken = resetCode.toString()
-      payload = {
-        success: true,
-        message: result,
-        status: HttpStatus.OK
-      }
-    })
-    .catch((error) => {
-      payload = {
-        success: false,
-        message: error,
-        status: HttpStatus.BAD_REQUEST
-      }
-    })
+      .then((result) => {
+        req.session.verificationEmail = user.email
+        req.session.passwordResetToken = resetCode.toString()
+        payload = {
+          success: true,
+          message: result,
+          status: HttpStatus.OK
+        }
+      })
+      .catch((error) => {
+        payload = {
+          success: false,
+          message: error,
+          status: HttpStatus.BAD_REQUEST
+        }
+      })
     return payload;
   }
 
   resetPassword = async (token: string, req: Request) => {
-    if(token !== req.session.passwordResetToken){
+    if (token !== req.session.passwordResetToken) {
       return {
         success: false,
         message: 'Invalid Password Reset Token',
         status: HttpStatus.PRECONDITION_FAILED
       }
     }
-    const userExists = req.session.verificationEmail && await this.userModel.findOne({where: {email: req.session.verificationEmail}})
-    if(!userExists){
+    const userExists = req.session.verificationEmail && await this.userModel.findOne({ where: { email: req.session.verificationEmail } })
+    if (!userExists) {
       return {
         success: false,
         message: 'Reset token has expired. Ask for another',
         status: HttpStatus.GATEWAY_TIMEOUT
       }
     }
-    if(token !== userExists.getDataValue('passwordResetToken')){
+    if (token !== userExists.getDataValue('passwordResetToken')) {
       return {
         success: false,
         message: 'Invalid reset Token',
         status: HttpStatus.FORBIDDEN
       }
     }
-    const passwordResetEnabled = await this.userModel.update({passwordResetToken: null, passwordResetExpires: null, passwordResetPossible: true}, {where: {email: req.session.verificationEmail}});
-    if(!passwordResetEnabled){
+    const passwordResetEnabled = await this.userModel.update({ passwordResetToken: null, passwordResetExpires: null, passwordResetPossible: true }, { where: { email: req.session.verificationEmail } });
+    if (!passwordResetEnabled) {
       return {
         success: false,
         message: 'Permission Denied. Try again later',
@@ -260,14 +260,14 @@ export class UserService {
   }
 
   changePassword = async (newPass: string, confirmPass: string, email: string) => {
-    if(newPass.length < 8 || confirmPass.length < 8){
+    if (newPass.length < 8 || confirmPass.length < 8) {
       return {
         success: false,
         message: 'Password is too short',
         status: HttpStatus.NOT_ACCEPTABLE
       }
     }
-    if(newPass !== confirmPass){
+    if (newPass !== confirmPass) {
       return {
         success: false,
         message: 'Passwords do not match!',
@@ -275,15 +275,15 @@ export class UserService {
       }
     }
     const encrpytedNewPass = encryptPassword(newPass)
-    const changePassword = await this.userModel.update({password: encrpytedNewPass}, {where: {email: email}})
-    if(!changePassword){
+    const changePassword = await this.userModel.update({ password: encrpytedNewPass }, { where: { email: email } })
+    if (!changePassword) {
       return {
         success: false,
         message: 'Could not update password. Try again later',
         status: HttpStatus.EXPECTATION_FAILED
       }
     }
-    await this.userModel.update({passwordResetPossible: false}, {where: {email: email}})
+    await this.userModel.update({ passwordResetPossible: false }, { where: { email: email } })
     return {
       success: true,
       message: 'Password changed successfully',

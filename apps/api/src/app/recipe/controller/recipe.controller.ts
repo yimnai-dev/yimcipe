@@ -1,9 +1,11 @@
-import { UpdateRecipeStatusDto } from './../../../../../../libs/api-interfaces/src/lib/update-recipe-status.dto';
-import { UpdateRecipeDto } from './../../../../../../libs/api-interfaces/src/lib/update-recipe.dto';
-import { RecipeByIdDto } from './../../../../../../libs/api-interfaces/src/lib/recipe-by-id.dto';
+import {
+  UpdateRecipeStatusDto,
+  UpdateRecipeDto,
+  RecipeByIdDto,
+  RecipeDto,
+  UserByIdDto
+ } from '../../../dtos/dto.holder';
 import { JwtAuthGuard } from './../../user/guards/jwt-auth.guard';
-import { RecipeDto } from '../../../../../../libs/api-interfaces/src/lib/create-recipe.dto';
-import { UserByIdDto } from './../../../../../../libs/api-interfaces/src/lib/user-by-id.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { Body, CACHE_MANAGER, Controller, Delete, Get, Inject, Post, Put, Query, UseGuards, CacheTTL, UseInterceptors, CacheInterceptor } from '@nestjs/common';
 import { RecipeService } from '../service/recipe.service';
@@ -14,33 +16,33 @@ import { Cache } from 'cache-manager';
 @Controller('recipes')
 export class RecipeController {
     constructor(
-      private recipeService: RecipeService,
-      ){}
+        private recipeService: RecipeService,
+    ) { }
     @Post('create')
     createRecipe(
         @Query() user: UserByIdDto,
         @Body() recipe: RecipeDto
-    ){
+    ) {
         return this.recipeService.createNewRecipe(user, recipe)
     }
 
     @Get('all')
-    async getAllRecipes(){
+    async getAllRecipes() {
         return this.recipeService.getAllRecipes()
     }
 
     @Get('all/single')
     async getRecipesForSingleUser(
         @Query() user: UserByIdDto,
-    ){
-      return this.recipeService.getRecipesForSingleUser(user)
+    ) {
+        return this.recipeService.getRecipesForSingleUser(user)
     }
     @Put('update')
     updateRecipe(
         @Query() user: UserByIdDto,
         @Body() recipe: UpdateRecipeDto,
         @Query() recipeWithId: RecipeByIdDto
-    ){
+    ) {
         return this.recipeService.updateRecipe(user, recipe, recipeWithId)
     }
 
@@ -48,7 +50,7 @@ export class RecipeController {
     deleteRecipe(
         @Query() user: UserByIdDto,
         @Query() recipeWithId: RecipeByIdDto
-    ){
+    ) {
         return this.recipeService.deleteRecipeById(user, recipeWithId)
     }
 
@@ -57,12 +59,12 @@ export class RecipeController {
         @Query() user: UserByIdDto,
         @Query() recipeWithId: RecipeByIdDto,
         @Body() activeRecipe: UpdateRecipeStatusDto
-    ){
+    ) {
         return this.recipeService.changeRecipeStatus(user, recipeWithId, activeRecipe)
     }
 
     @Get('categories/all')
-    getCategories(){
-      return this.recipeService.getCategories()
+    getCategories() {
+        return this.recipeService.getCategories()
     }
 }

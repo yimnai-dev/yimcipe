@@ -3,7 +3,7 @@ import {
   UpdateCredentialsDto,
   UserByIdDto,
   RegisterUserDto
- } from '../../../../../../libs/api-interfaces/src/lib/dto.holder';
+} from '../../../dtos/dto.holder';
 import { GoogleAuthGuard } from './../guards/google.guard';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { LocalAuthGuard } from '../guards/local-auth.guard';
@@ -21,13 +21,13 @@ export class UserController {
   constructor(
     private userService: UserService,
     private authService: AuthService,
-    private configService: ConfigService){}
+    private configService: ConfigService) { }
 
   @Post('verify-email')
   verifyEmail(
     @Body() user: VerifyUserDto,
     @Req() req: Request,
-    ){
+  ) {
     return this.userService.verifyEmail(user, req);
   }
 
@@ -35,7 +35,7 @@ export class UserController {
   registerUser(
     @Body() user: RegisterUserDto,
     @Req() req: Request,
-  ){
+  ) {
     console.log('Req: ', req.session.verificationEmail, ':; ', req.session.verificationCode)
     return this.userService.registerUser(user, req)
   }
@@ -44,23 +44,23 @@ export class UserController {
   @Post('login')
   async loginUser(
     @Req() req: any
-  ){
+  ) {
     return this.authService.login(req)
   }
 
   @UseGuards(GoogleAuthGuard)
   @Get('google')
-  async googleAuth(@Req() req: any){}
+  async googleAuth(@Req() req: any) { }
 
   @UseGuards(GoogleAuthGuard)
   @Get('google/redirect')
-  async googleAuthRedirect(@Req() req: any){
+  async googleAuthRedirect(@Req() req: any) {
     this.authService.googleLogin(req)
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('all')
-  getAllUsers(){
+  getAllUsers() {
     return this.userService.getAllUsers()
   }
 
@@ -70,7 +70,7 @@ export class UserController {
     required: true
   })
   @Delete('delete')
-  deleteSingleUser(@Query() user: UserByIdDto){
+  deleteSingleUser(@Query() user: UserByIdDto) {
     return this.userService.deleteUser(user)
   }
 
@@ -79,7 +79,7 @@ export class UserController {
   updateUser(
     @Query() user: UserByIdDto,
     @Body() data: UpdateCredentialsDto
-  ){
+  ) {
     return this.userService.updateUser(user, data)
   }
 
@@ -87,22 +87,22 @@ export class UserController {
   sendPasswordResetLink(
     @Body() user: VerifyUserDto,
     @Req() req: Request
-  ){
+  ) {
     return this.userService.forgotPassword(user, req)
   }
 
   @Post('reset')
   resetPasswordStatus(
-    @Body() payload: {token: string},
+    @Body() payload: { token: string },
     @Req() req: Request
-  ){
+  ) {
     return this.userService.resetPassword(payload.token, req);
   }
 
   @Put('change-password')
   changePassword(
-    @Body() user: {email: string, newPass: string, confirmPass: string},
-  ){
+    @Body() user: { email: string, newPass: string, confirmPass: string },
+  ) {
     return this.userService.changePassword(user.newPass, user.confirmPass, user.email)
   }
 }

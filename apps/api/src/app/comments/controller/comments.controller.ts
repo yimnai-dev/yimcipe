@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import CommentDto from 'libs/api-interfaces/src/lib/comment.dto';
+import { CommentDto } from 'apps/api/src/dtos/dto.holder';
 import { JwtAuthGuard } from '../../user/guards/jwt-auth.guard';
 import { CommentService } from '../service/comments.service';
 
@@ -8,17 +8,17 @@ import { CommentService } from '../service/comments.service';
 @Controller('recipes/comments')
 @UseGuards(JwtAuthGuard)
 export class CommentController {
-    constructor(private readonly commentsService: CommentService){}
+    constructor(private readonly commentsService: CommentService) { }
 
     @Post('make-comment')
     makeComment(
         @Body() commentInfo: CommentDto
-    ){
+    ) {
         return this.commentsService.makeComment(commentInfo)
     }
 
     @Get('all')
-    getAllComments(){
+    getAllComments() {
         return this.commentsService.getAllComments()
     }
 }

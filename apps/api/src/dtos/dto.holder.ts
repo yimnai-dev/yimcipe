@@ -25,5 +25,5 @@ export {
     RecipeDto,
     SubscriptionDto,
     VoteDto,
-    CommentDto
+    CommentDto,
 }

@@ -1,6 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { CommentDto } from 'libs/api-interfaces/src/lib/dto.holder';
+import { CommentDto } from '../../../dtos/dto.holder';
 import { Comments } from '../../models/comments.model';
 import { Recipe } from '../../models/recipe.model';
 import { User } from '../../models/user.model';
@@ -15,19 +15,19 @@ export class CommentService {
         private readonly userModel: typeof User,
         @InjectModel(Recipe)
         private readonly recipeModel: typeof Recipe
-    ){}
+    ) { }
 
     makeComment = async (commentInfo: CommentDto) => {
-        const commenterExists = await this.userModel.findOne({where: {userId: commentInfo.commenterId}})
-        if(!commenterExists){
+        const commenterExists = await this.userModel.findOne({ where: { userId: commentInfo.commenterId } })
+        if (!commenterExists) {
             return {
                 success: false,
                 message: 'Commenter does not exist',
                 status: HttpStatus.NOT_FOUND
             }
         }
-        const recipeExists = await this.recipeModel.findOne({where: {recipeId: commentInfo.recipeId}})
-        if(!recipeExists){
+        const recipeExists = await this.recipeModel.findOne({ where: { recipeId: commentInfo.recipeId } })
+        if (!recipeExists) {
             return {
                 success: false,
                 message: 'Recipe you are trying to comment on does not longer exist!',
@@ -41,8 +41,8 @@ export class CommentService {
             commentId: commentId,
             comment: commentInfo.comment
         }
-        const createComment = await this.commentsModel.create({...payload})
-        if(!createComment){
+        const createComment = await this.commentsModel.create({ ...payload })
+        if (!createComment) {
             return {
                 success: false,
                 message: 'Could not comment under this recipe',
@@ -65,7 +65,7 @@ export class CommentService {
                 },
             },
         })
-        if(!comments){
+        if (!comments) {
             return {
                 success: false,
                 message: 'Could not load comments',
