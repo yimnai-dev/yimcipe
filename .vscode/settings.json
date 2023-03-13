@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/400626fa-1aff-446a-ab71-48cf1eddca1c/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/yimcipe-api",
+    "appService.deploySubpath": "api"
+}
