@@ -1,0 +1,12 @@
+<div [class]=parentContainerClassList class="w-[60vw]">
+  <a href="#" class="text-md md:text-xl block text-center py-3" *ngIf="dropdownLocationState === 'dropdown-menu'">
+    <img src="assets/images/cancel.svg" class="w-10 h-10 ml-[80%]">
+  </a>
+  <a [routerLink]="['/dashboard/home/main']" [routerLinkActive]="'text-pinkChocolate'" [class]=menuItemsClassList *ngIf="dropdownLocationState === 'header' || dropdownLocationState === 'dropdown-menu' || dropdownLocationState === 'footer'">HOME</a>
+  <a [routerLink]="['/dashboard/home/personal']" [routerLinkActive]="'text-pinkChocolate'" [class]=menuItemsClassList *ngIf="dropdownLocationState === 'header' || dropdownLocationState === 'dropdown-menu' || dropdownLocationState === 'footer'">PERSONAL</a>
+  <a [routerLink]="['/dashboard/home/favourite']" [routerLinkActive]="'text-pinkChocolate'" [class]=menuItemsClassList *ngIf="dropdownLocationState === 'header' || dropdownLocationState === 'dropdown-menu' || dropdownLocationState === 'footer'">FAVOURITES</a>
+  <a [routerLink]="['/dashboard/home/new']" [routerLinkActive]="'text-pinkChocolate'" [class]=menuItemsClassList *ngIf="dropdownLocationState === 'header' || dropdownLocationState === 'dropdown-menu' || dropdownLocationState === 'footer'">NEW</a>
+  <a [routerLink]="['/dashboard/home/profile']" [routerLinkActive]="'text-pinkChocolate'" [class]=menuItemsClassList *ngIf="dropdownLocationState === 'footer' || dropdownLocationState === 'dropdown-menu'">PROFILE</a>
+  <a [routerLinkActive]="'text-pinkChocolate'" [class]=menuItemsClassList *ngIf="dropdownLocationState === 'footer' || dropdownLocationState === 'dropdown-menu'" (click)="authService.logout()">LOGOUT</a>
+
+</div>
