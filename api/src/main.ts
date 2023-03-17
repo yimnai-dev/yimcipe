@@ -16,7 +16,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors({ origin: 'http://localhost:4200', credentials: true });
+  app.enableCors({ origin: 'https://yimla.site', credentials: true });
   const globalPrefix = 'api/v1.0';
   const configService = app.get(ConfigService);
   app.setGlobalPrefix(globalPrefix);
