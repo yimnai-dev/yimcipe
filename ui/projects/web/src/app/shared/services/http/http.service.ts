@@ -8,8 +8,7 @@ export class HttpService {
 
   constructor(private httpClient: HttpClient){}
 
-  // baseUrl = 'http://8923-154-72-153-206.ngrok.io/api/v1.0'
-  baseUrl = 'http://localhost:3333/api/v1.0'
+  baseUrl = 'http://yimcipe-api.centralus.azurecontainer.io:3333/api/v1.0'
 
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'}),
