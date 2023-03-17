@@ -1,0 +1,5 @@
+<yimcipe-search-bar></yimcipe-search-bar>
+<div class="container mx-auto h-[40vh] flex items-center justify-center" *ngIf="isLoading$ | async">
+  <yimcipe-loading-spinner></yimcipe-loading-spinner>
+</div>
+<yimcipe-recipe-card *ngIf="!(isLoading$ | async)" [desiredRecipes]="recipeService.recipes"></yimcipe-recipe-card>

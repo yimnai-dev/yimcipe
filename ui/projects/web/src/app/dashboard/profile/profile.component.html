@@ -1,0 +1,43 @@
+<yimcipe-loading-spinner *ngIf="isLoading$ | async"></yimcipe-loading-spinner>
+<div class="bg-white md:rounded-lg w-screen md:w-auto md:mx-2 mx-auto py-3 px-3" *ngIf="!(isLoading$ | async)">
+    <div class="w-full text-center">
+        <h1 class="text-darkChocolate font-bold py-2 text-3xl">PROFILE</h1>
+    </div>
+    <div class="w-full flex flex-col items-center justify-between md:flex-row md:items-center md:justify-around min-h-[70vh]">
+        <!-- Uneditable  -->
+        <div class="flex flex-col items-start justify-center">
+            <div class="flex space-around px-2 py-3 text-2xl space-x-4">
+                <p class="text-darkChocolate">Name</p>
+                <p class="text-pinkChocolate">{{ userProfile$.getValue()?.fullName || authUser.username }}</p>
+            </div>
+            <div class="flex space-around px-2 py-3 text-2xl space-x-4">
+                <p class="text-darkChocolate">Occupation</p>
+                <p class="text-pinkChocolate">{{ userProfile$.getValue()?.occupation || 'No occupation' }}</p>
+            </div>
+            <div class="flex space-around px-2 py-3 text-2xl space-x-4">
+                <p class="text-darkChocolate">Status</p>
+                <p class="text-pinkChocolate">{{ userProfile$.getValue()?.status }}</p>
+            </div>
+            <div class="flex space-around px-2 py-3 text-2xl space-x-4">
+                <img [src]="'data:image/jpeg;base64, ' + userProfile$.getValue().photo" class="w-[250px] h-[250px] object-contain object-center">
+            </div>
+        </div>
+        <!-- editable  -->
+      <form class="" [formGroup]="profileForm">
+        <div class="flex flex-col items-start justify-start space-y-3 text-pinkChocolate">
+          <div class="w-96 py-2">
+            <input type="text" placeholder="@update name" class="border-solid border-2 border-pinkChocolate rounded-lg w-full h-12 focus:outline-none focus:border-darkGray" formControlName="fullName">
+          </div>
+          <div class="w-96 py-2">
+            <input type="text" placeholder="@update occupation" class="border-solid border-2 border-pinkChocolate rounded-lg w-full h-12 focus:outline-none focus:border-darkGray" formControlName="occupation">
+          </div>
+          <div class="w-96 py-2">
+            <input type="file" placeholder="@update picture" formControlName="photo" (change)="onFileChange($event)">
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="flex items-center justify-center py-3">
+      <button class="px-3 py-2 text-white hover:text-darkGray hover:bg-pinkChocolate bg-darkChocolate rounded-lg" [disabled]="formIsValid()" (click)="updateProfile()">UPDATE</button>
+    </div>
+</div>
