@@ -1,14 +1,10 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as session from 'express-session';
 import { ConfigService } from '@nestjs/config';
 import * as cors from 'cors';
 import * as cookieParser from 'cookie-parser';
+// import { cors } from '@nestjs/platform-express';
 
 import { AppModule } from './app/app.module';
 
@@ -16,7 +12,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors({ origin: 'https://yimla.site', credentials: true });
+  app.enableCors({ origin: true, credentials: true });
   const globalPrefix = 'api/v1.0';
   const configService = app.get(ConfigService);
   app.setGlobalPrefix(globalPrefix);

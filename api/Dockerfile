@@ -45,7 +45,6 @@ RUN pnpm run build
 ENV NODE_ENV production
 
 EXPOSE 3333
-
 #Build for production
 
 USER node
