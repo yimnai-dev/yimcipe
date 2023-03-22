@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"name": "YIMCIPE",
+			"path": ".."
+		}
+	],
+	"settings": {
+		"dotenv.enableAutocloaking": false
+	}
+}

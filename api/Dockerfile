@@ -1,11 +1,9 @@
-#Build for Local Development
-
-FROM node:18-alpine  as development
+# Build for Local Development
+FROM node:18-alpine as development
 
 RUN sed -i -e 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && \
     apk update && \
     apk add bash
-
 
 ENV DATABASE_CONNECTION_STRING=${DATABASE_CONNECTION_STRING}
 ENV JWT_SECRET_KEY=${JWT_SECRET_KEY}
@@ -26,8 +24,7 @@ RUN pnpm install
 
 COPY --chown=node:node . ./
 
-#Build for app build
-
+# Build for app build
 FROM node:18-alpine as build
 
 WORKDIR /usr/src/app
@@ -42,13 +39,19 @@ RUN npm install -g pnpm
 
 RUN pnpm run build
 
-ENV NODE_ENV production
+# Install and configure Nginx
+FROM nginx:1.21-alpine as nginx
 
-EXPOSE 3333
-#Build for production
+# Copy Nginx configuration
+COPY reverse-proxy.conf /etc/nginx/conf.d/default.conf
 
-USER node
+# Copy the built app to the Nginx public directory
+COPY --from=build /usr/src/app/dist /usr/share/nginx/html
 
+# Expose port 80
+EXPOSE 80 3333
+
+# Build for production
 FROM node:18-alpine as production
 
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
@@ -56,4 +59,3 @@ COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 
 CMD ["node", "dist/main.js"]
-

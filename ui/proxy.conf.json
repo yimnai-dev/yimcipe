@@ -1,9 +1,0 @@
-{
-  "/api": {
-    "target": "http://api.yimla.site",
-    "secure": false,
-    "pathRewrite": {
-      "^/api": "/api/v1.0"
-    }
-  }
-}
