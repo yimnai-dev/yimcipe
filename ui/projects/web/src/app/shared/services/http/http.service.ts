@@ -8,8 +8,7 @@ export class HttpService {
 
   constructor(private httpClient: HttpClient){}
 
-  // baseUrl = 'http://api.yimla.site:3333/api/v1.0'
-  baseUrl = 'http://localhost:3333/api/v1.0'
+  baseUrl = 'http://api.yimla.site:3333/api/v1.0'
 
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'}),
