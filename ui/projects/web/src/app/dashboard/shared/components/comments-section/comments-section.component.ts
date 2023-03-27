@@ -1,10 +1,13 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'yimcipe-comments-section',
-  templateUrl: './comments-section.component.html',
-  styleUrls: ['./comments-section.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'yimcipe-comments-section',
+    templateUrl: './comments-section.component.html',
+    styleUrls: ['./comments-section.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [NgIf]
 })
 export class CommentsSectionComponent {
   viewComments = false

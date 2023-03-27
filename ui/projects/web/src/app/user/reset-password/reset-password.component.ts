@@ -1,14 +1,17 @@
 import { tap, catchError, throwError } from 'rxjs';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChangeDetectionStrategy, Component, OnInit, SkipSelf } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../shared/services/auth/auth.service';
 import { ToastService } from '../../shared/services/toastr/toast.service';
+import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'yimcipe-reset-password',
-  templateUrl: './reset-password.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'yimcipe-reset-password',
+    templateUrl: './reset-password.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [FormsModule, ReactiveFormsModule, NgIf]
 })
 export class ResetPasswordComponent implements OnInit {
 

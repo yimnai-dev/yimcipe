@@ -2,12 +2,16 @@ import { CategoryService } from '../../../../shared/services/category/category.s
 import { RecipeService } from '../../../../shared/services/recipe/recipe.service';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { tap } from 'rxjs';
+import { NgFor, AsyncPipe, UpperCasePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'yimcipe-search-bar',
-  templateUrl: './search-bar.component.html',
-  styleUrls: ['./search-bar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'yimcipe-search-bar',
+    templateUrl: './search-bar.component.html',
+    styleUrls: ['./search-bar.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [FormsModule, NgFor, AsyncPipe, UpperCasePipe]
 })
 export class SearchBarComponent implements OnInit {
 

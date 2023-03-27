@@ -1,14 +1,18 @@
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastService } from '../../shared/services/toastr/toast.service';
 import { tap, shareReplay, catchError, throwError, Subject, BehaviorSubject } from 'rxjs';
 import { ChangeDetectionStrategy, Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ProfileService } from '../../shared/services/profile/profile.service';
+import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner/loading-spinner.component';
+import { NgIf, AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'yimcipe-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'yimcipe-profile',
+    templateUrl: './profile.component.html',
+    styleUrls: ['./profile.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [NgIf, LoadingSpinnerComponent, FormsModule, ReactiveFormsModule, AsyncPipe]
 })
 export class ProfileComponent implements OnInit {
   passwordVisibilityState = false

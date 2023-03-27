@@ -1,17 +1,18 @@
+import { Routes } from '@angular/router';
 import { ConfirmPasswordTokenComponent } from './confirm-password-token/confirm-password-token.component';
 import { EmailVerifierComponent } from './email-verifier/email-verifier.component';
-import { PasswordChangeVerificationComponent } from './password-change-verification/password-change-verification.component';
-import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { LoginComponent } from './login/login.component';
-import { UserComponent } from './user.component';
+import { PasswordChangeVerificationComponent } from './password-change-verification/password-change-verification.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { SignupComponent } from './signup/signup.component';
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { UserComponent } from './user.component';
 
-const routes: Routes = [
-  {path: '', redirectTo: '/verify', pathMatch: 'full'},
-  {path: '', component: UserComponent, children: [
+
+export const USER_ROUTES: Routes = [
+  {path: '', redirectTo: '/login', pathMatch: 'full'},
+  {path: '', component: UserComponent,
+  children: [
     {path: 'verify', component: EmailVerifierComponent},
     {path: 'signup', component: SignupComponent},
     {path: 'login', component: LoginComponent},
@@ -20,10 +21,4 @@ const routes: Routes = [
     {path: 'forgot/sent', component: PasswordChangeVerificationComponent},
     {path: 'forgot/confirm-token', component: ConfirmPasswordTokenComponent},
   ]}
-];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class UserRoutingModule { }
+]

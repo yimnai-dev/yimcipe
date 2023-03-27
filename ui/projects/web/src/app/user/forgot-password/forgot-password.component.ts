@@ -1,16 +1,19 @@
 import { ChangeDetectionStrategy, Component, OnInit, SkipSelf } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { catchError, throwError, Subject } from 'rxjs';
 import { AuthService } from '../../shared/services/auth/auth.service';
 import { ToastService } from '../../shared/services/toastr/toast.service';
+import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner/loading-spinner.component';
+import { NgIf, AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'yimcipe-forgot-password',
-  templateUrl: './forgot-password.component.html',
-
-changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'yimcipe-forgot-password',
+    templateUrl: './forgot-password.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [FormsModule, ReactiveFormsModule, NgIf, LoadingSpinnerComponent, AsyncPipe]
 })
 
 export class ForgotPasswordComponent {

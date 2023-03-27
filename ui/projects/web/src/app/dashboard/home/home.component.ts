@@ -2,12 +2,18 @@ import { RecipeService } from '../../shared/services/recipe/recipe.service';
 import { ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
 import { AuthService } from '../../shared/services/auth/auth.service';
 import { ProfileService } from '../../shared/services/profile/profile.service';
+import { FooterComponent } from '../../shared/components/footer/footer.component';
+import { NgClass } from '@angular/common';
+import { ToolbarComponent } from '../../shared/components/toolbar/toolbar.component';
+import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'yimcipe-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'yimcipe-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [RouterLink, ToolbarComponent, RouterOutlet, NgClass, FooterComponent]
 })
 export class HomeComponent {
 

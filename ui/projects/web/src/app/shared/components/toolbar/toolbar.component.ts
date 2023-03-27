@@ -1,10 +1,13 @@
 import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { NavigationLinksComponent } from '../navigation-links/navigation-links.component';
 
 @Component({
-  selector: 'yimcipe-toolbar',
-  templateUrl: './toolbar.component.html',
-  styleUrls: ['./toolbar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'yimcipe-toolbar',
+    templateUrl: './toolbar.component.html',
+    styleUrls: ['./toolbar.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [NavigationLinksComponent]
 })
 export class ToolbarComponent implements OnInit {
   @Input() nameInitial = 'Y'

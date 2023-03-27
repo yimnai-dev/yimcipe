@@ -3,9 +3,15 @@ import { VoteService } from '../../../shared/services/vote/vote.service';
 import { Component, OnInit } from '@angular/core';
 import { RecipeService } from '../../../shared/services/recipe/recipe.service';
 import { CommentService } from '../../../shared/services/comment/comment.service';
+import { VotePipe } from '../../../pipes/vote.pipe';
+import { CommentsSectionComponent } from '../../shared/components/comments-section/comments-section.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgIf, NgFor } from '@angular/common';
 @Component({
-  selector: 'yimcipe-single-recipe',
-  templateUrl: './single-recipe.component.html',
+    selector: 'yimcipe-single-recipe',
+    templateUrl: './single-recipe.component.html',
+    standalone: true,
+    imports: [NgIf, FormsModule, ReactiveFormsModule, NgFor, CommentsSectionComponent, VotePipe]
 })
 export class SingleRecipeComponent implements OnInit {
 

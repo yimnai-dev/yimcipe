@@ -1,15 +1,19 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AuthService } from '../../shared/services/auth/auth.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { User } from '../../shared/interfaces/interface';
 import { ToastService } from '../../shared/services/toastr/toast.service';
 import { catchError, throwError, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner/loading-spinner.component';
+import { NgIf, AsyncPipe } from '@angular/common';
 @Component({
-  selector: 'yimcipe-signup',
-  templateUrl: './signup.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'yimcipe-signup',
+    templateUrl: './signup.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [NgIf, LoadingSpinnerComponent, RouterLink, FormsModule, ReactiveFormsModule, AsyncPipe]
 })
 export class SignupComponent {
 

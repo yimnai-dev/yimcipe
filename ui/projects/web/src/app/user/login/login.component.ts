@@ -1,17 +1,21 @@
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChangeDetectionStrategy, Component, SkipSelf } from '@angular/core';
 import { User } from '../../shared/interfaces/interface';
 import { AuthService } from '../../shared/services/auth/auth.service';
 import { catchError, shareReplay, tap } from 'rxjs/operators';
 import { throwError, Subject } from 'rxjs';
 import { ToastService } from '../../shared/services/toastr/toast.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import jwt_decode from 'jwt-decode';
+import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner/loading-spinner.component';
+import { NgIf, AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'yimcipe-login',
-  templateUrl: './login.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'yimcipe-login',
+    templateUrl: './login.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [NgIf, LoadingSpinnerComponent, RouterLink, FormsModule, ReactiveFormsModule, AsyncPipe],
 })
 export class LoginComponent {
 
@@ -25,7 +29,7 @@ export class LoginComponent {
 
   passwordVisibilityState = false;
   constructor(
-    @SkipSelf() private authService: AuthService,
+    private authService: AuthService,
     private toastService: ToastService,
     private router: Router) { }
 

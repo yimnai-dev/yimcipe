@@ -1,8 +1,9 @@
 import { Directive, HostListener, HostBinding } from "@angular/core";
 
 @Directive({
-  selector: "[yimcipeDropdownMenuController]",
-  exportAs: "yimcipeDropdownMenuController",
+    selector: "[yimcipeDropdownMenuController]",
+    exportAs: "yimcipeDropdownMenuController",
+    standalone: true
 })
 
 export class DropdownDirective {

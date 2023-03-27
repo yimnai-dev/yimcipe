@@ -8,12 +8,20 @@ import { RecipeService } from 'projects/web/src/app/shared/services/recipe/recip
 import { SubscriptionService } from 'projects/web/src/app/shared/services/subscription/subscription.service';
 import { VoteService } from 'projects/web/src/app/shared/services/vote/vote.service';
 import { BehaviorSubject } from 'rxjs';
+import { ExcerptPipe } from '../../../../pipes/excerpt.pipe';
+import { SubscriptionPipe } from '../../../../pipes/subscription.pipe';
+import { VotePipe } from '../../../../pipes/vote.pipe';
+import { CommentsSectionComponent } from '../comments-section/comments-section.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgIf, NgFor, AsyncPipe, LowerCasePipe } from '@angular/common';
 
 @Component({
-  selector: 'yimcipe-recipe-card',
-  templateUrl: './recipe-card.component.html',
-  styleUrls: ['./recipe-card.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'yimcipe-recipe-card',
+    templateUrl: './recipe-card.component.html',
+    styleUrls: ['./recipe-card.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [NgIf, NgFor, FormsModule, ReactiveFormsModule, CommentsSectionComponent, AsyncPipe, LowerCasePipe, VotePipe, SubscriptionPipe, ExcerptPipe]
 })
 export class RecipeCardComponent implements OnInit {
 

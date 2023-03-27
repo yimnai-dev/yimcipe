@@ -1,14 +1,16 @@
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
 import { AuthService } from '../../shared/services/auth/auth.service';
 import { Subject, catchError, tap, throwError } from 'rxjs';
 import { ToastService } from '../../shared/services/toastr/toast.service';
 import { Router } from '@angular/router';
 import { User } from '../../shared/interfaces/interface';
+import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner/loading-spinner.component';
+import { NgIf, AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'yimcipe-email-verifier',
-  template: `
+    selector: 'yimcipe-email-verifier',
+    template: `
     <yimcipe-loading-spinner *ngIf="isLoading$ | async"></yimcipe-loading-spinner>
 <main
   [class]="'w-screen min-h-screen bg-darkChocolate flex items-center justify-between'"
@@ -57,6 +59,8 @@ import { User } from '../../shared/interfaces/interface';
 </main>
 
   `,
+    standalone: true,
+    imports: [NgIf, LoadingSpinnerComponent, FormsModule, ReactiveFormsModule, AsyncPipe]
 })
 export class EmailVerifierComponent {
 

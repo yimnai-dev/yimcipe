@@ -1,14 +1,14 @@
 import { tap, catchError, throwError } from 'rxjs';
 import { UUIDValidator } from '../validators/form.validator';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChangeDetectionStrategy, Component, SkipSelf } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../shared/services/auth/auth.service';
 import { ToastService } from '../../shared/services/toastr/toast.service';
 
 @Component({
-  selector: 'yimcipe-confirm-password-token',
-  template: `
+    selector: 'yimcipe-confirm-password-token',
+    template: `
       <main
   [class]="'w-screen min-h-screen bg-darkChocolate flex items-center justify-between'"
   [formGroup]="tokenForm"
@@ -53,8 +53,9 @@ import { ToastService } from '../../shared/services/toastr/toast.service';
   </section>
 </main>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [FormsModule, ReactiveFormsModule]
 })
 export class ConfirmPasswordTokenComponent {
 

@@ -1,52 +1,54 @@
-<div class="w-screen md:w-[80vw] mx-auto h-auto bg-white mt-3 rounded-lg shadow-lg py-6 flex flex-col items-start justify-center" *ngFor="let recipe of desiredRecipes | async">
-  <div class="flex justify-between items-center px-3 w-full cursor-pointer" tabindex="1">
-    <!-- Profile Info  -->
-    <div class="flex space-x-3">
-      <div class="rounded-full w-20 h-20 text-darkGray font-bold text-6xl flex items-center justify-center"><img [src]="'data:image/jpeg;base64, ' + recipe.user.profile.photo" class="rounded-full object-center object-cover w-full h-full"></div>
-        <div class="flex flex-col items-start justify-center text-darkChocolate font-light">
-          <h1>{{ recipe.user.profile.fullName || recipe.user.username }}</h1>
-          <h3>{{ recipe.user.profile.occupation || 'No occupation' }}</h3>
-          <span class="flex items-center justify-center">
-            <img src="assets/images/verified.svg" alt="Verified" *ngIf="recipe.user.profile?.status === 'VERIFIED'">
-            <p class="italic capitalize">{{ recipe.user.profile.status }}</p>
-          </span>
+<ng-container *ngIf="desiredRecipes">
+  <div class="w-screen md:w-[80vw] mx-auto h-auto bg-white mt-3 rounded-lg shadow-lg py-6 flex flex-col items-start justify-center" *ngFor="let recipe of desiredRecipes | async">
+    <div class="flex justify-between items-center px-3 w-full cursor-pointer" tabindex="1">
+      <!-- Profile Info  -->
+      <div class="flex space-x-3">
+        <div class="rounded-full w-20 h-20 text-darkGray font-bold text-6xl flex items-center justify-center"><img [src]="'data:image/jpeg;base64, ' + recipe.user.profile.photo" class="rounded-full object-center object-cover w-full h-full"></div>
+          <div class="flex flex-col items-start justify-center text-darkChocolate font-light">
+            <h1>{{ recipe.user.profile.fullName || recipe.user.username }}</h1>
+            <h3>{{ recipe.user.profile.occupation || 'No occupation' }}</h3>
+            <span class="flex items-center justify-center">
+              <img src="assets/images/verified.svg" alt="Verified" *ngIf="recipe.user.profile?.status === 'VERIFIED'">
+              <p class="italic capitalize">{{ recipe.user.profile.status }}</p>
+            </span>
+        </div>
+      </div>
+      <div class="flex flex-col">
+        <button class="bg-darkChocolate text-white px-3 py-2 rounded-lg hover:bg-pinkChocolate hover:text-darkChocolate" (click)="subscriptionService.subscribeOrUnsubscribe(recipe.userId, authUser.userId)">{{ recipe?.user.subscribers | subscription:authUser.userId }}</button>
+        <span class="italic text-darkChocolate">Followers - {{ recipe?.user.subscribers.length }}</span>
+
       </div>
     </div>
-    <div class="flex flex-col">
-      <button class="bg-darkChocolate text-white px-3 py-2 rounded-lg hover:bg-pinkChocolate hover:text-darkChocolate" (click)="subscriptionService.subscribeOrUnsubscribe(recipe.userId, authUser.userId)">{{ recipe?.user.subscribers | subscription:authUser.userId }}</button>
-      <span class="italic text-darkChocolate">Followers - {{ recipe?.user.subscribers.length }}</span>
-
+    <div class="px-3">
+      <!-- Excerpt  -->
+      <h1 class="text-darkChocolate font-bold text-2xl md:text-3xl capitalize">{{ recipe.recipeTitle | lowercase }}</h1>
+      <p class="" [innerHTML]="recipe.status ? recipe.recipeContent : recipe.recipeContent | excerpt"></p>
+      <a (click)="viewFullRecipe(recipe.recipeId)" class="text-lightChocolate hover:text-darkChocolate font-bold cursor-pointer py-3">Read More</a>
+    </div>
+    <div class="px-3 flex items-center justify-end text-darkChocolate w-full">
+      <!-- Single comment  -->
+      <div class="flex flex-col items-center justify-center px-3 cursor-pointer" (click)="commentService.toggleComments(recipe)">
+        <img src="assets/images/comments.svg">
+        <span>{{ recipe.comments.length }}</span>
+      </div>
+      <div class="flex flex-col items-center justify-center px-3 cursor-pointer">
+        <img src="assets/images/upvote.svg" (click)="makeVote({recipeId: recipe.recipeId, voterId: authUser.userId, voteType: 'upvote'})">
+        <span>{{ voteService.votes.getValue() | vote:'upvote':recipe.recipeId}}</span>
+      </div>
+      <div class="flex flex-col items-center justify-center px-3 cursor-pointer">
+        <img src="assets/images/downvote.svg" (click)="makeVote({recipeId: recipe.recipeId, voterId: authUser.userId, voteType: 'downvote'})">
+        <span>{{ voteService.votes.getValue() | vote:'downvote':recipe.recipeId}}</span>
+      </div>
+    </div>
+    <!-- Comments section -->
+    <div class="px-3 w-full" *ngIf="recipe.showComments">
+      <form class="flex flex-col md:flex-row items-start md:items-center justify-between" [formGroup]="commentFormService.commentForm">
+        <input type="text" placeholder="type commentInfo here..." class="w-full md:w-[80%] border-solid border-b-2 border-darkGray my-3 focus:outline-none" formControlName="comment">
+        <button class="bg-darkChocolate text-white hover:bg-pinkChocolate hover:text-darkChocolate px-3 py-2 rounded-lg shadow-lg mb-2 md:mb-0" (click)="commentService.makeComment(authUser.userId, recipe.recipeId)">Comment</button>
+      </form>
+      <div *ngFor="let comment of recipe.comments">
+        <yimcipe-comments-section *ngIf="recipe.showComments" [commentInfo]="{commenter: comment.commenter.username, comment: comment.comment}"></yimcipe-comments-section>
+      </div>
     </div>
   </div>
-  <div class="px-3">
-    <!-- Excerpt  -->
-    <h1 class="text-darkChocolate font-bold text-2xl md:text-3xl capitalize">{{ recipe.recipeTitle | lowercase }}</h1>
-    <p class="" [innerHTML]="recipe.status ? recipe.recipeContent : recipe.recipeContent | excerpt"></p>
-    <a (click)="viewFullRecipe(recipe.recipeId)" class="text-lightChocolate hover:text-darkChocolate font-bold cursor-pointer py-3">Read More</a>
-  </div>
-  <div class="px-3 flex items-center justify-end text-darkChocolate w-full">
-    <!-- Single comment  -->
-    <div class="flex flex-col items-center justify-center px-3 cursor-pointer" (click)="commentService.toggleComments(recipe)">
-      <img src="assets/images/comments.svg">
-      <span>{{ recipe.comments.length }}</span>
-    </div>
-    <div class="flex flex-col items-center justify-center px-3 cursor-pointer">
-      <img src="assets/images/upvote.svg" (click)="makeVote({recipeId: recipe.recipeId, voterId: authUser.userId, voteType: 'upvote'})">
-      <span>{{ voteService.votes.getValue() | vote:'upvote':recipe.recipeId}}</span>
-    </div>
-    <div class="flex flex-col items-center justify-center px-3 cursor-pointer">
-      <img src="assets/images/downvote.svg" (click)="makeVote({recipeId: recipe.recipeId, voterId: authUser.userId, voteType: 'downvote'})">
-      <span>{{ voteService.votes.getValue() | vote:'downvote':recipe.recipeId}}</span>
-    </div>
-  </div>
-  <!-- Comments section -->
-  <div class="px-3 w-full" *ngIf="recipe.showComments">
-    <form class="flex flex-col md:flex-row items-start md:items-center justify-between" [formGroup]="commentFormService.commentForm">
-      <input type="text" placeholder="type commentInfo here..." class="w-full md:w-[80%] border-solid border-b-2 border-darkGray my-3 focus:outline-none" formControlName="comment">
-      <button class="bg-darkChocolate text-white hover:bg-pinkChocolate hover:text-darkChocolate px-3 py-2 rounded-lg shadow-lg mb-2 md:mb-0" (click)="commentService.makeComment(authUser.userId, recipe.recipeId)">Comment</button>
-    </form>
-    <div *ngFor="let comment of recipe.comments">
-      <yimcipe-comments-section *ngIf="recipe.showComments" [commentInfo]="{commenter: comment.commenter.username, comment: comment.comment}"></yimcipe-comments-section>
-    </div>
-  </div>
-</div>
+</ng-container>

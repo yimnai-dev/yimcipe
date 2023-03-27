@@ -6,9 +6,8 @@ import { AppComponent } from './app.component';
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AppComponent],
-      imports: [HttpClientModule],
-    }).compileComponents();
+    imports: [HttpClientModule, AppComponent]
+}).compileComponents();
   }));
 
   it('should create the app', () => {

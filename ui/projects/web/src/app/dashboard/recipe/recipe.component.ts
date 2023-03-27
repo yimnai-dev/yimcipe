@@ -1,16 +1,20 @@
 import { CategoryService } from '../../shared/services/category/category.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Editor, Toolbar } from 'ngx-editor';
+import { Editor, Toolbar, NgxEditorModule } from 'ngx-editor';
 import { tap, Subject, catchError, throwError } from 'rxjs';
 import { ToastService } from '../../shared/services/toastr/toast.service';
 import { RecipeService } from '../../shared/services/recipe/recipe.service';
+import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner/loading-spinner.component';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'yimcipe-recipe',
-  templateUrl: './recipe.component.html',
-  styleUrls: ['./recipe.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'yimcipe-recipe',
+    templateUrl: './recipe.component.html',
+    styleUrls: ['./recipe.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [NgIf, LoadingSpinnerComponent, FormsModule, NgFor, NgxEditorModule, AsyncPipe]
 })
 export class RecipeComponent implements OnInit, OnDestroy {
   selectedCategory: string = 'Select meal category';
