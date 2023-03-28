@@ -22,7 +22,7 @@ jobs:
         working-directory: api
         run: |
           npm install -g pnpm
-          pnpm install
+          pnpm install --if-present
           pnpm run build
       
       - name: Zip all files for upload between jobs
