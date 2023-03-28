@@ -23,6 +23,7 @@ jobs:
           npm install -g pnpm
 
       - name: npm install, build, and test
+        working-directory: api
         run: |
           pnpm install
           pnpm run build
