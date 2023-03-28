@@ -22,7 +22,7 @@ jobs:
         working-directory: api
         run: |
           npm install -g pnpm
-          pnpm install --if-present
+          pnpm install --if-present --unsafe-perm=true
           pnpm run build
       
       - name: Zip all files for upload between jobs
