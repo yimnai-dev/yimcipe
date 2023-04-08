@@ -91,9 +91,6 @@ dependencies:
   firebase-admin:
     specifier: ^11.6.0
     version: 11.6.0
-  firebase-functions:
-    specifier: ^4.2.1
-    version: 4.2.1(firebase-admin@11.6.0)
   handlebars:
     specifier: ^4.7.7
     version: 4.7.7
@@ -2058,6 +2055,7 @@ packages:
       '@types/body-parser': 1.19.2
       '@types/express-serve-static-core': 4.17.33
       '@types/serve-static': 1.15.1
+    dev: true
 
   /@types/glob@8.1.0:
     resolution: {integrity: sha512-IO+MJPVhoqz+28h1qLAcBEH2+xHMK6MTyHJc7MTnnYb6wsoLR29POVGJ7LycmVXIqyy/4/2ShP5sUwTXuOwb/w==}
@@ -5161,6 +5159,7 @@ packages:
     transitivePeerDependencies:
       - encoding
       - supports-color
+    dev: true
 
   /flat-cache@3.0.4:
     resolution: {integrity: sha512-dm9s5Pw7Jc0GvMYbshN6zchCA9RgQlzzEZX3vylR9IqFfS8XciblUXOKfW6SiuJ0e13eDYZoZV5wdrev7P3Nwg==}
