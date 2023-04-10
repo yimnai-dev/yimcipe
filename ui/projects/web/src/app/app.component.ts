@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { RouterOutlet } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
+import { inject } from '@angular/core';
 
 @Component({
     selector: 'yimcipe-root',
@@ -11,6 +11,12 @@ import { RouterOutlet } from '@angular/router';
     providers: [
     ]
 })
-export class AppComponent {
-  constructor(private http: HttpClient) {}
+export class AppComponent implements OnInit{
+
+  private router = inject(Router)
+
+  ngOnInit(): void {
+    const accessToken = localStorage.getItem('access_token');
+    accessToken ? this.router.navigate(['/dashboard/home/main']) : this.router.navigate(['/user/login'])
+  }
 }

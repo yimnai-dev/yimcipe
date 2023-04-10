@@ -4,12 +4,12 @@ import { APP_ROUTES } from './app/app.routes';
 import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { environment } from './environments/environment';
 import { AppComponent } from './app/app.component';
-import { RouterModule, provideRouter, withDebugTracing } from '@angular/router';
+import { RouterModule, provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
-import { AuthInterceptor } from './app/shared/interceptors/auth/auth.interceptor';
-import { HTTP_INTERCEPTORS, withInterceptorsFromDi, provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { NgxEditorModule } from 'ngx-editor';
+import { authInterceptor } from './app/shared/interceptors/auth/auth.interceptor';
 
 if (environment.production) {
   enableProdMode();
@@ -57,18 +57,15 @@ bootstrapApplication(AppComponent, {
           }),
 
           ),
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: AuthInterceptor,
-            multi: true,
-        },
+        provideHttpClient(
+          withInterceptors([authInterceptor])
+        ),
         {
           provide: AuthService,
           useClass: AuthService
         },
         provideAnimations(),
-        provideHttpClient(withInterceptorsFromDi()),
-        provideRouter(APP_ROUTES, withDebugTracing())
+        provideRouter(APP_ROUTES)
     ]
 })
   .catch((err) => console.error(err));
