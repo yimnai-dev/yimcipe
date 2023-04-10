@@ -8,7 +8,7 @@ export class HttpService {
 
   constructor(private httpClient: HttpClient){}
 
-  baseUrl = 'http://api.yimla.site:3333/api/v1.0'
+  baseUrl = 'https://yimcipe-api.happysand-8cfd27ff.westus2.azurecontainerapps.io/api/v1.0'
 
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'}),
