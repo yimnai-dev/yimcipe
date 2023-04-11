@@ -4,7 +4,6 @@ import {
   UserByIdDto,
   RegisterUserDto,
 } from '../../../dtos/dto.holder';
-import rn from 'random-number';
 import { UserRegistrationMechanism } from '../../utils/types/user.type';
 import { generateUUID } from './../../utils/cid-generator.util';
 import { encryptPassword } from './../../utils/password.util';
@@ -15,6 +14,7 @@ import { Request } from 'express';
 import { SendMailService } from '../../shared/services/mail/mail.service';
 import { Profile } from '../../models/profile.model';
 import { baseUserAvatar } from '../../utils/data.util';
+import { randomCodeGenerator } from 'src/app/utils/random-number.util';
 
 @Injectable()
 export class UserService {
@@ -27,11 +27,7 @@ export class UserService {
   ) {}
 
   verifyEmail = async (user: VerifyUserDto, req: Request) => {
-    const randomCode = rn.generator({
-      min: 10000,
-      max: 99999,
-      integer: true,
-    })();
+    const randomCode = randomCodeGenerator();
     // eslint-disable-next-line @typescript-eslint/ban-types
     let payload: {} = {};
     const message = `
@@ -40,6 +36,16 @@ export class UserService {
     <h1><strong>${randomCode}</strong></h1>
     <p>If you did not request this email you can safely ignore it.</p>`;
     const subject = 'Email Verification';
+    const userExists = await this.userModel.findOne({
+      where: { email: user.email },
+    });
+    if (userExists) {
+      return {
+        success: false,
+        message: 'A user with this email already exists',
+        status: HttpStatus.EXPECTATION_FAILED,
+      };
+    }
     await this.sendMailService
       .sendEmail(user.email, subject, message)
       .then((result) => {
@@ -209,11 +215,7 @@ export class UserService {
     if (!userExists) {
       return new HttpException('User does not exist', HttpStatus.NOT_FOUND);
     }
-    const resetCode = rn.generator({
-      min: 10000,
-      max: 99999,
-      integer: true,
-    })();
+    const resetCode = randomCodeGenerator();
     await this.userModel.update(
       {
         passwordResetToken: resetCode,

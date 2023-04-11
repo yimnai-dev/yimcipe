@@ -11,7 +11,7 @@ export class HttpService {
   baseUrl = 'https://yimcipe-api.happysand-8cfd27ff.westus2.azurecontainerapps.io/api/v1.0'
 
   httpOptions = {
-    headers: new HttpHeaders({'Content-Type': 'application/json'}),
+    headers: new HttpHeaders({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'}),
     withCredentials: true,
   }
 
