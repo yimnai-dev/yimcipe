@@ -98,7 +98,7 @@ export class EmailVerifierComponent {
         }
         else{
           this.isLoading$.next(false);
-          this.toastService.showError(response.message.response);
+          this.toastService.showError(response.message);
         }
       })
     // eslint-disable-next-line @typescript-eslint/no-empty-function

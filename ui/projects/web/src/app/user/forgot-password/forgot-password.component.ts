@@ -41,7 +41,7 @@ export class ForgotPasswordComponent {
         this.router.navigate(['/user/forgot/sent'])
       }
       else{
-        this.toastService.showError('Could not send reset link: ' + result.message)
+        this.toastService.showError('Could not send reset link: \n' + result.message)
       }
       this.forgotPasswordForm.reset()
       }),

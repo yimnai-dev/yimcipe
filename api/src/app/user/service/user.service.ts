@@ -28,6 +28,7 @@ export class UserService {
 
   verifyEmail = async (user: VerifyUserDto, req: Request) => {
     const randomCode = randomCodeGenerator();
+
     // eslint-disable-next-line @typescript-eslint/ban-types
     let payload: {} = {};
     const message = `
@@ -51,10 +52,6 @@ export class UserService {
       .then((result) => {
         req.session.verificationCode = randomCode;
         req.session.verificationEmail = user.email;
-        setTimeout(() => {
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          req.session.destroy(() => {});
-        }, 900000);
         payload = {
           success: true,
           message: result,

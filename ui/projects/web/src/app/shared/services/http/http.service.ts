@@ -8,7 +8,8 @@ export class HttpService {
 
   constructor(private httpClient: HttpClient){}
 
-  baseUrl = 'https://yimcipe-api.calmmeadow-30f159ab.westus2.azurecontainerapps.io/api/v1.0'
+  // baseUrl = 'https://yimcipe-api.calmmeadow-30f159ab.westus2.azurecontainerapps.io/api/v1.0'
+  baseUrl='http://localhost:3333/api/v1.0'
 
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'}),
