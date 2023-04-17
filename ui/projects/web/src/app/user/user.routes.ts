@@ -10,7 +10,7 @@ import { UserComponent } from './user.component';
 
 
 export const USER_ROUTES: Routes = [
-  {path: '', redirectTo: '/login', pathMatch: 'full'},
+  // {path: '', redirectTo: '/login', pathMatch: 'full'},
   {path: '', component: UserComponent,
   children: [
     {path: 'verify', component: EmailVerifierComponent},

@@ -2,12 +2,12 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as session from 'express-session';
 import { ConfigService } from '@nestjs/config';
-import * as cors from 'cors';
-import * as cookieParser from 'cookie-parser';
 
 import { AppModule } from './app/app.module';
 
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import RedisStore from 'connect-redis';
+import { createClient } from 'redis';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,9 +17,25 @@ async function bootstrap() {
   app.setGlobalPrefix(globalPrefix);
   app.useGlobalPipes(new ValidationPipe());
 
+  const redisClient = createClient({
+    password: configService.get<string>('REDIS_CACHE_PASSWORD'),
+    socket: {
+      host: 'redis-17799.c251.east-us-mz.azure.cloud.redislabs.com',
+      port: 17799,
+    },
+  });
+  redisClient.connect().catch(console.error);
+
+  const redisStore = new RedisStore({
+    client: redisClient,
+    prefix: 'api:',
+    ttl: 3600,
+  });
+
   //Express Sessions
   app.use(
     session({
+      store: redisStore,
       secret: configService.get<string>('EXPRESS_SESSION_SECRET') as string,
       resave: false,
       saveUninitialized: false,

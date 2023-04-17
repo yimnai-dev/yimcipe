@@ -8,7 +8,7 @@ import { UserRegistrationMechanism } from '../../utils/types/user.type';
 import { generateUUID } from './../../utils/cid-generator.util';
 import { encryptPassword } from './../../utils/password.util';
 import { User } from './../../models/user.model';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Session } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Request } from 'express';
 import { SendMailService } from '../../shared/services/mail/mail.service';
@@ -26,7 +26,10 @@ export class UserService {
     private profileModel: typeof Profile,
   ) {}
 
-  verifyEmail = async (user: VerifyUserDto, req: Request) => {
+  async verifyEmail(
+    user: VerifyUserDto,
+    @Session() session: Record<string, any>,
+  ) {
     const randomCode = randomCodeGenerator();
 
     // eslint-disable-next-line @typescript-eslint/ban-types
@@ -50,8 +53,8 @@ export class UserService {
     await this.sendMailService
       .sendEmail(user.email, subject, message)
       .then((result) => {
-        req.session.verificationCode = randomCode;
-        req.session.verificationEmail = user.email;
+        session.verificationCode = randomCode;
+        session.verificationEmail = user.email;
         payload = {
           success: true,
           message: result,
@@ -66,9 +69,12 @@ export class UserService {
         };
       });
     return { ...payload };
-  };
+  }
 
-  registerUser = async (user: RegisterUserDto, req: Request) => {
+  async registerUser(
+    user: RegisterUserDto,
+    @Session() session: Record<string, any>,
+  ) {
     const userExists = await this.userModel.findOne({
       where: { email: user.email },
     });
@@ -97,8 +103,8 @@ export class UserService {
     const userId = generateUUID();
     if (
       !user.verificationCode ||
-      +user.verificationCode !== req.session.verificationCode ||
-      user.email !== req.session.verificationEmail
+      +user.verificationCode !== session.verificationCode ||
+      user.email !== session.verificationEmail
     ) {
       return {
         success: false,
@@ -132,7 +138,7 @@ export class UserService {
       message: 'Could not create user successfully due to an unknown error',
       status: HttpStatus.EXPECTATION_FAILED,
     };
-  };
+  }
 
   async getAllUsers() {
     const users = await this.userModel.findAll({
@@ -205,7 +211,10 @@ export class UserService {
     }
   }
 
-  async forgotPassword(user: VerifyUserDto, req: Request) {
+  async forgotPassword(
+    user: VerifyUserDto,
+    @Session() session: Record<string, any>,
+  ) {
     const userExists = await this.userModel.findOne({
       where: { email: user.email },
     });
@@ -213,10 +222,13 @@ export class UserService {
       return new HttpException('User does not exist', HttpStatus.NOT_FOUND);
     }
     const resetCode = randomCodeGenerator();
+
     await this.userModel.update(
       {
         passwordResetToken: resetCode,
-        passwordResetExpires: new Date(Date.now() + 3600000),
+        passwordResetExpires: new Date(
+          Date.now() + 3600000,
+        ).toLocaleTimeString(),
       },
       { where: { email: user.email } },
     );
@@ -232,8 +244,8 @@ export class UserService {
     await this.sendMailService
       .sendEmail(user.email, subject, message)
       .then((result) => {
-        req.session.verificationEmail = user.email;
-        req.session.passwordResetToken = resetCode.toString();
+        session.verificationEmail = user.email;
+        session.passwordResetToken = resetCode.toString();
         payload = {
           success: true,
           message: result,

@@ -46,7 +46,7 @@ export class User extends Model {
 
   @AllowNull(true)
   @Column({
-    type: DataType.UUID,
+    type: DataType.STRING,
   })
   passwordResetToken!: string;
 

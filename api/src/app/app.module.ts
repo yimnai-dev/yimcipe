@@ -10,20 +10,8 @@ import { SharesModule } from './shares/shares.module';
 import { RecipeModule } from './recipe/recipe.module';
 import { SharedModule } from './shared/shared.module';
 import { MulterModule } from '@nestjs/platform-express';
-import RedisStore from 'connect-redis';
-import { Redis } from 'ioredis';
-import { SessionModule } from 'nestjs-session';
-import { createClient } from 'redis';
 
 const configService: ConfigService = new ConfigService();
-
-const client = createClient({
-  password: configService.get<string>('REDIS_CACHE_PASSWORD'),
-  socket: {
-    host: 'redis-17799.c251.east-us-mz.azure.cloud.redislabs.com',
-    port: 17799,
-  },
-});
 
 @Module({
   imports: [
@@ -53,20 +41,6 @@ const client = createClient({
     CommentsModule,
     SharedModule,
     MulterModule.register(),
-    SessionModule.forRoot({
-      session: {
-        secret: configService.get<string>('REDIS_CACHE_SECRET'),
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-          maxAge: 3600000,
-        },
-        store: new RedisStore({
-          client: client,
-          ttl: 3600,
-        }),
-      },
-    }),
   ],
   controllers: [],
 })

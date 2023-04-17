@@ -2,6 +2,7 @@ import { SendMailService } from './services/mail/mail.service';
 import { Module } from '@nestjs/common';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
+import RedisStore from 'connect-redis';
 
 const configService: ConfigService = new ConfigService();
 
