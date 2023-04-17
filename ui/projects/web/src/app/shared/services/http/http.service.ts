@@ -9,7 +9,7 @@ export class HttpService {
   constructor(private httpClient: HttpClient){}
 
   // baseUrl = 'https://yimcipe-api.delightfulcoast-e2a4923f.westus2.azurecontainerapps.io/api/v1.0'
-  baseUrl='http://localhost:3333/api/v1.0'
+  baseUrl='https://yimcipeapi-neruszaumuy.b4a.run/api/v1.0/'
 
 
   httpOptions = {
