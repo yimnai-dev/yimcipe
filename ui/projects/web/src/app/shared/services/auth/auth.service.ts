@@ -27,7 +27,7 @@ export class AuthService {
     return this.httpService.post(`${this.authBaseUrl}/forgot`, user)
   }
 
-  validateResetToken(payload: { token: string }) {
+  validateResetToken(payload: { verificationCode: number }) {
     return this.httpService.post(`${this.authBaseUrl}/reset`, payload)
   }
 

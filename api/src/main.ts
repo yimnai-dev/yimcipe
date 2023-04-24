@@ -2,6 +2,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as session from 'express-session';
 import { ConfigService } from '@nestjs/config';
+import * as MongoDBStore from 'connect-mongodb-session';
 
 import { AppModule } from './app/app.module';
 
@@ -17,25 +18,23 @@ async function bootstrap() {
   app.setGlobalPrefix(globalPrefix);
   app.useGlobalPipes(new ValidationPipe());
 
-  const redisClient = createClient({
-    password: configService.get<string>('REDIS_CACHE_PASSWORD'),
-    socket: {
-      host: 'redis-17799.c251.east-us-mz.azure.cloud.redislabs.com',
-      port: 17799,
+  const mongoDBSession = MongoDBStore(session);
+  const mongoStore = new mongoDBSession({
+    uri: 'mongodb+srv://yimnai_dev:FbEnYNInzc1fQJqR@yimcipe.d835tqx.mongodb.net/?retryWrites=true&w=majority',
+    collection: 'sessions',
+    databaseName: 'yimcipe',
+    expires: 900000,
+    connectionOptions: {
+      serverSelectionTimeoutMS: 10000,
     },
   });
-  redisClient.connect().catch(console.error);
 
-  const redisStore = new RedisStore({
-    client: redisClient,
-    prefix: 'api:',
-    ttl: 3600,
-  });
+  mongoStore.on('error', console.error);
 
   //Express Sessions
   app.use(
     session({
-      store: redisStore,
+      store: mongoStore,
       secret: configService.get<string>('EXPRESS_SESSION_SECRET') as string,
       resave: false,
       saveUninitialized: false,

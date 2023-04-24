@@ -35,13 +35,13 @@ export class ForgotPasswordComponent {
     this.authService.forgotPassword(payload).pipe(
       tap((result: any) => {
         this.isLoading$.next(false)
-      if(result.success){
+      if(result.success === true){
         localStorage.setItem('confirmationEmail', payload.email)
         this.toastService.showSuccess('Password Reset Link has been sent to your email')
         this.router.navigate(['/user/forgot/sent'])
       }
       else{
-        this.toastService.showError('Could not send reset link: \n' + result.message)
+        this.toastService.showError('Could not send reset link: \nError: ' + result.message)
       }
       this.forgotPasswordForm.reset()
       }),

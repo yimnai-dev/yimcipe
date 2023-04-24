@@ -19,7 +19,6 @@ import {
   Delete,
   Query,
   Put,
-  Session,
 } from '@nestjs/common';
 import { ApiTags, ApiQuery } from '@nestjs/swagger';
 import { Request } from 'express';
@@ -90,16 +89,16 @@ export class UserController {
   }
 
   @Post('forgot')
-  sendPasswordResetLink(
-    @Body() user: VerifyUserDto,
-    @Session() session: Record<string, any>,
-  ) {
-    return this.userService.forgotPassword(user, session);
+  sendPasswordResetLink(@Body() user: VerifyUserDto, @Req() req: Request) {
+    return this.userService.forgotPassword(user, req);
   }
 
   @Post('reset')
-  resetPasswordStatus(@Body() payload: { token: string }, @Req() req: Request) {
-    return this.userService.resetPassword(payload.token, req);
+  resetPasswordStatus(
+    @Body() payload: { verificationCode: number },
+    @Req() req: Request,
+  ) {
+    return this.userService.resetPassword(payload.verificationCode, req);
   }
 
   @Put('change-password')

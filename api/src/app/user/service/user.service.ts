@@ -26,10 +26,7 @@ export class UserService {
     private profileModel: typeof Profile,
   ) {}
 
-  async verifyEmail(
-    user: VerifyUserDto,
-    @Session() session: Record<string, any>,
-  ) {
+  async verifyEmail(user: VerifyUserDto, req: Request) {
     const randomCode = randomCodeGenerator();
 
     // eslint-disable-next-line @typescript-eslint/ban-types
@@ -53,8 +50,8 @@ export class UserService {
     await this.sendMailService
       .sendEmail(user.email, subject, message)
       .then((result) => {
-        session.verificationCode = randomCode;
-        session.verificationEmail = user.email;
+        req.session.verificationCode = randomCode;
+        req.session.verificationEmail = user.email;
         payload = {
           success: true,
           message: result,
@@ -211,10 +208,9 @@ export class UserService {
     }
   }
 
-  async forgotPassword(
-    user: VerifyUserDto,
-    @Session() session: Record<string, any>,
-  ) {
+  async forgotPassword(user: VerifyUserDto, req: Request) {
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    let payload: {} = {};
     const userExists = await this.userModel.findOne({
       where: { email: user.email },
     });
@@ -240,12 +236,11 @@ export class UserService {
 
   `;
     const subject = 'Reset Password';
-    let payload = {};
     await this.sendMailService
       .sendEmail(user.email, subject, message)
       .then((result) => {
-        session.verificationEmail = user.email;
-        session.passwordResetToken = resetCode.toString();
+        req.session.verificationCode = resetCode;
+        req.session.verificationEmail = user.email;
         payload = {
           success: true,
           message: result,
@@ -256,17 +251,17 @@ export class UserService {
         payload = {
           success: false,
           message: error,
-          status: HttpStatus.BAD_REQUEST,
+          status: HttpStatus.NOT_FOUND,
         };
       });
-    return payload;
+    return { ...payload };
   }
 
-  resetPassword = async (token: string, req: Request) => {
-    if (token !== req.session.passwordResetToken) {
+  resetPassword = async (verificationCode: number, req: Request) => {
+    if (verificationCode !== req.session.verificationCode) {
       return {
         success: false,
-        message: 'Invalid Password Reset Token',
+        message: 'Invalid Password Reset Code',
         status: HttpStatus.PRECONDITION_FAILED,
       };
     }
@@ -282,7 +277,10 @@ export class UserService {
         status: HttpStatus.GATEWAY_TIMEOUT,
       };
     }
-    if (token !== userExists.getDataValue('passwordResetToken')) {
+    if (
+      verificationCode.toString() !==
+      userExists.getDataValue('passwordResetToken')
+    ) {
       return {
         success: false,
         message: 'Invalid reset Token',
