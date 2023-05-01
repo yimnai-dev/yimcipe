@@ -8,7 +8,7 @@ export class HttpService {
 
   constructor(private httpClient: HttpClient){}
 
-  baseUrl='https://yimcipe-api-vdsy.onrender.com/api/v1.0/'
+  baseUrl='https://yimcipe-api-vdsy.onrender.com/api/v1.0'
 
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'}),
