@@ -38,7 +38,7 @@ async function bootstrap() {
       secret: configService.get<string>('EXPRESS_SESSION_SECRET') as string,
       resave: false,
       saveUninitialized: false,
-      cookie: { secure: false },
+      cookie: { secure: false, sameSite: 'none' },
     }),
   );
 
