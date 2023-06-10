@@ -22,7 +22,6 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiQuery } from '@nestjs/swagger';
 import { Request } from 'express';
-import { ConfigService } from '@nestjs/config';
 
 @ApiTags('User')
 @Controller('users/auth')
@@ -30,16 +29,15 @@ export class UserController {
   constructor(
     private userService: UserService,
     private authService: AuthService,
-    private configService: ConfigService,
   ) {}
 
   @Post('verify-email')
-  verifyEmail(@Body() user: VerifyUserDto, @Req() req: Request) {
+  verifyEmail(@Body() user: VerifyUserDto, @Req() req: Express.Request) {
     return this.userService.verifyEmail(user, req);
   }
 
   @Post('register')
-  registerUser(@Body() user: RegisterUserDto, @Req() req: Request) {
+  registerUser(@Body() user: RegisterUserDto, @Req() req: Express.Request) {
     console.log(
       'Req: ',
       req.session.verificationEmail,
@@ -96,7 +94,7 @@ export class UserController {
   @Post('reset')
   resetPasswordStatus(
     @Body() payload: { verificationCode: number },
-    @Req() req: Request,
+    @Req() req: Express.Request,
   ) {
     return this.userService.resetPassword(payload.verificationCode, req);
   }

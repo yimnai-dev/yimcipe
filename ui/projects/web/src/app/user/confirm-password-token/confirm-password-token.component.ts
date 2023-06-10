@@ -23,7 +23,7 @@ import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner
     <div
       [class]="'container w-[100vw] mx-auto flex flex-col justify-center items-center md:w-auto'"
     >
-      <img src="assets/images/logo.svg" class="px-3 md:px-0 md:w-[30%]" />
+      <!-- <img src="assets/images/logo.svg" class="px-3 md:px-0 md:w-[30%]" /> -->
       <p
         [class]="'text-darkChocolate text-2xl md:text-3xl text-center px-3 mt-6 md:px-0'"
       >

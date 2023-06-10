@@ -8,9 +8,8 @@ import { UserRegistrationMechanism } from '../../utils/types/user.type';
 import { generateUUID } from './../../utils/cid-generator.util';
 import { encryptPassword } from './../../utils/password.util';
 import { User } from './../../models/user.model';
-import { HttpException, HttpStatus, Injectable, Session } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Request } from 'express';
 import { SendMailService } from '../../shared/services/mail/mail.service';
 import { Profile } from '../../models/profile.model';
 import { baseUserAvatar } from '../../utils/data.util';
@@ -26,16 +25,15 @@ export class UserService {
     private profileModel: typeof Profile,
   ) {}
 
-  async verifyEmail(user: VerifyUserDto, req: Request) {
+  async verifyEmail(user: VerifyUserDto, req: Express.Request) {
     const randomCode = randomCodeGenerator();
-
     // eslint-disable-next-line @typescript-eslint/ban-types
     let payload: {} = {};
     const message = `
     <p>Hey ${user.email},</p>
     <p>Please copy the code below and enter in the form. It expires in 15 minutes after which you would have to verify your email again</p>
     <h1><strong>${randomCode}</strong></h1>
-    <p>If you did not request this email you can safely ignore it.</p>`;
+    <p>If you did not Express.Request this email you can safely ignore it.</p>`;
     const subject = 'Email Verification';
     const userExists = await this.userModel.findOne({
       where: { email: user.email },
@@ -68,10 +66,7 @@ export class UserService {
     return { ...payload };
   }
 
-  async registerUser(
-    user: RegisterUserDto,
-    @Session() session: Record<string, any>,
-  ) {
+  async registerUser(user: RegisterUserDto, req: Express.Request) {
     const userExists = await this.userModel.findOne({
       where: { email: user.email },
     });
@@ -100,8 +95,8 @@ export class UserService {
     const userId = generateUUID();
     if (
       !user.verificationCode ||
-      +user.verificationCode !== session.verificationCode ||
-      user.email !== session.verificationEmail
+      +user.verificationCode !== req.session.verificationCode ||
+      user.email !== req.session.verificationEmail
     ) {
       return {
         success: false,
@@ -208,7 +203,7 @@ export class UserService {
     }
   }
 
-  async forgotPassword(user: VerifyUserDto, req: Request) {
+  async forgotPassword(user: VerifyUserDto, req: Express.Request) {
     // eslint-disable-next-line @typescript-eslint/ban-types
     let payload: {} = {};
     const userExists = await this.userModel.findOne({
@@ -232,7 +227,7 @@ export class UserService {
     <p>Hey ${user.email},</p>
     <p>Please copy this token and paste in the field. Do not share it with anyone. It expires in one hour after which you would have to verify your email again</p>
     <h1><strong>${resetCode}</strong></h1>
-    <p>If you did not request this email you can safely ignore it.</p>
+    <p>If you did not Express.Request this email you can safely ignore it.</p>
 
   `;
     const subject = 'Reset Password';
@@ -257,7 +252,7 @@ export class UserService {
     return { ...payload };
   }
 
-  resetPassword = async (verificationCode: number, req: Request) => {
+  resetPassword = async (verificationCode: number, req: Express.Request) => {
     if (verificationCode !== req.session.verificationCode) {
       return {
         success: false,

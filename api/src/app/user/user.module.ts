@@ -1,4 +1,3 @@
-import { GoogleStrategy } from './strategies/google.strategy';
 import { ConfigService } from '@nestjs/config';
 import { User } from './../models/user.model';
 import { SequelizeModule } from '@nestjs/sequelize';
@@ -34,7 +33,6 @@ const configService: ConfigService = new ConfigService();
     AuthService,
     LocalStrategy,
     JwtStrategy,
-    GoogleStrategy,
     ConfigService,
     ProfileService,
   ],

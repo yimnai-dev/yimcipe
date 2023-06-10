@@ -7,8 +7,6 @@ import * as MongoDBStore from 'connect-mongodb-session';
 import { AppModule } from './app/app.module';
 
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import RedisStore from 'connect-redis';
-import { createClient } from 'redis';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -34,11 +32,11 @@ async function bootstrap() {
   //Express Sessions
   app.use(
     session({
-      store: mongoStore,
+      // store: mongoStore,
       secret: configService.get<string>('EXPRESS_SESSION_SECRET') as string,
       resave: false,
       saveUninitialized: false,
-      cookie: { secure: false, sameSite: 'none' },
+      // cookie: { secure: false, sameSite: 'none' },
     }),
   );
 
@@ -54,9 +52,7 @@ async function bootstrap() {
   SwaggerModule.setup('api/v1.0/docs', app, document);
   const port = process.env.PORT || process.env.WEBSITE_PORT || 3333;
   await app.listen(port);
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`,
-  );
+  Logger.log(`🚀 Application is running on: http://localhost:${port}`);
 }
 
 bootstrap();
